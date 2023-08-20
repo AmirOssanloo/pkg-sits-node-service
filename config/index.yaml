@@ -1,0 +1,8 @@
+name: 'service'
+sns:
+  auth:
+    jwt:
+      securePaths:
+        - /v1
+env:
+  SECRET: 'index'

@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚧 Building..."
+yarn build
+
+echo "👀 Checking linting..."
+yarn lint
+
+echo "🔎 Checking types..."
+yarn tsc
+
+echo "🛡 Running tests..."
+yarn test

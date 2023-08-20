@@ -1,0 +1,8 @@
+sns:
+  port: 3021
+  auth:
+    jwt:
+      securePaths:
+        - '/secure'
+env:
+  SECRET: 'development'

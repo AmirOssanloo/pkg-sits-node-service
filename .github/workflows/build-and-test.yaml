@@ -1,0 +1,44 @@
+name: Build and run tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Prepare
+        run: |
+          echo "🏁 Installing packages..."
+          yarn install
+      - name: Building
+        run: |
+          echo "🚧 Building..."
+          yarn build
+      - name: Checking linting
+        run: |
+          echo "👀 Checking linting..."
+          yarn lint
+      - name: Checking types
+        run: |
+          echo "🔎 Checking types..."
+          yarn tsc
+      - name: Running tests
+        run: |
+          echo "🛡 Running tests..."
+          yarn test

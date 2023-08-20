@@ -1,0 +1,45 @@
+# All files starting with ~
+~*
+
+# Cache files and directories
+.cache/
+.cache
+
+# Build directories
+dist/
+**/dist/
+
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Dotenv environment variables file
+.env
+
+# Test reports
+junit.xml
+test-report.xml
+test-report.*.xml
+test-report-*.xml
+
+# IDE files and directories
+.vscode/
+.vscode
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Output of 'npm pack'
+*.tgz
+
+# OS generated files
+._*
+.ds_store
+.DS_Store
+.DS_STORE
+ehthumbs.db
+Thumbs.db
