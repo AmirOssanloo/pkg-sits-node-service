@@ -1,2 +1,2 @@
 env:
-  SECRET: 'production'
+  JWT_SECRET: 'production'

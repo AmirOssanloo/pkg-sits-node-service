@@ -3,7 +3,7 @@ import applyEnv from './applyEnv'
 const CONFIG = {
   name: 'service',
   env: {
-    SECRET: 'secret',
+    JWT_SECRET: 'secret',
   },
 }
 
@@ -26,7 +26,7 @@ describe('applyEnv', () => {
 
   it('should have values from base configuration', () => {
     applyEnv({ ...CONFIG })
-    expect(process.env.SECRET).toBe(CONFIG.env.SECRET)
+    expect(process.env.JWT_SECRET).toBe(CONFIG.env.JWT_SECRET)
   })
 
   it('should delete env from config when NODE_ENV is production', () => {

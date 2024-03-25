@@ -26,6 +26,6 @@ describe('assembleConfig', () => {
 
   it('should overwrite values from environment configuration', () => {
     const config = assembleConfig(configDir)
-    expect(config.env.SECRET).toBe('test')
+    expect(config.env.JWT_SECRET).toBe('test')
   })
 })
