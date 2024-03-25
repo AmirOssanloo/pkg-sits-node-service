@@ -1,4 +1,5 @@
 import type { Express } from 'express'
+import config from './config'
 import createGracefulShutdown from './createGracefulShutdown'
 import createServer from './createServer'
 import type { ReleaseResources } from './types'
@@ -14,7 +15,7 @@ interface BootApp {
 }
 
 const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
-  const { server } = await createServer({ app, port: 3000, logger })
+  const { server } = await createServer({ app, port: config.sns.port, logger })
 
   const gracefulShutdown = createGracefulShutdown({
     server,

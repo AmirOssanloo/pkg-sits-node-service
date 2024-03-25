@@ -16,6 +16,7 @@ const createApp = async () => {
     ...sns,
     resources,
     releaseResources,
+    logger,
   }
 }
 

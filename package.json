@@ -14,7 +14,8 @@
     "build": "tsc --project tsconfig.prod.json",
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh",
-    "types": "./scripts/types.sh"
+    "types": "./scripts/types.sh",
+    "create:token": "./scripts/create-token.sh"
   },
   "keywords": [],
   "author": "Amir Ossanloo <amir@amirossanloo.com>",
@@ -27,6 +28,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "joi": "^17.12.2",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.1",
     "ramda": "^0.27.1"

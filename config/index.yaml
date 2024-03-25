@@ -3,6 +3,6 @@ sns:
   auth:
     jwt:
       securePaths:
-        - /v1
+        - /secure
 env:
-  SECRET: 'index'
+  JWT_SECRET: 'index'

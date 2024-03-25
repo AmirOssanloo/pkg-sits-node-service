@@ -11,6 +11,7 @@
     "paths": {
       "src/*": ["./src/*"]
     },
+    "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2022",

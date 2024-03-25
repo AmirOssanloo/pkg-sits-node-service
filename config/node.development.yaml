@@ -5,4 +5,4 @@ sns:
       securePaths:
         - '/secure'
 env:
-  SECRET: 'development'
+  JWT_SECRET: 'development'

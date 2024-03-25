@@ -6,6 +6,7 @@ import authMiddleware from './middleware/auth'
 import contextMiddleware from './middleware/context'
 import correlationIdMiddleware from './middleware/correlationId'
 import corsMiddleware from './middleware/cors'
+import loggerMiddleware from './middleware/logger'
 import type { Logger } from './utils/logger'
 
 interface ServiceOptions {
@@ -19,9 +20,10 @@ const createApp = async ({ handlers = () => {} }: ServiceOptions) => {
   app.use(express.json())
   app.use(helmet())
   app.use(cookieParser())
-  app.use(authMiddleware)
-  app.use(correlationIdMiddleware)
-  app.use(contextMiddleware)
+  app.use(contextMiddleware())
+  app.use(authMiddleware())
+  app.use(correlationIdMiddleware())
+  app.use(loggerMiddleware())
   app.use(corsMiddleware())
 
   app.get('/ping', (req, res) => {
