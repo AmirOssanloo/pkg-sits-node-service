@@ -31,6 +31,7 @@ module.exports = {
 
     // Eslint rules
     'prettier/prettier': 'error',
+    'security/detect-non-literal-fs-filename': 'off',
     'security/detect-object-injection': 'off',
   },
   overrides: [
