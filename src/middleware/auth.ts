@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt, { type JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { path, pathOr } from 'ramda'
 import config from '../config'
 import type { EnrichedRequest } from '../typings/request'
