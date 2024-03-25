@@ -21,14 +21,14 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
   let tokenPayload: JwtPayload | string
 
   if (!authToken || !authToken.startsWith('Bearer')) {
-    return res.status(401).send('Unable to authenticate')
+    return res.status(401).send('Unauthorized request')
   }
 
   try {
     tokenPayload = await jwt.verify(authToken, config.env.JWT_SECRET)
 
     if (!tokenPayload || typeof tokenPayload === 'string') {
-      return res.status(401).send('Unable to authenticate')
+      return res.status(401).send('Unauthorized request')
     }
 
     const { personaId, market } = tokenPayload
@@ -40,7 +40,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
     return next()
   } catch (err) {
-    res.status(401).send('Unable to authenticate')
+    res.status(401).send('Unauthorized request')
   }
 
   next()

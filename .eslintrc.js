@@ -24,11 +24,14 @@ module.exports = {
         'newlines-between': 'never',
       },
     ],
-    'prettier/prettier': 'error',
 
     // Typescript specific
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+
+    // Eslint rules
+    'prettier/prettier': 'error',
+    'security/detect-object-injection': 'off',
   },
   overrides: [
     {
