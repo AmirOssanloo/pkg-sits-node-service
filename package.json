@@ -1,6 +1,6 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Some description for the project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -93,7 +93,7 @@
     "outputName": "test-report.xml"
   },
   "volta": {
-    "node": "16.20.2",
+    "node": "18.12.0",
     "yarn": "1.22.19"
   }
 }
