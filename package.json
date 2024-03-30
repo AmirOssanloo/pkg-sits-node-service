@@ -11,7 +11,7 @@
   "sideEffects": false,
   "scripts": {
     "lint": "./scripts/eslint.sh",
-    "build": "tsc --project tsconfig.prod.json",
+    "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh",
     "types": "./scripts/types.sh",
