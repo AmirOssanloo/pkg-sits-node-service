@@ -1,6 +1,6 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "Some description for the project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
