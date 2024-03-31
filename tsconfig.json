@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
-    "declaration": true,
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -12,7 +11,6 @@
       "src/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "sourceMap": true,
     "strict": true,
     "target": "ES2022",
     "types": ["node", "jest"]
