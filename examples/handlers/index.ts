@@ -8,8 +8,8 @@ const createHandlers = () => {
     res.status(200).json({ message: 'OK' })
   })
 
-  router.get('/secure/message', (req: Request, res: Response) => {
-    res.status(200).json({ message: 'OK' })
+  router.post('/secure/message', (req: Request, res: Response) => {
+    res.status(200).json({ message: req.body.message })
   })
 
   return router

@@ -5,12 +5,14 @@ const createApp = async () => {
   const { setup, logger } = await SNS()
   const handlers = crateHandlers()
 
-  const resources = {}
-  const releaseResources = () => {}
-
   const sns = await setup({
     handlers,
   })
+
+  const resources = {}
+  const releaseResources = async () => {
+    return await Promise.resolve()
+  }
 
   return {
     ...sns,

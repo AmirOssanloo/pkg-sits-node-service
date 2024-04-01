@@ -1,8 +1,8 @@
-name: 'service'
+name: service
 sns:
   auth:
     jwt:
       securePaths:
         - /secure
 env:
-  JWT_SECRET: 'index'
+  JWT_SECRET: index

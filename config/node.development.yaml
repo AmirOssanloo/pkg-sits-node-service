@@ -3,6 +3,6 @@ sns:
   auth:
     jwt:
       securePaths:
-        - '/secure'
+        - /secure
 env:
-  JWT_SECRET: 'development'
+  JWT_SECRET: development

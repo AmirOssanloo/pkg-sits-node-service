@@ -1,2 +1,2 @@
 env:
-  JWT_SECRET: 'test'
+  JWT_SECRET: test
