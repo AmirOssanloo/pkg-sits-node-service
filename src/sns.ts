@@ -58,6 +58,7 @@ const SNS = async () => {
     }
 
     return {
+      app,
       run,
     }
   }
