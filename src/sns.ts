@@ -1,3 +1,4 @@
+import express from 'express'
 import type { RequestHandler } from 'express'
 import bootApp from './bootApp'
 import createApp from './createApp'
@@ -18,16 +19,17 @@ const state = {
 }
 
 const SNS = async () => {
+  const expressApp = express()
+
   const setup = async (opts: ServiceSetupOptions = {}) => {
     if (state.hasBootstrapped) {
       throw new Error('The app has already been bootstrapped')
     }
 
     const { handlers } = opts
-
     state.hasBootstrapped = true
 
-    const app = await createApp({
+    const app = await createApp(expressApp, {
       handlers,
       logger,
     })
@@ -58,12 +60,12 @@ const SNS = async () => {
     }
 
     return {
-      app,
       run,
     }
   }
 
   return {
+    app: expressApp,
     setup,
     logger,
   }

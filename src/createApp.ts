@@ -1,5 +1,5 @@
 import cookieParser from 'cookie-parser'
-import express from 'express'
+import express, { Express } from 'express'
 import type { Request, Response, NextFunction } from 'express'
 import helmet from 'helmet'
 import authMiddleware from './middleware/auth'
@@ -14,9 +14,7 @@ interface ServiceOptions {
   logger?: Logger
 }
 
-const createApp = async ({ handlers = () => {} }: ServiceOptions) => {
-  const app = express()
-
+const createApp = async (app: Express, { handlers = () => {} }: ServiceOptions) => {
   app.use(express.json())
   app.use(helmet())
   app.use(cookieParser())
