@@ -11,6 +11,8 @@ interface ValidationSchema {
 
 const validateRequestSchemaMiddleware =
   (schemas: ValidationSchema) => (req: EnrichedRequest, res: Response, next: NextFunction) => {
+    req.validated = {}
+
     try {
       if (schemas.body) {
         const { error } = schemas.body.validate(req.body, { abortEarly: false })
