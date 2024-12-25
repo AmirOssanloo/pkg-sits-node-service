@@ -18,6 +18,8 @@ const validateRequestSchemaMiddleware =
         if (error) {
           throw error
         }
+
+        req.validated.body = req.body
       }
 
       if (schemas.query) {
@@ -26,6 +28,8 @@ const validateRequestSchemaMiddleware =
         if (error) {
           throw error
         }
+
+        req.validated.query = req.query
       }
 
       if (schemas.params) {
@@ -34,6 +38,8 @@ const validateRequestSchemaMiddleware =
         if (error) {
           throw error
         }
+
+        req.validated.params = req.params
       }
 
       next()
