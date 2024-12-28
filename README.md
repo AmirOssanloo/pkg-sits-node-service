@@ -1,1 +1,15 @@
 # Node Service
+
+## Publishing a New Version
+
+1. Make changes to the codebase
+2. Update the version number in `package.json`
+3. Push changes to the repository
+4. Build the project:
+   ```bash
+   npm run build
+   ```
+5. Publish to npm:
+   ```bash
+   npm publish
+   ```

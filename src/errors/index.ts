@@ -1,4 +1,4 @@
-class BasicError extends Error {
+export class BasicError extends Error {
   readonly status: number
   readonly errors: any[]
 
