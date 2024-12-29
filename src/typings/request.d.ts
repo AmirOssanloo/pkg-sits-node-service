@@ -1,5 +1,5 @@
+import { Request } from 'express'
 import Joi from 'joi'
-import type { EnrichedRequest } from '../typings/request'
 import { Logger } from '../utils/logger'
 
 export interface RequestContext {
