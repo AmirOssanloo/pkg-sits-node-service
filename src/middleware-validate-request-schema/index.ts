@@ -9,11 +9,24 @@ interface ValidationSchema {
   params?: Schema
 }
 
+interface Options {
+  coerceBooleans?: boolean
+}
+
 const validateRequestSchemaMiddleware =
-  (schemas: ValidationSchema) => (req: EnrichedRequest, res: Response, next: NextFunction) => {
+  (schemas: ValidationSchema, options?: Options) =>
+  (req: EnrichedRequest, res: Response, next: NextFunction) => {
     req.validated = {}
 
     try {
+      if (options?.coerceBooleans) {
+        Object.values(req.body).forEach((value) => {
+          if (value === 'true' || value === 'false') {
+            req.body[value] = Boolean(value)
+          }
+        })
+      }
+
       if (schemas.body) {
         const { error } = schemas.body.validate(req.body, { abortEarly: false })
 

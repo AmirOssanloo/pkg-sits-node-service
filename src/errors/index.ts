@@ -11,21 +11,21 @@ export class BasicError extends Error {
   }
 }
 
-export class ServiceError extends BasicError {
+export class BadRequestError extends BasicError {
   constructor(message: string, errors = []) {
-    super('ERROR', message, 500, errors)
+    super('BAD_REQUEST', message, 400, errors)
+  }
+}
+
+export class UnauthorizedError extends BasicError {
+  constructor(message: string, errors = []) {
+    super('UNAUTHORIZED', message, 401, errors)
   }
 }
 
 export class ValidationError extends BasicError {
   constructor(message: string, errors = []) {
-    super('VALIDATION_ERROR', message, 400, errors)
-  }
-}
-
-export class ForbiddenError extends BasicError {
-  constructor(message = 'Forbidden', errors = []) {
-    super('FORBIDDEN', message, 403, errors)
+    super('VALIDATION_ERROR', message, 403, errors)
   }
 }
 
@@ -38,5 +38,17 @@ export class NotFoundError extends BasicError {
 export class AlreadyExistsError extends BasicError {
   constructor(message = 'Already exists', errors = []) {
     super('ALREADY_EXISTS', message, 409, errors)
+  }
+}
+
+export class UnsupportedMediaTypeError extends BasicError {
+  constructor(message: string, errors = []) {
+    super('UNSUPPORTED_MEDIA_TYPE', message, 415, errors)
+  }
+}
+
+export class ServiceError extends BasicError {
+  constructor(message: string, errors = []) {
+    super('ERROR', message, 500, errors)
   }
 }
