@@ -20,9 +20,11 @@ const validateRequestSchemaMiddleware =
 
     try {
       if (options?.coerceBooleans) {
-        Object.values(req.body).forEach((value) => {
-          if (value === 'true' || value === 'false') {
-            req.body[value] = Boolean(value)
+        Object.entries(req.body).forEach(([key, value]) => {
+          if (value === 'true') {
+            req.body[key] = true
+          } else if (value === 'false') {
+            req.body[key] = false
           }
         })
       }
