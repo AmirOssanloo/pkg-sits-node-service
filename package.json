@@ -1,6 +1,6 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -24,7 +24,7 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-},
+  },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
