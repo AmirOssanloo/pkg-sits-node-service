@@ -1,4 +1,6 @@
-# Node Service
+# SNS
+
+A lightweight Express.js wrapper that provides a clear structure for building HTTP services with built-in configuration management, security, and monitoring.
 
 ## Publishing a New Version
 
