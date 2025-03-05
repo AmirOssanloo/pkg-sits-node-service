@@ -1,6 +1,6 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -39,7 +39,8 @@
     "joi": "^17.12.2",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.1",
-    "ramda": "^0.30.1"
+    "ramda": "^0.30.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
