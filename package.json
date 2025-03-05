@@ -1,6 +1,6 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,12 +9,13 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "lint": "./scripts/eslint.sh",
-    "build": "./scripts/build.sh",
-    "dev": "./scripts/dev.sh",
-    "test": "./scripts/test.sh",
-    "types": "./scripts/types.sh",
-    "create:token": "./scripts/create-token.sh"
+    "build": "./bin/build.sh",
+    "build:clean": "rm -rf dist",
+    "dev:start": "./bin/dev.sh",
+    "lint": "./bin/eslint.sh",
+    "test": "./bin/test.sh",
+    "types": "./bin/types.sh",
+    "create:token": "./scripts/create-auth-token/index.sh"
   },
   "keywords": [],
   "author": "Amir Ossanloo <amir@amirossanloo.com>",
@@ -25,14 +26,16 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
+  "peerDependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.1",
+    "joi": "^17.12.2"
+  },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
     "helmet": "^4.6.0",
-    "joi": "^17.12.2",
     "js-yaml": "^4.1.0",
-    "jsonwebtoken": "^9.0.1",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
@@ -96,6 +99,6 @@
   },
   "volta": {
     "node": "20.9.0",
-    "yarn": "1.22.22"
+    "yarn": "4.6.0"
   }
 }
