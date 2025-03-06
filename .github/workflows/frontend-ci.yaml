@@ -20,13 +20,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
       - name: Enable Corepack and install Yarn
         run: |
           corepack enable
@@ -34,6 +27,13 @@ jobs:
           yarn set version 4.6.0
         env:
           GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+          cache-dependency-path: yarn.lock
 
       - name: Debug info
         run: |
