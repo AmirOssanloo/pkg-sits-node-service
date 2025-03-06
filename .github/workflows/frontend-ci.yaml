@@ -20,13 +20,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Enable Corepack and install Yarn
+      - name: Enable Corepack
         run: |
           corepack enable
-          corepack prepare yarn@4.6.0 --activate
-          yarn set version 4.6.0
-        env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -34,6 +30,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: yarn
           cache-dependency-path: yarn.lock
+
+      - name: Install Yarn at specific version
+        run: |
+          corepack prepare yarn@4.6.0 --activate
+          yarn set version 4.6.0
+        env:
+          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
 
       - name: Debug info
         run: |
