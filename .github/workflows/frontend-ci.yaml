@@ -30,7 +30,8 @@ jobs:
       - name: Enable Corepack and install Yarn
         run: |
           corepack enable
-          corepack prepare yarn@stable --activate
+          corepack prepare yarn@4.6.0 --activate
+          yarn set version 4.6.0
 
       - name: Debug info
         run: |
