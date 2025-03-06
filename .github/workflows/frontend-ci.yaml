@@ -59,22 +59,12 @@ jobs:
         run: |
           echo "🏁 Installing dependencies..."
           yarn install
-          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
-            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
-          else
-            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
-          fi
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Build package
         run: |
           yarn build || (echo "❌ Build failed!" && exit 1)
-          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
-            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
-          else
-            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
-          fi
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
@@ -86,10 +76,5 @@ jobs:
       - name: Check types
         run: |
           yarn types || (echo "❌ Type checking failed!" && exit 1)
-          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
-            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
-          else
-            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
-          fi
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
