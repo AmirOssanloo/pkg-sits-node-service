@@ -20,9 +20,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Enable Corepack
+      - name: Check environment variables
         run: |
-          corepack enable
+          echo "Debugging environment variables"
+          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
+            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
+          else
+            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
+          fi
+        env:
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -31,26 +41,21 @@ jobs:
           cache: yarn
           cache-dependency-path: yarn.lock
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Install Yarn at specific version
         run: |
           corepack prepare yarn@4.6.0 --activate
           yarn set version 4.6.0
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
-      - name: Debug info
+      - name: Debug environment information
         run: |
-          echo "Debugging Environment Information"
+          echo "Debugging environment information"
           echo "-----------------------------------"
           echo "Node version: $(node -v)"
           echo "Yarn version: $(yarn -v)"
-          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
-            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
-          else
-            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
-          fi
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
@@ -69,7 +74,7 @@ jobs:
       - name: Check lint
         run: yarn lint || (echo "❌ Lint failed!" && exit 1)
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Check types
         run: yarn types || (echo "❌ Type checking failed!" && exit 1)
