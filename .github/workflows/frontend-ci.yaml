@@ -47,29 +47,29 @@ jobs:
           echo "-----------------------------------"
           echo "Node version: $(node -v)"
           echo "Yarn version: $(yarn -v)"
-          if [ -z "$GH_PKG_CONSUME_TOKEN" ]; then
-            echo "❌ GH_PKG_CONSUME_TOKEN is not set";
+          if [ -z "$GH_PKG_PRODUCE_TOKEN" ]; then
+            echo "❌ GH_PKG_PRODUCE_TOKEN is not set";
           else
-            echo "✅ GH_PKG_CONSUME_TOKEN is set";
+            echo "✅ GH_PKG_PRODUCE_TOKEN is set";
           fi
           echo "-----------------------------------"
           echo "Workspaces"
           yarn workspaces list --json
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Install dependencies
         run: |
           echo "🏁 Installing dependencies..."
           yarn workspaces focus @sits-astra/astra-client
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Build package
         working-directory: client
         run: yarn build || (echo "❌ Build failed!" && exit 1)
         env:
-          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
+          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Check lint
         working-directory: client
