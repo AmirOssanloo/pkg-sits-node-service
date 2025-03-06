@@ -25,9 +25,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
-          cache-dependency-path: |
-            yarn.lock
-            client/yarn.lock
+          cache-dependency-path: yarn.lock
 
       - name: Enable Corepack and install Yarn
         run: |
@@ -45,9 +43,6 @@ jobs:
           else
             echo "✅ GH_PKG_PRODUCE_TOKEN is set";
           fi
-          echo "-----------------------------------"
-          echo "Workspaces"
-          yarn workspaces list --json
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
@@ -65,6 +60,8 @@ jobs:
 
       - name: Check lint
         run: yarn lint || (echo "❌ Lint failed!" && exit 1)
+        env:
+          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
 
       - name: Check types
         run: yarn types || (echo "❌ Type checking failed!" && exit 1)
