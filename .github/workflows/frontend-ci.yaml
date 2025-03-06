@@ -31,20 +31,16 @@ jobs:
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
           cache-dependency-path: yarn.lock
-        env:
-          GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
-      - name: Install Yarn at specific version
+      - name: Enable Corepack and install Yarn
         run: |
+          corepack enable
           corepack prepare yarn@4.6.0 --activate
           yarn set version 4.6.0
         env:
