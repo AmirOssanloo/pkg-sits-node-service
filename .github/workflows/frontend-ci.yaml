@@ -32,6 +32,8 @@ jobs:
           corepack enable
           corepack prepare yarn@4.6.0 --activate
           yarn set version 4.6.0
+        env:
+          GH_PKG_CONSUME_TOKEN: ${{ secrets.GH_PKG_CONSUME_TOKEN }}
 
       - name: Debug info
         run: |
