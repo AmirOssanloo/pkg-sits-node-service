@@ -3,15 +3,8 @@ name: Frontend CI
 on:
   push:
     branches: [master]
-    paths:
-      - 'client/**'
-      - 'shared/**'
-      - 'package.json'
   pull_request:
-    paths:
-      - 'client/**'
-      - 'shared/**'
-      - 'package.json'
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -61,22 +54,17 @@ jobs:
       - name: Install dependencies
         run: |
           echo "🏁 Installing dependencies..."
-          yarn workspaces focus @sits-astra/astra-client
+          yarn install
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Build package
-        working-directory: client
         run: yarn build || (echo "❌ Build failed!" && exit 1)
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Check lint
-        working-directory: client
-        run: |
-          yarn lint || (echo "❌ Lint failed!" && exit 1)
+        run: yarn lint || (echo "❌ Lint failed!" && exit 1)
 
       - name: Check types
-        working-directory: client
-        run: |
-          yarn types || (echo "❌ Type checking failed!" && exit 1)
+        run: yarn types || (echo "❌ Type checking failed!" && exit 1)
