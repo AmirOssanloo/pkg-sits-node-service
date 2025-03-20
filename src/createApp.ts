@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
+import type { NextFunction, Request, Response } from 'express'
 import express, { Express } from 'express'
-import type { Request, Response, NextFunction } from 'express'
 import helmet from 'helmet'
 import { authMiddleware } from './middleware/auth'
 import contextMiddleware from './middleware/context'
@@ -15,6 +15,7 @@ interface ServiceOptions {
 }
 
 const createApp = async (app: Express, { handlers = () => {} }: ServiceOptions) => {
+  app.use(corsMiddleware())
   app.use(express.json())
   app.use(helmet())
   app.use(cookieParser())
@@ -22,7 +23,6 @@ const createApp = async (app: Express, { handlers = () => {} }: ServiceOptions) 
   app.use(authMiddleware())
   app.use(correlationIdMiddleware())
   app.use(loggerMiddleware())
-  app.use(corsMiddleware())
 
   app.get('/ping', (req, res) => {
     res.send({ timestamp: new Date().toISOString() })
