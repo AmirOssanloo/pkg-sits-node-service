@@ -1,7 +1,11 @@
 import cors from 'cors'
-import type { CorsOptions } from 'cors'
+import config from '../config'
 
-const whitelist = ['http://localhost:8080', 'http://0.0.0.0:8080', 'http://51.21.205.125']
+const whitelist = ['http://localhost:8080', 'http://0.0.0.0:8080']
+
+if (config.sns?.cors?.whitelist) {
+  whitelist.push(...(config?.sns?.cors?.whitelist || []))
+}
 
 const corsMiddleware = () => {
   const corsOptions: CorsOptions = {

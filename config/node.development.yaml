@@ -1,5 +1,8 @@
 sns:
   port: 3021
+  cors:
+    whitelist:
+      - http://51.21.205.125
   auth:
     jwt:
       securePaths:
