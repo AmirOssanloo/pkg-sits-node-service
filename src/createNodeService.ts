@@ -1,5 +1,5 @@
-import express from 'express'
-import type { RequestHandler } from 'express'
+import Fastify from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import bootApp from './bootApp'
 import createApp from './createApp'
 import type { ReleaseResources } from './types'
@@ -10,7 +10,7 @@ interface ServiceListenOptions {
 }
 
 interface ServiceSetupOptions {
-  handlers?: RequestHandler
+  handlers?: FastifyPluginAsync
 }
 
 const state = {
@@ -18,8 +18,8 @@ const state = {
   isRunning: false,
 }
 
-const SNS = async () => {
-  const expressApp = express()
+const NodeService = async () => {
+  const fastifyApp = Fastify()
 
   const setup = async (opts: ServiceSetupOptions = {}) => {
     if (state.hasBootstrapped) {
@@ -29,7 +29,7 @@ const SNS = async () => {
     const { handlers } = opts
     state.hasBootstrapped = true
 
-    const app = await createApp(expressApp, {
+    const app = await createApp(fastifyApp, {
       handlers,
       logger,
     })
@@ -65,10 +65,10 @@ const SNS = async () => {
   }
 
   return {
-    app: expressApp,
+    app: fastifyApp,
     setup,
     logger,
   }
 }
 
-export default SNS
+export default NodeService

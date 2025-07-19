@@ -1,14 +1,14 @@
 import type { AddressInfo } from 'net'
-import express from 'express'
+import Fastify from 'fastify'
 import fetch from 'node-fetch'
 import createServer from './createServer'
 
 describe('createServer', () => {
   const status = 200
-  const app = express()
+  const app = Fastify()
 
-  app.get('/', (req, res) => {
-    res.sendStatus(status)
+  app.get('/', async function handler(request, reply) {
+    reply.status(status)
   })
 
   const config = {

@@ -1,11 +1,10 @@
+import type { FastifyInstance } from 'fastify'
 import http from 'http'
 import type { AddressInfo } from 'net'
 import type { Logger } from './utils/logger'
 
-type Server = http.Server
-
 interface CreateServer {
-  app: any
+  app: FastifyInstance
   port: number
   logger: Logger
 }
@@ -19,23 +18,23 @@ const createServer = async ({ app, port, logger }: CreateServer) => {
     throw new Error('Cannot create the server since no port was provided.')
   }
 
-  const server: Server = http.createServer(app)
+  const server = app.server
   const scheme = 'http'
 
-  const startServer = () => {
-    return new Promise<void>((resolve, reject) => {
-      server.once('error', reject)
-
-      server.listen(port, () => {
-        server.removeListener('error', reject)
-        resolve()
-      })
+  server.on('connection', (socket) => {
+    socket.on('error', (error) => {
+      logger.error('Socket error', { error })
     })
-  }
+  })
+
+  server.on('request', (req, res) => {
+    // Custom request handling hooks
+    // res.setHeader('X-Custom-Server', 'Fastify-Custom')
+  })
 
   server.on('error', (error: ServerError) => {
     switch (error.code) {
-      case 'EACCESS':
+      case 'EACCES':
         logger.error(`Port ${port} requires elevated privileges`)
         break
       case 'EADDRINUSE':
@@ -46,11 +45,34 @@ const createServer = async ({ app, port, logger }: CreateServer) => {
     }
   })
 
-  try {
-    await startServer()
+  const startServer = async () => {
+    await app.listen({ port })
 
     const address = server.address() as AddressInfo
-    const host = address && address.address === '::' ? 'localhost' : address.address
+    let host: string
+
+    if (address) {
+      switch (address.address) {
+        case '::':
+        case '::1':
+          host = 'localhost'
+          break
+        case '0.0.0.0':
+        case '127.0.0.1':
+          host = 'localhost'
+          break
+        default:
+          host = address.address.includes(':') ? `[${address.address}]` : address.address
+      }
+    } else {
+      host = 'localhost'
+    }
+
+    return host
+  }
+
+  try {
+    const host = await startServer()
 
     logger.info(`Server is running at ${scheme}://${host}:${port}`)
     logger.info(`Process is using PID ${process.pid}`)

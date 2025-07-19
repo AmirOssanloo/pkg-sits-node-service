@@ -1,5 +1,5 @@
 import http from 'http'
-import express from 'express'
+import Fastify, { FastifyInstance } from 'fastify'
 import createGracefulShutdownHandler from './createGracefulShutdown'
 import type { GracefulShutdownHandler } from './createGracefulShutdown'
 
@@ -11,16 +11,19 @@ const logger = {
   error: jest.fn(),
 }
 
-const createServer = (app: http.RequestListener) => {
-  const server = http.createServer(app)
+const createServer = (app: FastifyInstance) => {
+  const server = http.createServer(app.server)
   server.listen(PORT)
 
   return server
 }
 
 const createApp = () => {
-  const app = express()
-  app.get('/', (req, res) => res.sendStatus(STATUS))
+  const app = Fastify()
+
+  app.get('/', async (request, reply) => {
+    reply.status(STATUS)
+  })
 
   return app
 }

@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser'
-import express, { Express } from 'express'
-import type { Request, Response, NextFunction } from 'express'
-import helmet from 'helmet'
+import type { FastifyInstance, FastifyReply, FastifyRequest, FastifyPluginAsync } from 'fastify'
+import helmet from '@fastify/helmet'
 import { authMiddleware } from './middleware/auth'
 import contextMiddleware from './middleware/context'
 import correlationIdMiddleware from './middleware/correlationId'
@@ -10,31 +9,31 @@ import loggerMiddleware from './middleware/logger'
 import type { Logger } from './utils/logger'
 
 interface ServiceOptions {
-  handlers?: (req: Request, res: Response, next: NextFunction) => Promise<void> | void
+  handlers?: FastifyPluginAsync
   logger?: Logger
 }
 
-const createApp = async (app: Express, { handlers = () => {} }: ServiceOptions) => {
-  app.use(express.json())
-  app.use(helmet())
-  app.use(cookieParser())
-  app.use(contextMiddleware())
-  app.use(authMiddleware())
-  app.use(correlationIdMiddleware())
-  app.use(loggerMiddleware())
-  app.use(corsMiddleware())
+const createApp = async (app: FastifyInstance, { handlers = async () => {} }: ServiceOptions) => {
+  // app.use(corsMiddleware())
+  // app.use(express.json())
+  // app.use(helmet())
+  // app.use(cookieParser())
+  // app.use(contextMiddleware())
+  // app.use(authMiddleware())
+  // app.use(correlationIdMiddleware())
+  // app.use(loggerMiddleware())
 
-  app.get('/ping', (req, res) => {
-    res.send({ timestamp: new Date().toISOString() })
+  app.get('/ping', async (request, reply) => {
+    reply.send({ timestamp: new Date().toISOString() })
   })
 
-  app.use(async (req, res, next) => {
-    try {
-      await handlers(req, res, next)
-    } catch (error) {
-      next(error)
-    }
-  })
+  // app.use(async (req, res, next) => {
+  //   try {
+  //     await handlers(req, res, next)
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // })
 
   return app
 }

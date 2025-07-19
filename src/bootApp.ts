@@ -1,4 +1,4 @@
-import type { Express } from 'express'
+import type { FastifyInstance } from 'fastify'
 import config from './config'
 import createGracefulShutdown from './createGracefulShutdown'
 import createServer from './createServer'
@@ -9,7 +9,7 @@ const errorTypes = ['unhandledRejection', 'uncaughtExeption']
 const signalTraps = ['exit', 'SIGTERM', 'SIGINT', 'SIGUSR2']
 
 interface BootApp {
-  app: Express
+  app: FastifyInstance
   releaseResources: ReleaseResources
   logger: Logger
 }
