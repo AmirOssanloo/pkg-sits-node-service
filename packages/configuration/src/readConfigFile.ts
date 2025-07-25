@@ -1,16 +1,28 @@
-import fs from 'fs'
-import yaml from 'js-yaml'
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
+import type { UserConfig } from './types.js'
 
-const readConfigFile = (filePath: string): Record<any, any> => {
+const readConfigFile = (filePath: string, optional: boolean = false): UserConfig => {
   if (!fs.existsSync(filePath)) {
-    throw new Error('Configuration file not found')
+    if (optional) {
+      // Return empty config for optional files
+      return {} as UserConfig
+    }
+    throw new Error(`Configuration file not found: ${filePath}`)
   }
 
   try {
     const fileContents = fs.readFileSync(filePath, 'utf8')
-    return yaml.load(fileContents) as Record<any, any>
-  } catch {
-    throw new Error('Failed to parse configuration file')
+    const config = yaml.load(fileContents)
+    
+    // Handle empty files
+    if (!config || typeof config !== 'object') {
+      return {} as UserConfig
+    }
+    
+    return config as UserConfig
+  } catch (error) {
+    throw new Error(`Failed to parse configuration file ${filePath}: ${error}`)
   }
 }
 

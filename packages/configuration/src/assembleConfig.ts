@@ -1,10 +1,12 @@
-import path from 'path'
+import * as path from 'path'
 import { mergeDeepRight } from 'ramda'
 import readConfigFile from './readConfigFile.js'
+import type { Config, UserConfig } from './types.js'
+import { mergeWithDefaults, validateConfig } from './mergeConfig.js'
 
 const { NODE_ENV } = process.env
 
-const assembleConfig = (configPath: string) => {
+const assembleConfig = (configPath: string): Config => {
   if (!NODE_ENV) {
     throw new Error('NODE_ENV is not defined')
   }
@@ -12,13 +14,22 @@ const assembleConfig = (configPath: string) => {
   const projectDir = process.cwd()
   const configDir = path.join(projectDir, configPath)
 
+  // Read base configuration (required)
   const baseConfigFilePath = path.join(configDir, 'index.yaml')
-  const baseConfig = readConfigFile(baseConfigFilePath)
+  const baseConfig = readConfigFile(baseConfigFilePath, false)
 
+  // Read environment-specific configuration (optional)
   const envConfigFilePath = path.join(configDir, `node.${NODE_ENV}.yaml`)
-  const envConfig = readConfigFile(envConfigFilePath)
+  const envConfig = readConfigFile(envConfigFilePath, true)
 
-  return mergeDeepRight(baseConfig, envConfig)
+  // Merge configs: defaults -> base -> environment
+  const mergedUserConfig = mergeDeepRight(baseConfig, envConfig) as UserConfig
+  const finalConfig = mergeWithDefaults(mergedUserConfig)
+
+  // Validate the final configuration
+  validateConfig(finalConfig)
+
+  return finalConfig
 }
 
 export default assembleConfig

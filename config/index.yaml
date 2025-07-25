@@ -1,8 +1,30 @@
 name: service
-sns:
+core:
   auth:
-    jwt:
-      securePaths:
-        - /secure
+    strategies:
+      jwt:
+        provider: jwt
+        config:
+          secret: ${JWT_SECRET}
+    paths:
+      - path: /secure
+        strategy: jwt
+  cloud:
+    cluster: ''
+    environment: ''
+    region: ''
+  port: 3000
+  cors:
+    enabled: false
+    origins: null
+    methods: null
+    requestHeaders: null
+    responseHeaders: null
+    supportsCredentials: null
+    maxAge: null
+    endPreflightRequests: null
+  https:
+    enabled: false
+    options: {}
 env:
   JWT_SECRET: index

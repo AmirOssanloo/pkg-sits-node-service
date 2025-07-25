@@ -1,6 +1,9 @@
-import applyEnv from './applyEnv'
+import applyEnv from './applyEnv.js'
+
+import { getDefaultConfig } from './defaults.js'
 
 const CONFIG = {
+  ...getDefaultConfig(),
   name: 'service',
   env: {
     JWT_SECRET: 'secret',

@@ -1,5 +1,5 @@
-import path from 'path'
-import readConfigFile from './readConfigFile'
+import * as path from 'path'
+import readConfigFile from './readConfigFile.js'
 
 const configDir = 'config'
 
@@ -9,7 +9,7 @@ describe('readConfigFile', () => {
       const filePath = path.join(configDir, 'index.yaml')
       const config = readConfigFile(filePath)
 
-      expect(config.env.JWT_SECRET).toBe('index')
+      expect(config.env?.JWT_SECRET).toBe('index')
     })
 
     it('should read environment file', () => {
@@ -17,7 +17,7 @@ describe('readConfigFile', () => {
       const filePath = path.join(configDir, `node.${ENV}.yaml`)
       const config = readConfigFile(filePath)
 
-      expect(config.env.JWT_SECRET).toBe(ENV)
+      expect(config.env?.JWT_SECRET).toBe(ENV)
     })
   })
 

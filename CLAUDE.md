@@ -10,14 +10,16 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 | Category | Tech choice |
 |---------|---------|
 | Package manager | pnpm |
-| Runtime environment | Node.js |
+| Runtime environment | Node.js 22.16.0+ |
+| Module system | ESM (ECMAScript modules) |
+| TypeScript config | @tsconfig/node22 (uses `moduleResolution: node16`) |
 | Web server | Express 5 |
 | Middleware | Express-compatible (cookie-parser, cors, helmet) |
 | Authentication | JWT (jsonwebtoken) |
 | Schema validation | Joi |
 | Configuration | YAML files with environment overrides |
 | Testing | Jest, ts-jest |
-| Build | TypeScript, custom build scripts |
+| Build | TypeScript with dual ESM/CJS output |
 
 ## Key Commands
 
@@ -103,6 +105,8 @@ For detailed guidelines and agent behavior, see:
 - **Performance:** Optimize middleware chains, avoid blocking operations
 - **Documentation:** Keep docs updated when making changes
 - **Dependencies:** New dependencies require justification
+- **ESM Modules:** This project uses ESM (ECMAScript modules). All relative imports in TypeScript files MUST include the `.js` extension (e.g., `import foo from './foo.js'`). This is required by Node.js ESM resolution and TypeScript's `node16`/`nodenext` module resolution strategy.
+- **Dual Package Build:** Packages are built to support both ESM and CommonJS consumers. The build process creates both `dist/esm/` and `dist/cjs/` outputs, allowing the packages to be used in any Node.js environment.
 
 ## AI Assistant Configuration
 

@@ -1,4 +1,4 @@
-import assembleConfig from './assembleConfig'
+import assembleConfig from './assembleConfig.js'
 
 const configDir = 'config'
 
@@ -26,6 +26,6 @@ describe('assembleConfig', () => {
 
   it('should overwrite values from environment configuration', () => {
     const config = assembleConfig(configDir)
-    expect(config.env.JWT_SECRET).toBe('test')
+    expect(config.env?.JWT_SECRET).toBe('test')
   })
 })
