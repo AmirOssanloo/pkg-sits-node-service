@@ -1,6 +1,8 @@
+/** @type {import('jest').Config} */
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
+  extensionsToTreatAsEsm: ['.ts'],
   roots: ['<rootDir>/packages', '<rootDir>/src'],
   collectCoverageFrom: [
     'packages/*/src/**/*.ts',
@@ -13,13 +15,29 @@ module.exports = {
   moduleFileExtensions: ['js', 'ts'],
   reporters: ['default', 'jest-junit'],
   moduleNameMapper: {
-    '^@sits/(.*)$': '<rootDir>/packages/$1/src'
+    '^@sits/(.*)$': '<rootDir>/packages/$1/src',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx|js)',
     '**/?(*.)+(spec|test).+(ts|tsx|js)'
   ],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+      tsconfig: {
+        moduleResolution: 'node',
+        allowJs: true
+      }
+    }
+  },
   transform: {
-    '^.+\\.ts$': 'ts-jest'
-  }
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true
+      }
+    ]
+  },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)']
 }

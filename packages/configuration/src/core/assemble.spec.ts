@@ -1,14 +1,12 @@
-import assembleConfig from './assembleConfig.js'
+import assembleConfig from './assemble.js'
 
-const configDir = 'config'
+const configDir = '../../config'
 
 describe('assembleConfig', () => {
   const NODE_ENV = 'test'
   const PROCESS_ENV = process.env
 
   beforeEach(() => {
-    jest.resetModules()
-
     process.env = {
       ...PROCESS_ENV,
       NODE_ENV,

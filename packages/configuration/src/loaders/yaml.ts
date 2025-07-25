@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
-import type { UserConfig } from './types.js'
+import type { UserConfig } from '../types.js'
 
 const readConfigFile = (filePath: string, optional: boolean = false): UserConfig => {
   if (!fs.existsSync(filePath)) {

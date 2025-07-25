@@ -130,6 +130,8 @@ In production, the `env` section is automatically removed from the configuration
 
 ```typescript
 import config from '@sits/configuration'
+import { validateConfig, ConfigSchema, isValidConfig } from '@sits/configuration'
+import { z } from 'zod'
 
 // Access core configuration
 console.log(config.core.port)
@@ -155,4 +157,61 @@ interface MyConfig extends Config {
 }
 
 const typedConfig = config as MyConfig
+
+// Validate custom configuration
+const MyConfigSchema = ConfigSchema.extend({
+  resources: z.object({
+    database: z.object({
+      host: z.string(),
+      port: z.number(),
+      name: z.string()
+    })
+  }).optional()
+})
+
+// Runtime validation
+try {
+  const validatedConfig = validateConfig(myConfig)
+  console.log('Configuration is valid!')
+} catch (error) {
+  console.error('Configuration errors:', error.message)
+}
+
+// Strict validation (no unknown properties allowed)
+const strictConfig = validateConfig(myConfig, { strict: true })
+
+// Type guard
+if (isValidConfig(unknownConfig)) {
+  // TypeScript knows this is a valid Config
+  console.log(unknownConfig.core.port)
+}
+```
+
+## Schema Extension
+
+You can extend the base schemas for custom validation. Use `BaseConfigSchema` for strict validation or `ConfigSchema` for allowing additional properties:
+
+```typescript
+import { CoreConfigSchema, ConfigSchema } from '@sits/configuration'
+import { z } from 'zod'
+
+// Extend core config
+const MyCustomCoreSchema = CoreConfigSchema.extend({
+  customSetting: z.string().default('default-value')
+})
+
+// Create fully custom config schema
+const MyServiceConfigSchema = ConfigSchema.extend({
+  core: MyCustomCoreSchema,
+  features: z.object({
+    rateLimit: z.object({
+      enabled: z.boolean(),
+      maxRequests: z.number().int().positive(),
+      windowMs: z.number().int().positive()
+    })
+  })
+})
+
+// Use for validation
+const config = MyServiceConfigSchema.parse(rawConfig)
 ```

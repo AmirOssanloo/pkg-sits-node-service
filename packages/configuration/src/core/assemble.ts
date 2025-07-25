@@ -1,8 +1,9 @@
 import * as path from 'path'
 import { mergeDeepRight } from 'ramda'
-import readConfigFile from './readConfigFile.js'
-import type { Config, UserConfig } from './types.js'
-import { mergeWithDefaults, validateConfig } from './mergeConfig.js'
+import readConfigFile from '../loaders/yaml.js'
+import type { Config, UserConfig } from '../types.js'
+import { mergeWithDefaults } from './merge.js'
+import { validateConfig as validateConfigSchema } from '../validation/validator.js'
 
 const { NODE_ENV } = process.env
 
@@ -26,10 +27,10 @@ const assembleConfig = (configPath: string): Config => {
   const mergedUserConfig = mergeDeepRight(baseConfig, envConfig) as UserConfig
   const finalConfig = mergeWithDefaults(mergedUserConfig)
 
-  // Validate the final configuration
-  validateConfig(finalConfig)
+  // Validate the final configuration with schema
+  const validatedConfig = validateConfigSchema(finalConfig)
 
-  return finalConfig
+  return validatedConfig
 }
 
 export default assembleConfig

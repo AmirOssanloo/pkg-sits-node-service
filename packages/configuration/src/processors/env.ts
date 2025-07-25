@@ -1,5 +1,5 @@
 import { hasIn } from 'ramda'
-import type { Config } from './types.js'
+import type { Config } from '../types.js'
 
 const CONFIG_ENV_KEY = 'env'
 

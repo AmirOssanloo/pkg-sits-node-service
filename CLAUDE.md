@@ -16,7 +16,7 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 | Web server | Express 5 |
 | Middleware | Express-compatible (cookie-parser, cors, helmet) |
 | Authentication | JWT (jsonwebtoken) |
-| Schema validation | Joi |
+| Schema validation | Zod |
 | Configuration | YAML files with environment overrides |
 | Testing | Jest, ts-jest |
 | Build | TypeScript with dual ESM/CJS output |

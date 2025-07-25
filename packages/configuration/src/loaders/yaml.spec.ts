@@ -1,7 +1,7 @@
 import * as path from 'path'
-import readConfigFile from './readConfigFile.js'
+import readConfigFile from './yaml.js'
 
-const configDir = 'config'
+const configDir = '../../config'
 
 describe('readConfigFile', () => {
   describe('should read correct file', () => {

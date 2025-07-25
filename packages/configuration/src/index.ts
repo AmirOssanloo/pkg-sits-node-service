@@ -1,5 +1,5 @@
-import applyEnv from './applyEnv.js'
-import assembleConfig from './assembleConfig.js'
+import applyEnv from './processors/env.js'
+import assembleConfig from './core/assemble.js'
 
 const config = assembleConfig('config')
 const envConfig = applyEnv(config)
@@ -22,5 +22,34 @@ export type {
 } from './types.js'
 
 // Export utilities for programmatic use
-export { mergeWithDefaults, validateConfig } from './mergeConfig.js'
-export { getDefaultConfig } from './defaults.js'
+export { mergeWithDefaults } from './core/merge.js'
+export { getDefaultConfig } from './core/defaults.js'
+
+// Export validation utilities
+export {
+  validateConfig,
+  validateConfigAsync,
+  safeValidateConfig,
+  isValidConfig,
+  extractConfigPath
+} from './validation/validator.js'
+
+export {
+  ConfigValidationError,
+  type ValidationIssue
+} from './validation/errors.js'
+
+export type { ValidationOptions } from './validation/schemas.js'
+
+// Export schemas for extension
+export {
+  ConfigSchema,
+  BaseConfigSchema,
+  CoreConfigSchema,
+  AuthConfigSchema,
+  CloudConfigSchema,
+  CorsConfigSchema,
+  HttpsConfigSchema,
+  StrategyDefinitionSchema,
+  StrategyPathSchema
+} from './validation/schemas.js'

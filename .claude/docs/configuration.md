@@ -2,18 +2,52 @@
 
 ## Overview
 
-The `configuration` package (planned) will provide a robust configuration management system for Node.js services. Currently, the configuration logic is embedded within the `node-service` package but will be extracted into its own package for reusability.
+The `@sits/configuration` package provides a robust, type-safe configuration management system for Node.js services. It features YAML-based configuration with environment-specific overrides, TypeScript type definitions, and default value support.
 
 ## Current Implementation
 
-The configuration system currently resides in `packages/node-service/config/` and provides:
-
 ### Features
-- YAML file support for different environments
-- Environment variable interpolation
-- Hierarchical configuration merging
-- Type-safe configuration access
-- Default values with environment overrides
+- **YAML-based configuration** with environment-specific overrides
+- **TypeScript type definitions** for type safety
+- **Default configuration** with deep merging
+- **Environment variable support** via `env` section
+- **Dual ESM/CJS build** for maximum compatibility
+- **Extensible design** allowing custom properties
+
+### Package Structure
+```
+packages/configuration/
+├── src/
+│   ├── index.ts              # Main exports
+│   ├── types.d.ts            # TypeScript type definitions
+│   ├── defaults.ts           # Default configuration values
+│   ├── assembleConfig.ts     # Configuration assembly logic
+│   ├── applyEnv.ts           # Environment variable application
+│   ├── readConfigFile.ts     # YAML file reading
+│   └── mergeConfig.ts        # Configuration merging utilities
+├── EXAMPLE.md                # Usage examples
+└── package.json              # Package configuration
+```
+
+### Configuration Structure
+
+The configuration uses a `core` namespace for framework settings and allows custom properties:
+
+```typescript
+interface Config {
+  name: string              // Service name (required)
+  core: CoreConfig          // Framework configuration
+  [key: string]: any        // Custom properties
+}
+
+interface CoreConfig {
+  auth: AuthConfig | null   // Authentication settings
+  cloud: CloudConfig        // Cloud deployment info
+  port: number              // Server port (default: 3000)
+  cors: CorsConfig          // CORS settings
+  https: HttpsConfig        // HTTPS configuration
+}
+```
 
 ### Configuration Files
 
@@ -25,115 +59,141 @@ config/
 └── node.test.yaml          # Test environment config
 ```
 
-### Environment Variable Substitution
-
-Configuration files support environment variable interpolation using `${VAR_NAME}` syntax:
-
-```yaml
-database:
-  host: ${DB_HOST:localhost}  # Default to localhost
-  port: ${DB_PORT:5432}
-  password: ${DB_PASSWORD}     # Required, no default
-```
-
-## Planned Architecture
-
-### Module Structure
-```
-packages/configuration/
-├── index.ts                 # Main exports
-├── ConfigLoader.ts          # Main configuration loader
-├── readers/
-│   ├── YamlReader.ts        # YAML file reader
-│   ├── JsonReader.ts        # JSON file reader
-│   └── EnvReader.ts         # Environment variable reader
-├── validators/
-│   ├── SchemaValidator.ts   # Configuration schema validation
-│   └── types.ts             # Validation types
-├── interpolation/
-│   └── EnvInterpolator.ts   # Environment variable substitution
-└── types.ts                 # Configuration types
-```
-
-### Usage Pattern (Planned)
+### Usage
 
 ```typescript
-import { ConfigLoader } from '@amirossanloo/configuration'
+import config from '@sits/configuration'
 
-// Define configuration schema
-interface AppConfig {
-  server: {
-    port: number
-    host: string
-  }
-  database: {
-    url: string
-    poolSize: number
+// Access core configuration
+console.log(config.core.port)        // 3000
+console.log(config.core.cors.enabled) // false
+
+// Access custom properties
+console.log(config.myCustomProperty)
+```
+
+### Environment Variables
+
+Set environment variables via the `env` section:
+
+```yaml
+env:
+  JWT_SECRET: my-secret-key
+  DATABASE_URL: postgres://localhost:5432/mydb
+```
+
+These are applied to `process.env` and removed from the config object in production.
+
+## Configuration Merging
+
+The system merges configurations in this order:
+1. **Default configuration** (from `defaults.ts`)
+2. **Base configuration** (`config/index.yaml`)
+3. **Environment-specific** (`config/node.{NODE_ENV}.yaml`)
+
+Later values override earlier ones using deep merge.
+
+## Type Safety
+
+Full TypeScript support with exported types:
+
+```typescript
+import type { Config, CoreConfig, UserConfig } from '@sits/configuration'
+
+// Extend for custom properties
+interface MyConfig extends Config {
+  resources?: {
+    database?: {
+      host: string
+      port: number
+    }
   }
 }
+```
 
-// Load configuration
-const config = await ConfigLoader.load<AppConfig>({
-  basePath: './config',
-  environment: process.env.NODE_ENV,
-  schema: configSchema, // Joi/Zod schema
-  defaults: {
-    server: { port: 3000, host: '0.0.0.0' },
-    database: { poolSize: 10 }
-  }
+## Schema Validation
+
+The configuration package now includes comprehensive schema validation using Zod:
+
+### Features
+- **Runtime validation** - Configurations are validated when loaded
+- **Clear error messages** - Detailed paths and descriptions for validation failures
+- **Type inference** - Schemas provide TypeScript types automatically
+- **Extensible schemas** - Export schemas for custom validation rules
+- **Validation modes** - Strict mode (BaseConfigSchema) rejects unknown properties, permissive mode (ConfigSchema) allows them
+
+### Usage
+
+```typescript
+import { validateConfig, ConfigSchema } from '@sits/configuration'
+
+// Validate a configuration object
+try {
+  const config = validateConfig(myConfig)
+} catch (error) {
+  // ConfigValidationError with detailed issues
+  console.error(error.message)
+}
+
+// Safe validation (no throwing)
+const result = safeValidateConfig(myConfig)
+if (result.success) {
+  console.log(result.data)
+} else {
+  console.error(result.error.issues)
+}
+
+// Extend schemas for custom validation
+const MyConfigSchema = ConfigSchema.extend({
+  myCustomField: z.string().min(1)
 })
 ```
 
-## Key Features to Implement
+### Error Format
 
-### 1. Multiple File Formats
-- YAML (current)
-- JSON
-- TOML
-- Environment files (.env)
+```
+Configuration validation failed:
+  - core.port: Expected number, received string
+  - core.cors.origins.0: Invalid URL
+  - name: Service name is required
+```
 
-### 2. Schema Validation
-- Joi or Zod integration
-- Runtime type checking
-- Clear error messages
+## Upcoming Features
 
-### 3. Configuration Sources
-- Files (YAML, JSON, etc.)
-- Environment variables
-- Command line arguments
-- Remote sources (Consul, etcd)
+### Future Enhancements
+- Hot reloading for development
+- Remote configuration sources
+- Encrypted value support
+- Environment variable interpolation in YAML
+- CLI configuration tools
 
-### 4. Advanced Features
-- Hot reloading
-- Encrypted values
-- Configuration inheritance
-- Namespace support
+## Best Practices
 
-### 5. Developer Experience
-- TypeScript generics for type safety
-- Detailed error messages
-- Configuration debugging tools
-- Migration utilities
+1. **Use the `core` namespace** for framework settings
+2. **Add custom properties** at the root level
+3. **Sensitive values** should use environment variables
+4. **Document custom properties** in your service README
+5. **Test configuration** in all target environments
 
-## Migration Plan
+## Migration from Embedded Config
 
-1. Extract current config code from `node-service`
-2. Create new `@amirossanloo/configuration` package
-3. Add schema validation
-4. Implement multiple readers
-5. Add hot reload support
-6. Update `node-service` to use new package
+If migrating from the old embedded configuration:
+
+1. Update imports from `@sits/node-service/config` to `@sits/configuration`
+2. Change `sns.*` references to `core.*`
+3. Update any custom configuration to use the new structure
 
 ## Security Considerations
 
-- Sensitive values should be loaded from environment variables
-- Support for encrypted configuration values
-- Audit trail for configuration changes
-- Validation to prevent injection attacks
+- Environment variables in `env` section are removed in production
+- Never commit sensitive values to configuration files
+- Use environment-specific files on secure deployment systems
+- Validate all configuration values before use
 
-## Testing Strategy
+## Testing
 
-- Unit tests for each reader/validator
-- Integration tests with real config files
-- Mock implementations for testing
-- Performance benchmarks for large configs
+The package includes comprehensive tests for:
+- Configuration file reading
+- Environment merging
+- Default value application
+- Type safety verification

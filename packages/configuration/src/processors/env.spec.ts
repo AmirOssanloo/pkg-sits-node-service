@@ -1,6 +1,5 @@
-import applyEnv from './applyEnv.js'
-
-import { getDefaultConfig } from './defaults.js'
+import applyEnv from './env.js'
+import { getDefaultConfig } from '../core/defaults.js'
 
 const CONFIG = {
   ...getDefaultConfig(),
@@ -15,8 +14,6 @@ describe('applyEnv', () => {
   const PROCESS_ENV = process.env
 
   beforeEach(() => {
-    jest.resetModules()
-
     process.env = {
       ...PROCESS_ENV,
       NODE_ENV,
