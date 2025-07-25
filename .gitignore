@@ -4,6 +4,7 @@
 # Cache files and directories
 .cache/
 .cache
+.turbo
 
 # Build directories
 dist/

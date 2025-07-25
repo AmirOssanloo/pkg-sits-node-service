@@ -1,7 +1,2 @@
-export type { EnrichedRequest } from './typings/request'
-export type { Logger } from './utils/logger'
-export { default as config } from './config'
-export { default as NodeService } from './createNodeService'
-export { default as validateRequestSchemaMiddleware } from './middleware-validate-request-schema'
-export { default as errorHandlerMiddleware } from './middleware-global-error-handler'
-export * from './errors'
+// Re-export everything from @sits/node-service for backward compatibility
+export * from '@sits/node-service'

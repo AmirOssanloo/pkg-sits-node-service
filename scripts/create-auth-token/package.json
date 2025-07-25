@@ -1,0 +1,16 @@
+{
+  "name": "@sits/create-auth-token",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "./index.sh"
+  },
+  "dependencies": {
+    "@sits/configuration": "workspace:*",
+    "@sits/fixtures": "workspace:*",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10"
+  }
+}

@@ -1,20 +1,10 @@
 {
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
-    "allowJs": false,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    },
-    "resolveJsonModule": true,
-    "strict": true,
-    "target": "ES2022",
-    "types": ["node", "jest"]
+    "allowJs": true,
+    "declaration": true,
+    "skipDefaultLibCheck": true,
+    "sourceMap": true
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.js"]
 }

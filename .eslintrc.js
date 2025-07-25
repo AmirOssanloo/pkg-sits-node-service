@@ -4,7 +4,6 @@ module.exports = {
     'standard',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'plugin:security/recommended',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -12,7 +11,7 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['import', 'jest', 'node', 'prettier', 'security', 'standard'],
+  plugins: ['import', 'jest', 'node', 'prettier', 'security'],
   rules: {
     'import/order': [
       'warn',
@@ -31,8 +30,6 @@ module.exports = {
 
     // Eslint rules
     'prettier/prettier': 'error',
-    'security/detect-non-literal-fs-filename': 'off',
-    'security/detect-object-injection': 'off',
   },
   overrides: [
     {

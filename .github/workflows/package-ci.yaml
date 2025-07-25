@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
 
     steps:
       - name: Checkout code
@@ -35,14 +35,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
-      - name: Enable Corepack and install Yarn
+      - name: Install dependencies
         run: |
-          corepack enable
-          corepack prepare yarn@4.6.0 --activate
-          yarn set version 4.6.0
+          pnpm install
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
@@ -51,30 +49,30 @@ jobs:
           echo "Debugging environment information"
           echo "-----------------------------------"
           echo "Node version: $(node -v)"
-          echo "Yarn version: $(yarn -v)"
+          echo "pnpm version: $(pnpm -v)"
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Install dependencies
         run: |
           echo "🏁 Installing dependencies..."
-          yarn install
+          pnpm install
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Build package
         run: |
-          yarn build || (echo "❌ Build failed!" && exit 1)
+          pnpm build || (echo "❌ Build failed!" && exit 1)
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Check lint
-        run: yarn lint || (echo "❌ Lint failed!" && exit 1)
+        run: pnpm lint || (echo "❌ Lint failed!" && exit 1)
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}
 
       - name: Check types
         run: |
-          yarn types || (echo "❌ Type checking failed!" && exit 1)
+          pnpm type:check || (echo "❌ Type checking failed!" && exit 1)
         env:
           GH_PKG_PRODUCE_TOKEN: ${{ secrets.GH_PKG_PRODUCE_TOKEN }}

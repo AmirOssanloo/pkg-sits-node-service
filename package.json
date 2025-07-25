@@ -1,24 +1,9 @@
 {
   "name": "@amirossanloo/node-service",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "./bin/build.sh",
-    "build:clean": "rm -rf dist",
-    "dev:start": "./bin/dev.sh",
-    "lint": "./bin/eslint.sh",
-    "test": "./bin/test.sh",
-    "types": "./bin/types.sh",
-    "create:token": "./scripts/create-auth-token/index.sh"
-  },
-  "keywords": [],
+  "version": "0.0.0",
   "author": "Amir Ossanloo <amir@amirossanloo.com>",
+  "private": true,
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git://github.com/amirossanloo/pkg-sits-node-service.git"
@@ -26,28 +11,20 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "peerDependencies": {
-    "express": "^4.17.1",
-    "joi": "^17.12.2",
-    "jsonwebtoken": "^9.0.1"
-  },
-  "dependencies": {
-    "@fastify/cookie": "^11.0.2",
-    "@fastify/cors": "^11.0.1",
-    "@fastify/helmet": "^13.0.1",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "fastify": "^5.4.0",
-    "fastify-plugin": "^5.0.1",
-    "helmet": "^8.1.0",
-    "joi": "^17.13.3",
-    "js-yaml": "^4.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "ramda": "^0.31.3",
-    "uuid": "^11.1.0"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "format": "prettier --write",
+    "lint": "turbo run lint --parallel && prettier --check",
+    "lint:fix": "turbo run lint:fix --parallel && prettier --write",
+    "test": "turbo run test --concurrency=1",
+    "type:check": "turbo run type:check --parallel",
+    "release": "tsx bin/publish.sh"
   },
   "devDependencies": {
+    "@tsconfig/node22": "^22.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/eslint": "^9.6.1",
@@ -83,24 +60,8 @@
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
+    "turbo": "^2.3.4",
     "typescript": "^5.8.3"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ],
-    "modulePathIgnorePatterns": [
-      "dist"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "reporters": [
-      "default",
-      "jest-junit"
-    ]
   },
   "jest-junit": {
     "outputName": "test-report.xml"
@@ -108,5 +69,11 @@
   "engines": {
     "node": ">=22.16.0"
   },
-  "packageManager": "pnpm@10.10.0"
+  "volta": {
+    "node": "22.16.0"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "dotenv": "^17.2.1"
+  }
 }
