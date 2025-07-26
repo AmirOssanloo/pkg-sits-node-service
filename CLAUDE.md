@@ -23,26 +23,26 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 
 ## Key Commands
 
-| Command                        | Purpose                                           |
-| ------------------------------ | ------------------------------------------------- |
-| `pnpm install`                 | Install dependencies                              |
-| `pnpm test`                    | Run all tests                                     |
-| `pnpm lint`                    | Run ESLint                                        |
-| `pnpm type:check`              | Run TypeScript type checking                      |
-| `pnpm dev`                     | Start development server with nodemon             |
-| `pnpm build`                   | Build for production                              |
-| `pnpm build:clean`             | Remove build artifacts                            |
-| `pnpm create:token`            | Generate JWT authentication token                 |
+| Command              | Purpose                               |
+| -------------------- | ------------------------------------- |
+| `pnpm install`       | Install dependencies                  |
+| `pnpm test`          | Run all tests                         |
+| `pnpm lint`          | Run ESLint                            |
+| `pnpm type:check`    | Run TypeScript type checking          |
+| `pnpm dev`           | Start development server with nodemon |
+| `pnpm build`         | Build for production                  |
+| `pnpm build:clean`   | Remove build artifacts                |
+| `pnpm create:token`  | Generate JWT authentication token     |
 
 ## Claude Commands
 
-| Command                        | Purpose                                               |
-| ------------------------------ | ----------------------------------------------------- |
-| `c_analyze-improvements`       | Analyze existing functionality for potential improvements |
-| `c_explore-features`           | Explore new features that complement existing functionality |
-| `c_implement-feature`          | Start implementing new features with proper workflow   |
-| `c_update-docs`                | Comprehensive documentation updates                   |
-| `c_finalize-commit`            | Final validation and commit process                   |
+| Command                  | Purpose                                                     |
+| ------------------------ | ----------------------------------------------------------- |
+| `c_analyze-improvements` | Analyze existing functionality for potential improvements   |
+| `c_explore-features`     | Explore new features that complement existing functionality |
+| `c_implement-feature`    | Start implementing new features with proper workflow        |
+| `c_update-docs`          | Comprehensive documentation updates                         |
+| `c_finalize-commit`      | Final validation and commit process                         |
 
 **Package Manager**: Always use `pnpm` (never npm or yarn)
 
@@ -62,7 +62,8 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 3. **Implement** → Follow three-layer architecture
 4. **Review** → Validate code quality
 5. **Test** → Ensure all tests pass
-6. **Commit** → Use conventional commits
+6. **Archive** → Move completed plans to `.claude/plans/done/`
+7. **Commit** → Use conventional commits
 
 ## Project Structure
 
@@ -81,6 +82,7 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 ├── fixtures/         # Test fixtures
 ├── .claude/          # AI assistant config
 │   ├── plans/        # Task planning
+│   │   └── done/     # Completed plans archive
 │   ├── docs/         # Package documentation
 │   └── agents/       # Agent configs
 ├── CLAUDE.md         # This file
@@ -107,7 +109,8 @@ For detailed guidelines and agent behavior, see:
 4. **Implement** → Follow three-layer architecture
 5. **Review** → Code must pass lint and typecheck
 6. **Test** → All tests must pass
-7. **Commit** → Use conventional commits
+7. **Archive** → Move plan to `.claude/plans/done/` when status is ✅ done
+8. **Commit** → Use conventional commits
 
 ## Important Guidelines
 

@@ -49,7 +49,7 @@ Key architectural choices:
 - [ ] **Planner → Programmer**: Plan approved, status set to 🛠 implementing
 - [ ] **Programmer → Reviewer**: All steps complete, tests passing
 - [ ] **Reviewer → Tester**: Code approved, ready for final validation
-- [ ] **Tester → Complete**: All tests pass, status set to ✅ done
+- [ ] **Tester → Complete**: All tests pass, status set to ✅ done, plan moved to `.claude/plans/done/`
 
 ## Decisions Log
 
@@ -65,4 +65,4 @@ _Status Legend:_
 - ⏸️ awaiting approval - Ready for user review
 - 🛠 implementing - Active development
 - 🔍 reviewing - Code review in progress
-- ✅ done - Completed and tested
+- ✅ done - Completed and tested (plan archived to `done/` folder)

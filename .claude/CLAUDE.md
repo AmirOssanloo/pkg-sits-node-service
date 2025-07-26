@@ -89,6 +89,8 @@ By following this checklist, Claude guarantees living documentation that remains
 _Example:_ `.claude/plans/PLAN_feature/123-user-invite.md`  
 Each feature/bug-fix gets exactly **one** plan file, created by the Planner.
 
+**Completed plans:** When a plan reaches ✅ _done_ status, it's moved to `.claude/plans/done/` to keep the active plans directory clean.
+
 ### Markdown layout (template)
 
 ```md
@@ -123,7 +125,7 @@ Each feature/bug-fix gets exactly **one** plan file, created by the Planner.
 | **Planner**     | Create file; fill **Goals** & **Checklist**.<br>Set **Status:** 🟡 _planning_ → ⏸️ _awaiting approval_.<br>Get user approval before setting 🛠 _implementing_. |
 | **Implementer** | Verify status is 🛠 _implementing_ (not ⏸️ _awaiting approval_).<br>Tick boxes as tasks complete.<br>Append brief notes if deviating.                          |
 | **Reviewer**    | Verify all boxes are ticked; add comments under **Decisions / Notes**.<br>Set **Status:** 🔍 _reviewing_.                                                      |
-| **Tester**      | After tests pass, change **Status** to ✅ _done_ and add a final confirmation note.                                                                            |
+| **Tester**      | After tests pass, change **Status** to ✅ _done_, add a final confirmation note, and move the plan file to `.claude/plans/done/`.                              |
 
 ---
 
@@ -133,6 +135,6 @@ Each feature/bug-fix gets exactly **one** plan file, created by the Planner.
 2. **Timestamp** decisions in `YYYY-MM-DD` format.
 3. **No code blobs** – link to files/lines instead.
 4. **Keep it concise** – delete obsolete notes rather than piling up noise.
-5. When **Status** becomes ✅ _done_, archive or move the file to `.claude/plans/_history/`.
+5. When **Status** becomes ✅ _done_, the Tester agent moves the file to `.claude/plans/done/` using `git mv`.
 
 _This shared plan file ensures seamless hand-offs and full transparency between agents._

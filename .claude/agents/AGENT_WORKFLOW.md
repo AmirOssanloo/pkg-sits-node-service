@@ -50,6 +50,9 @@ pnpm test && pnpm lint && pnpm typecheck && pnpm build
 
 # Verify all checklist items completed
 grep -c "\[x\]" .claude/plans/PLAN_*.md
+
+# Archive completed plan
+git mv .claude/plans/PLAN_*.md .claude/plans/done/
 ```
 
 ## Status Transitions
@@ -60,7 +63,7 @@ Valid status flow:
 2. ⏸️ awaiting approval (Planner requests)
 3. 🛠 implementing (User approves)
 4. 🔍 reviewing (Programmer completes)
-5. ✅ done (Tester validates)
+5. ✅ done (Tester validates & archives to done folder)
 
 ## Common Issues
 

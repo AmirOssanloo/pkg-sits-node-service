@@ -51,7 +51,7 @@
 
 6. **Success Handling**
    - Update plan status: ✅ done
-   - Archive plan to `.claude/plans/_history/`
+   - Move plan to `.claude/plans/done/` using `git mv`
    - Prepare commit message:
 
    ```
@@ -67,7 +67,7 @@
 
 1. Document results in plan's Decision Log
 2. Create conventional commit message
-3. Move plan to history folder
+3. Move plan to done folder: `git mv .claude/plans/PLAN_*.md .claude/plans/done/`
 4. Confirm task completion
 
 ## Deliverable
