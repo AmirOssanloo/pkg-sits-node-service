@@ -9,11 +9,14 @@ The `@sits/configuration` package provides a robust, type-safe configuration man
 ### Features
 
 - **YAML-based configuration** with environment-specific overrides
-- **TypeScript type definitions** for type safety
+- **Zod schema validation** with runtime type checking and clear error messages
+- **TypeScript type definitions** auto-generated from Zod schemas
 - **Default configuration** with deep merging
 - **Environment variable support** via `env` section
 - **Dual ESM/CJS build** for maximum compatibility
 - **Extensible design** allowing custom properties
+- **Validation modes** supporting both strict and permissive validation
+- **Schema extension** support for custom validation rules
 
 ### Package Structure
 
@@ -21,13 +24,20 @@ The `@sits/configuration` package provides a robust, type-safe configuration man
 packages/configuration/
 ├── src/
 │   ├── index.ts              # Main exports
-│   ├── types.d.ts            # TypeScript type definitions
-│   ├── defaults.ts           # Default configuration values
-│   ├── assembleConfig.ts     # Configuration assembly logic
-│   ├── applyEnv.ts           # Environment variable application
-│   ├── readConfigFile.ts     # YAML file reading
-│   └── mergeConfig.ts        # Configuration merging utilities
-├── EXAMPLE.md                # Usage examples
+│   ├── types.ts              # TypeScript type definitions
+│   ├── core/
+│   │   ├── assemble.ts       # Configuration assembly logic
+│   │   ├── defaults.ts       # Default configuration values
+│   │   └── merge.ts          # Configuration merging utilities
+│   ├── loaders/
+│   │   └── yaml.ts           # YAML file reading
+│   ├── processors/
+│   │   └── env.ts            # Environment variable processing
+│   └── validation/
+│       ├── schemas.ts        # Zod schema definitions
+│       ├── validator.ts      # Validation functions
+│       └── errors.ts         # Custom error handling
+├── EXAMPLE.md                # Usage examples and validation guide
 └── package.json              # Package configuration
 ```
 
@@ -72,6 +82,94 @@ console.log(config.core.cors.enabled) // false
 
 // Access custom properties
 console.log(config.myCustomProperty)
+```
+
+### Schema Validation
+
+The package uses Zod for runtime schema validation with comprehensive error handling:
+
+```typescript
+import { 
+  validateConfig, 
+  validateConfigAsync, 
+  safeValidateConfig,
+  isValidConfig,
+  ConfigSchema 
+} from '@sits/configuration'
+
+// Runtime validation
+try {
+  const validatedConfig = validateConfig(userConfig)
+  console.log('Configuration is valid!')
+} catch (error) {
+  // Detailed error with path information
+  console.error('Validation errors:', error.issues)
+  /*
+  Output example:
+  [
+    { path: "core.port", message: "Expected number, received string" },
+    { path: "core.cors.origins.0", message: "Invalid URL" }
+  ]
+  */
+}
+
+// Safe validation (returns result object)
+const result = safeValidateConfig(userConfig)
+if (result.success) {
+  console.log('Valid config:', result.data)
+} else {
+  console.error('Validation failed:', result.error.issues)
+}
+
+// Type guard validation
+if (isValidConfig(unknownConfig)) {
+  // TypeScript knows this is a valid Config
+  console.log(unknownConfig.core.port)
+}
+
+// Async validation for large configs
+const asyncResult = await validateConfigAsync(largeConfig)
+```
+
+### Validation Modes
+
+```typescript
+// Strict mode: Rejects unknown properties
+const strictConfig = validateConfig(userConfig, { strict: true })
+
+// Permissive mode (default): Allows unknown properties
+const permissiveConfig = validateConfig(userConfig, { strict: false })
+```
+
+### Schema Extension
+
+Extend schemas for custom validation:
+
+```typescript
+import { ConfigSchema, CoreConfigSchema } from '@sits/configuration'
+import { z } from 'zod'
+
+// Extend the core schema
+const MyCustomCoreSchema = CoreConfigSchema.extend({
+  customFeature: z.object({
+    enabled: z.boolean(),
+    maxItems: z.number().int().positive()
+  })
+})
+
+// Create custom config schema
+const MyConfigSchema = ConfigSchema.extend({
+  core: MyCustomCoreSchema,
+  resources: z.object({
+    database: z.object({
+      host: z.string().url(),
+      port: z.number().int().min(1).max(65535)
+    })
+  }).optional()
+})
+
+// Use for validation
+const myConfig = MyConfigSchema.parse(rawConfig)
 ```
 
 ### Environment Variables

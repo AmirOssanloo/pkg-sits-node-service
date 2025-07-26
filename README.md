@@ -6,11 +6,13 @@ A lightweight Node.js framework for building HTTP services with minimal boilerpl
 
 - 🚀 **Express 5** - Battle-tested web framework
 - 🔧 **Zero Config** - Sensible defaults with YAML configuration support
+- ✅ **Schema Validation** - Runtime configuration validation with Zod and clear error messages
 - 🔐 **JWT Authentication** - Built-in auth middleware with secure path routing
 - 📝 **Structured Logging** - Request tracking with correlation IDs
 - 🛡️ **Security** - Helmet, CORS, and security best practices
 - ⚡ **Graceful Shutdown** - Proper cleanup and resource management
 - 🧪 **Testing Ready** - Jest setup with TypeScript support
+- 📦 **Dual Package** - ESM and CommonJS builds for maximum compatibility
 
 ## Installation
 
