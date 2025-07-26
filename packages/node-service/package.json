@@ -1,0 +1,43 @@
+{
+  "name": "@sits/node-service",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json && cp -R src/typings dist/typings && cp src/types.d.ts dist/types.d.ts",
+    "build:clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts",
+    "test": "jest",
+    "type:check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1 || ^5.0.0",
+    "joi": "^17.12.2",
+    "jsonwebtoken": "^9.0.1"
+  },
+  "dependencies": {
+    "@sits/configuration": "workspace:*",
+    "@sits/errors": "workspace:*",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/uuid": "^10.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}
