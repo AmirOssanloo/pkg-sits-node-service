@@ -1,6 +1,5 @@
 import type { Server } from 'node:http'
 import type { Express, Request, Response, NextFunction } from 'express'
-import type { Schema as JoiSchema } from 'joi'
 import type { ZodSchema, ZodObject } from 'zod'
 import type { Logger } from '../utils/logger.js'
 
@@ -65,17 +64,16 @@ export interface AuthOptions {
   onExpired?: (req: Request, res: Response) => void
 }
 
-// Validation schemas (supporting both Joi and Zod during migration)
+// Validation schemas (Zod only)
 export interface ValidationSchema {
-  body?: ZodSchema | JoiSchema
-  query?: ZodSchema | JoiSchema
-  params?: ZodSchema | JoiSchema
+  body?: ZodSchema
+  query?: ZodSchema
+  params?: ZodSchema
 }
 
 // Validation options
 export interface ValidationOptions {
-  coerce?: boolean
-  coerceBooleans?: boolean // Joi compatibility
+  coerce?: boolean // Enable type coercion
 }
 
 /**

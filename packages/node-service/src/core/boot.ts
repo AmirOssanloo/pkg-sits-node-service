@@ -15,7 +15,7 @@ interface BootApp {
 
 const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
   const config = getServiceConfig()
-  const { server } = await createServer({ app, port: config.service.port, logger })
+  const { server } = await createServer({ app, port: config.service?.port ?? 3000, logger })
 
   const gracefulShutdown = createGracefulShutdown({
     server,
@@ -43,7 +43,7 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
   })
 
   // Use signals from configuration
-  const signalTraps = config.service.shutdown.signals
+  const signalTraps = config.service?.shutdown?.signals ?? ['SIGTERM', 'SIGINT']
 
   signalTraps.forEach((eventType) => {
     const shutdown = gracefulShutdown(eventType)

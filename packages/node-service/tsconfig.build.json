@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.spec.ts"]
+  "compilerOptions": {
+    "sourceMap": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo.esm.json"
+  },
+  "exclude": ["**/*.spec.ts", "**/__tests__/**", "test/**"]
 }

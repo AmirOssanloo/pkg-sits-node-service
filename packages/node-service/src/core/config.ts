@@ -1,11 +1,13 @@
 import config from '@sits/configuration'
+import { pathOr } from 'ramda'
 import { z } from 'zod'
 
 /**
  * Node Service configuration schema
  */
 export const nodeServiceConfigSchema = z.object({
-  service: z.object({
+  service: z
+    .object({
     name: z.string().min(1).default('node-service'),
     version: z.string().default('1.0.0'),
     environment: z.enum(['development', 'test', 'staging', 'production']).default('development'),
@@ -23,16 +25,18 @@ export const nodeServiceConfigSchema = z.object({
       .optional(),
 
     // Server configuration
-    server: z.object({
-      trustProxy: z.boolean().default(false),
-      timeout: z.number().positive().default(60000), // 60 seconds
-      keepAliveTimeout: z.number().positive().default(65000), // 65 seconds
-      headersTimeout: z.number().positive().default(66000), // 66 seconds
-      maxHeaderSize: z.number().positive().default(16384), // 16KB
-    }),
+    server: z
+      .object({
+        trustProxy: z.boolean().default(false),
+        timeout: z.number().positive().default(60000), // 60 seconds
+        keepAliveTimeout: z.number().positive().default(65000), // 65 seconds
+        headersTimeout: z.number().positive().default(66000), // 66 seconds
+        maxHeaderSize: z.number().positive().default(16384), // 16KB
+      }),
 
     // Middleware configuration
-    middleware: z.object({
+    middleware: z
+      .object({
       // CORS configuration
       cors: z.object({
         enabled: z.boolean().default(true),
@@ -122,7 +126,8 @@ export const nodeServiceConfigSchema = z.object({
     }),
 
     // Health check configuration
-    health: z.object({
+    health: z
+      .object({
       enabled: z.boolean().default(true),
       path: z.string().default('/health'),
       timeout: z.number().positive().default(5000),
@@ -137,14 +142,16 @@ export const nodeServiceConfigSchema = z.object({
     }),
 
     // Metrics configuration
-    metrics: z.object({
+    metrics: z
+      .object({
       enabled: z.boolean().default(false),
       path: z.string().default('/metrics'),
       includeDefaults: z.boolean().default(true),
     }),
 
     // Graceful shutdown configuration
-    shutdown: z.object({
+    shutdown: z
+      .object({
       enabled: z.boolean().default(true),
       timeout: z.number().positive().default(30000), // 30 seconds
       signals: z.array(z.string()).default(['SIGTERM', 'SIGINT']),
@@ -169,9 +176,8 @@ export function getServiceConfig(): NodeServiceConfig {
     // Validate and return
     return nodeServiceConfigSchema.parse(rawConfig)
   } catch (error) {
-    // If validation fails, return defaults
-    console.warn('Configuration validation failed, using defaults:', error)
-    return nodeServiceConfigSchema.parse({})
+    // If validation fails, return complete defaults
+    return defaultConfig
   }
 }
 
@@ -180,18 +186,27 @@ export function getServiceConfig(): NodeServiceConfig {
  */
 export function getConfigValue<T>(path: string, defaultValue: T): T {
   const parts = path.split('.')
-  let value: any = getServiceConfig()
-
-  for (const part of parts) {
-    if (value && typeof value === 'object' && part in value) {
-      value = value[part]
-    } else {
-      return defaultValue
-    }
-  }
-
-  return value as T
+  return pathOr(defaultValue, parts, getServiceConfig()) as T
 }
 
 // Export the default configuration
-export const defaultConfig = nodeServiceConfigSchema.parse({})
+export const defaultConfig = nodeServiceConfigSchema.parse({
+  service: {
+    server: {},
+    middleware: {
+      cors: {},
+      helmet: {},
+      auth: {},
+      rateLimit: {},
+      bodyParser: {
+        json: {},
+        urlencoded: {},
+        raw: {},
+        text: {},
+      },
+    },
+    health: {},
+    metrics: {},
+    shutdown: {},
+  },
+})

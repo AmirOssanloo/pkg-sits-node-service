@@ -1,0 +1,20 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "email": "user1@example.com",
+    "name": "Test User 1",
+    "role": "admin"
+  },
+  {
+    "id": "223e4567-e89b-12d3-a456-426614174001",
+    "email": "user2@example.com",
+    "name": "Test User 2",
+    "role": "user"
+  },
+  {
+    "id": "323e4567-e89b-12d3-a456-426614174002",
+    "email": "user3@example.com",
+    "name": "Test User 3",
+    "role": "guest"
+  }
+]

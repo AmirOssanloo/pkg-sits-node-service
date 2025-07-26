@@ -8,7 +8,6 @@ export { default as createApp } from './core/app.js'
 export { default as bootApp } from './core/boot.js'
 
 // Middleware exports
-export { default as validateRequestSchemaMiddleware } from './middleware/validation/validate-request-joi.js' // Deprecated - use validateRequestMiddleware
 export { default as validateRequestMiddleware } from './middleware/validation/validate-request.js'
 export { default as errorHandlerMiddleware } from './middleware/error-handler/index.js'
 export * from './middleware/validation/schemas.js'

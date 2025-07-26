@@ -1,0 +1,11 @@
+# Build outputs (package-specific)
+*.tsbuildinfo
+.tsbuildinfo.*.json
+
+# Test coverage (package-specific)
+coverage/
+.nyc_output/
+
+# Environment (package-specific)
+.env.local
+.env.*.local

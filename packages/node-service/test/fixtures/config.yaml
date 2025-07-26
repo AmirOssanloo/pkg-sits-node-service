@@ -1,0 +1,30 @@
+# Test configuration fixture
+service:
+  name: test-service
+  version: 1.0.0
+  environment: test
+  port: 9999
+  
+  logging:
+    level: debug
+    format: json
+    silent: false
+    
+  middleware:
+    cors:
+      enabled: true
+      origin: "*"
+      
+    auth:
+      enabled: false
+      
+    rateLimit:
+      enabled: false
+      
+  health:
+    enabled: true
+    path: /health
+    
+  shutdown:
+    enabled: true
+    timeout: 5000

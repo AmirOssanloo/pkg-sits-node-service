@@ -4,9 +4,9 @@ import express from 'express'
 import type { Express } from 'express'
 import helmet from 'helmet'
 import authMiddleware from '../middleware/auth/index.js'
-import contextMiddleware from '../middleware/logging/context.js'
-import correlationIdMiddleware from '../middleware/logging/correlation-id.js'
 import loggerMiddleware from '../middleware/logging/logger.js'
+import contextMiddleware from '../middleware/request/context.js'
+import correlationIdMiddleware from '../middleware/request/correlation-id.js'
 import type { Logger } from '../utils/logger.js'
 import { getServiceConfig } from './config.js'
 
@@ -26,17 +26,17 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
   // Apply configurable middleware
 
   // CORS
-  if (config.service.middleware.cors.enabled) {
+  if (config.service.middleware?.cors?.enabled !== false) {
     app.use(
       cors({
-        origin: config.service.middleware.cors.origin as any,
-        credentials: config.service.middleware.cors.credentials,
-        methods: config.service.middleware.cors.methods,
-        allowedHeaders: config.service.middleware.cors.allowedHeaders,
-        exposedHeaders: config.service.middleware.cors.exposedHeaders,
-        maxAge: config.service.middleware.cors.maxAge,
-        preflightContinue: config.service.middleware.cors.preflightContinue,
-        optionsSuccessStatus: config.service.middleware.cors.optionsSuccessStatus,
+        origin: config.service.middleware?.cors?.origin ?? true,
+        credentials: config.service.middleware?.cors?.credentials ?? true,
+        methods: config.service.middleware?.cors?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: config.service.middleware?.cors?.allowedHeaders,
+        exposedHeaders: config.service.middleware?.cors?.exposedHeaders,
+        maxAge: config.service.middleware?.cors?.maxAge,
+        preflightContinue: config.service.middleware?.cors?.preflightContinue ?? false,
+        optionsSuccessStatus: config.service.middleware?.cors?.optionsSuccessStatus ?? 204,
       })
     )
   }
@@ -44,38 +44,38 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
   // Body parsing
   app.use(
     express.json({
-      limit: config.service.middleware.bodyParser.json.limit,
-      strict: config.service.middleware.bodyParser.json.strict,
-      type: config.service.middleware.bodyParser.json.type,
+      limit: config.service.middleware?.bodyParser?.json?.limit ?? '10mb',
+      strict: config.service.middleware?.bodyParser?.json?.strict ?? true,
+      type: config.service.middleware?.bodyParser?.json?.type ?? 'application/json',
     })
   )
 
   app.use(
     express.urlencoded({
-      extended: config.service.middleware.bodyParser.urlencoded.extended,
-      limit: config.service.middleware.bodyParser.urlencoded.limit,
-      parameterLimit: config.service.middleware.bodyParser.urlencoded.parameterLimit,
+      extended: config.service.middleware?.bodyParser?.urlencoded?.extended ?? true,
+      limit: config.service.middleware?.bodyParser?.urlencoded?.limit ?? '10mb',
+      parameterLimit: config.service.middleware?.bodyParser?.urlencoded?.parameterLimit ?? 1000,
     })
   )
 
   // Helmet
-  if (config.service.middleware.helmet.enabled) {
+  if (config.service.middleware?.helmet?.enabled !== false) {
     app.use(
       helmet({
-        contentSecurityPolicy: config.service.middleware.helmet.contentSecurityPolicy,
-        crossOriginEmbedderPolicy: config.service.middleware.helmet.crossOriginEmbedderPolicy,
-        crossOriginOpenerPolicy: config.service.middleware.helmet.crossOriginOpenerPolicy,
-        crossOriginResourcePolicy: config.service.middleware.helmet.crossOriginResourcePolicy,
-        dnsPrefetchControl: config.service.middleware.helmet.dnsPrefetchControl,
-        frameguard: config.service.middleware.helmet.frameguard,
-        hidePoweredBy: config.service.middleware.helmet.hidePoweredBy,
-        hsts: config.service.middleware.helmet.hsts,
-        ieNoOpen: config.service.middleware.helmet.ieNoOpen,
-        noSniff: config.service.middleware.helmet.noSniff,
-        originAgentCluster: config.service.middleware.helmet.originAgentCluster,
-        permittedCrossDomainPolicies: config.service.middleware.helmet.permittedCrossDomainPolicies,
-        referrerPolicy: config.service.middleware.helmet.referrerPolicy,
-        xssFilter: config.service.middleware.helmet.xssFilter,
+        contentSecurityPolicy: config.service.middleware?.helmet?.contentSecurityPolicy ?? false,
+        crossOriginEmbedderPolicy: config.service.middleware?.helmet?.crossOriginEmbedderPolicy ?? true,
+        crossOriginOpenerPolicy: config.service.middleware?.helmet?.crossOriginOpenerPolicy ?? true,
+        crossOriginResourcePolicy: config.service.middleware?.helmet?.crossOriginResourcePolicy ?? true,
+        dnsPrefetchControl: config.service.middleware?.helmet?.dnsPrefetchControl ?? true,
+        frameguard: config.service.middleware?.helmet?.frameguard ?? true,
+        hidePoweredBy: config.service.middleware?.helmet?.hidePoweredBy ?? true,
+        hsts: config.service.middleware?.helmet?.hsts ?? true,
+        ieNoOpen: config.service.middleware?.helmet?.ieNoOpen ?? true,
+        noSniff: config.service.middleware?.helmet?.noSniff ?? true,
+        originAgentCluster: config.service.middleware?.helmet?.originAgentCluster ?? true,
+        permittedCrossDomainPolicies: config.service.middleware?.helmet?.permittedCrossDomainPolicies ?? false,
+        referrerPolicy: config.service.middleware?.helmet?.referrerPolicy ?? true,
+        xssFilter: config.service.middleware?.helmet?.xssFilter ?? true,
       } as any)
     )
   }
@@ -83,7 +83,7 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
   app.use(cookieParser() as any)
 
   // Auth middleware (if enabled)
-  if (config.service.middleware.auth.enabled) {
+  if (config.service.middleware?.auth?.enabled) {
     app.use(authMiddleware() as any)
   }
 

@@ -34,23 +34,22 @@ const createGracefulShutdownHandler = ({ server, releaseResources, logger }: Gra
 
       logger.info(`Graceful shutdown started at ${new Date().toISOString()}`)
 
-      const serverShutdown = (resolve: () => void) => {
-        server.close(async (error) => {
+      // Shut down server
+      await new Promise<void>((resolve) => {
+        server.close((error) => {
           if (error) {
             logger.error('Cannot shutdown server', { error })
           }
-
-          try {
-            await releaseResources()
-          } catch (error) {
-            logger.error('Error occured while releasing resources', { error })
-          }
-
           resolve()
         })
-      }
+      })
 
-      await Promise.all([new Promise<void>(serverShutdown)])
+      // Release resources after server is closed
+      try {
+        await releaseResources()
+      } catch (error) {
+        logger.error('Error occured while releasing resources', { error })
+      }
     }
   }
 }
