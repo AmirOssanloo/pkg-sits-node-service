@@ -31,7 +31,7 @@
     "build": "rimraf dist && pnpm build:esm && pnpm build:cjs && pnpm build:post",
     "build:esm": "tsc -p tsconfig.build.json",
     "build:cjs": "tsc -p tsconfig.build.cjs.json",
-    "build:post": "cp -R src/types dist/esm/types && cp -R src/types dist/cjs/types && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build:post": "mkdir -p dist/cjs && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "build:clean": "rimraf dist coverage *.tsbuildinfo",
     "build:watch": "concurrently \"pnpm build:esm --watch\" \"pnpm build:cjs --watch\"",
     "dev": "tsc --watch",

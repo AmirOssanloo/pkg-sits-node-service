@@ -1,0 +1,27 @@
+name: auth-example
+core:
+  auth:
+    strategies:
+      jwt:
+        provider: jwt
+        config:
+          secret: my-super-secret-key-for-example
+          algorithms: ['HS256']
+    paths:
+      - path: /api/secure
+        strategy: jwt
+      - path: /api/admin
+        strategy: jwt
+  cloud:
+    cluster: ''
+    environment: 'development'
+    region: ''
+  port: 3003
+  cors:
+    enabled: true
+    origins: ['http://localhost:3003']
+  https:
+    enabled: false
+    options: {}
+env:
+  JWT_SECRET: my-super-secret-key-for-example
