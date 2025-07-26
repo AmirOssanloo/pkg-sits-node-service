@@ -1,142 +1,62 @@
 import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import express from 'express'
-import type { Express } from 'express'
-import helmet from 'helmet'
+import type { Express, Router } from 'express'
 import authMiddleware from '../middleware/auth/index.js'
+import bodyParserMiddleware from '../middleware/body-parser/index.js'
+import corsMiddleware from '../middleware/cors/index.js'
+import createHealthEndpoints from '../middleware/health/index.js'
+import helmetMiddleware from '../middleware/helmet/index.js'
 import loggerMiddleware from '../middleware/logging/logger.js'
 import contextMiddleware from '../middleware/request/context.js'
 import correlationIdMiddleware from '../middleware/request/correlation-id.js'
 import type { Logger } from '../utils/logger.js'
 import { getServiceConfig } from './config.js'
 
-interface ServiceOptions {
+interface AppOptions {
+  handlers: Router
   logger?: Logger
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const createApp = (app: Express, _options: ServiceOptions): Express => {
+/**
+ * Creates and configures the Express application with all middleware
+ */
+const createApp = (app: Express, { handlers }: AppOptions): Express => {
   const config = getServiceConfig()
 
-  // Apply core middleware
+  // Middleware before handlers
   app.use(contextMiddleware() as any)
   app.use(correlationIdMiddleware() as any)
   app.use(loggerMiddleware() as any)
 
-  // Apply configurable middleware
-
-  // CORS
-  if (config.service.middleware?.cors?.enabled !== false) {
-    app.use(
-      cors({
-        origin: config.service.middleware?.cors?.origin ?? true,
-        credentials: config.service.middleware?.cors?.credentials ?? true,
-        methods: config.service.middleware?.cors?.methods ?? [
-          'GET',
-          'POST',
-          'PUT',
-          'DELETE',
-          'PATCH',
-          'OPTIONS',
-        ],
-        allowedHeaders: config.service.middleware?.cors?.allowedHeaders,
-        exposedHeaders: config.service.middleware?.cors?.exposedHeaders,
-        maxAge: config.service.middleware?.cors?.maxAge,
-        preflightContinue: config.service.middleware?.cors?.preflightContinue ?? false,
-        optionsSuccessStatus: config.service.middleware?.cors?.optionsSuccessStatus ?? 204,
-      })
-    )
+  if (config.service.middleware?.cors?.enabled) {
+    app.use(corsMiddleware(config) as any)
   }
 
-  // Body parsing
-  app.use(
-    express.json({
-      limit: config.service.middleware?.bodyParser?.json?.limit ?? '10mb',
-      strict: config.service.middleware?.bodyParser?.json?.strict ?? true,
-      type: config.service.middleware?.bodyParser?.json?.type ?? 'application/json',
-    })
-  )
-
-  app.use(
-    express.urlencoded({
-      extended: config.service.middleware?.bodyParser?.urlencoded?.extended ?? true,
-      limit: config.service.middleware?.bodyParser?.urlencoded?.limit ?? '10mb',
-      parameterLimit: config.service.middleware?.bodyParser?.urlencoded?.parameterLimit ?? 1000,
-    })
-  )
-
-  // Helmet
-  if (config.service.middleware?.helmet?.enabled !== false) {
-    app.use(
-      helmet({
-        contentSecurityPolicy: config.service.middleware?.helmet?.contentSecurityPolicy ?? false,
-        crossOriginEmbedderPolicy:
-          config.service.middleware?.helmet?.crossOriginEmbedderPolicy ?? true,
-        crossOriginOpenerPolicy: config.service.middleware?.helmet?.crossOriginOpenerPolicy ?? true,
-        crossOriginResourcePolicy:
-          config.service.middleware?.helmet?.crossOriginResourcePolicy ?? true,
-        dnsPrefetchControl: config.service.middleware?.helmet?.dnsPrefetchControl ?? true,
-        frameguard: config.service.middleware?.helmet?.frameguard ?? true,
-        hidePoweredBy: config.service.middleware?.helmet?.hidePoweredBy ?? true,
-        hsts: config.service.middleware?.helmet?.hsts ?? true,
-        ieNoOpen: config.service.middleware?.helmet?.ieNoOpen ?? true,
-        noSniff: config.service.middleware?.helmet?.noSniff ?? true,
-        originAgentCluster: config.service.middleware?.helmet?.originAgentCluster ?? true,
-        permittedCrossDomainPolicies:
-          config.service.middleware?.helmet?.permittedCrossDomainPolicies ?? false,
-        referrerPolicy: config.service.middleware?.helmet?.referrerPolicy ?? true,
-        xssFilter: config.service.middleware?.helmet?.xssFilter ?? true,
-      } as any)
-    )
+  if (config.service.middleware?.helmet?.enabled) {
+    app.use(helmetMiddleware(config) as any)
   }
 
+  app.use(bodyParserMiddleware(app, config) as any)
   app.use(cookieParser() as any)
 
-  // Auth middleware (if enabled)
   if (config.service.middleware?.auth?.enabled) {
     app.use(authMiddleware() as any)
   }
 
-  // Default ping route
-  app.get('/ping', (req, res) => {
-    res.json({ timestamp: new Date().toISOString() })
+  // Health check endpoints
+  createHealthEndpoints(app, config)
+
+  // User-provided handlers
+  app.use(async (req, res, next) => {
+    try {
+      await handlers(req, res, next)
+    } catch (error) {
+      next(error)
+    }
   })
 
-  // Health check route (if enabled)
-  if (config.service.health.enabled) {
-    app.get(config.service.health.path, async (req, res) => {
-      const startTime = Date.now()
-      const checks: Record<string, boolean> = {}
-
-      // Run configured health checks
-      for (const check of config.service.health.checks) {
-        try {
-          const timeoutPromise = new Promise<boolean>((resolve, reject) =>
-            setTimeout(
-              () => reject(new Error('Health check timeout')),
-              config.service.health.timeout
-            )
-          )
-          checks[check.name] = await Promise.race([check.check(), timeoutPromise])
-        } catch {
-          checks[check.name] = false
-        }
-      }
-
-      const allHealthy = Object.values(checks).every((status) => status)
-      const response = {
-        status: allHealthy ? 'ok' : 'error',
-        timestamp: new Date().toISOString(),
-        service: config.service.name,
-        version: config.service.version,
-        uptime: process.uptime(),
-        responseTime: Date.now() - startTime,
-        checks,
-      }
-
-      res.status(allHealthy ? 200 : 503).json(response)
-    })
-  }
+  // Middleware after handlers
+  // We should add a middleware that will handle missing routes (missingRouteMiddleware)
+  // We should add a middleware that will be used to handle errors (errorHandlerMiddleware)
 
   return app
 }

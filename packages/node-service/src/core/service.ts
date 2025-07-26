@@ -1,17 +1,16 @@
 import express from 'express'
-import type { Express } from 'express'
+import type { Express, Router } from 'express'
 import type { ReleaseResources, Logger } from '../types/index.js'
 import logger from '../utils/logger.js'
 import createApp from './app.js'
 import bootApp from './boot.js'
 
-// Internal types
-interface InternalServiceListenOptions {
+interface ServiceListenOptions {
   releaseResources?: ReleaseResources
 }
 
-interface InternalServiceSetupOptions {
-  handlers?: Express
+interface ServiceSetupOptions {
+  handlers?: Router
 }
 
 const state = {
@@ -19,36 +18,33 @@ const state = {
   isRunning: false,
 }
 
-interface NodeServiceReturn {
+interface CreateNodeService {
   app: Express
-  setup: (opts?: InternalServiceSetupOptions) => Promise<{
-    run: (opts?: InternalServiceListenOptions) => void
+  setup: (opts?: ServiceSetupOptions) => Promise<{
+    run: (opts?: ServiceListenOptions) => void
   }>
   logger: Logger
 }
 
-const NodeService = (): NodeServiceReturn => {
+const createNodeService = (): CreateNodeService => {
   const expressApp = express()
 
-  const setup = async (opts: InternalServiceSetupOptions = {}) => {
+  const setup = async (opts: ServiceSetupOptions = {}) => {
     if (state.hasBootstrapped) {
       throw new Error('The app has already been bootstrapped')
     }
 
+    const { handlers = express.Router() } = opts
     state.hasBootstrapped = true
 
     const app = createApp(expressApp, {
+      handlers,
       logger,
     })
 
-    // Apply additional handlers if provided
-    if (opts.handlers) {
-      app.use(opts.handlers)
-    }
-
     const listen = async ({
       releaseResources: releaseResourcesByRun,
-    }: InternalServiceListenOptions = {}) => {
+    }: ServiceListenOptions = {}) => {
       if (state.isRunning) {
         throw new Error('The app has already been started')
       }
@@ -85,4 +81,4 @@ const NodeService = (): NodeServiceReturn => {
   }
 }
 
-export default NodeService
+export default createNodeService

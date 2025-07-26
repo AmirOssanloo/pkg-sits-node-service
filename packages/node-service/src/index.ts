@@ -3,7 +3,7 @@ export * from './types/index.js'
 export type { EnrichedRequest, RequestContext } from './types/express.js'
 
 // Core exports
-export { default as NodeService } from './core/service.js'
+export { default as createNodeService } from './core/service.js'
 export { default as createApp } from './core/app.js'
 export { default as bootApp } from './core/boot.js'
 

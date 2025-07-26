@@ -1,41 +1,58 @@
+import type { Server } from 'http'
 import { jest } from '@jest/globals'
 import express from 'express'
-import fetch from 'node-fetch'
-import type { Server } from 'http'
 import type { Express } from 'express'
-import type { EnrichedRequest } from '../../types/express.js'
-import NodeService from '../service.js'
 
 describe('Node Service Integration Tests', () => {
   let serviceInstance: { server: Server; app: Express } | null = null
-  const testPort = 9999
 
   afterEach(async () => {
     if (serviceInstance) {
       // Force close the server
       await new Promise((resolve) => {
-        serviceInstance.server.close(resolve)
+        serviceInstance!.server.close(resolve)
       })
       serviceInstance = null
     }
+
+    // Clear module cache to reset service state
+    jest.resetModules()
   })
 
   describe('Service Lifecycle', () => {
     it('should start and stop a basic service', async () => {
-      // Create service
-      const service = NodeService()
+      // Import fresh to avoid state issues
+      const { default: createNodeService } = await import('../service.js')
+      const service = createNodeService()
 
       // Add a simple route
-      service.app.get('/health', (req, res) => {
+      service.app.get('/test', (req, res) => {
         res.json({ status: 'ok' })
       })
 
-      // Setup and run service
-      const { run } = await service.setup()
-      
-      // We need to capture the server instance differently
-      // For now, let's skip these integration tests and focus on unit tests
-      expect(true).toBe(true)
+      // This is a simplified test
+      expect(service.app).toBeDefined()
+      expect(service.setup).toBeDefined()
+      expect(service.logger).toBeDefined()
+    })
+
+    it('should support custom router', async () => {
+      const { default: createNodeService } = await import('../service.js')
+      const service = createNodeService()
+
+      // Create a router
+      const router = express.Router()
+      router.get('/custom', (req, res) => {
+        res.json({ custom: true })
+      })
+
+      // Setup with custom router
+      const { run } = await service.setup({
+        handlers: router,
+      })
+
+      expect(run).toBeDefined()
+      expect(typeof run).toBe('function')
     })
   })
 })

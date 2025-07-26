@@ -67,10 +67,10 @@ packages/node-service/
 ## Usage Pattern
 
 ```typescript
-import { NodeService } from '@amirossanloo/node-service'
+import { createNodeService } from '@amirossanloo/node-service'
 
 // 1. Create service instance
-const { app, setup, logger } = NodeService()
+const { app, setup, logger } = createNodeService()
 
 // 2. Define routes (Express style)
 app.get('/hello', (req, res) => {

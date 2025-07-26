@@ -1,5 +1,4 @@
-import type { Server } from 'node:http'
-import type { Express, Request, Response, NextFunction } from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import type { ZodSchema, ZodObject } from 'zod'
 import type { Logger } from '../utils/logger.js'
 

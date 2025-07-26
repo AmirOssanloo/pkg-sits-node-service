@@ -1,8 +1,8 @@
-import { NodeService } from '@sits/node-service'
+import { createNodeService } from '@sits/node-service'
 import crateHandlers from './handlers'
 
 const createApp = async () => {
-  const { app, setup, logger } = NodeService()
+  const { app, setup, logger } = createNodeService()
   const handlers = crateHandlers({ app })
 
   const sns = await setup({
