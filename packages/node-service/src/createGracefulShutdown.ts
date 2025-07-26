@@ -1,6 +1,6 @@
 import type { Server } from 'http'
-import type { ReleaseResources } from './types'
-import type { Logger } from './utils/logger'
+import type { ReleaseResources } from './types.js'
+import type { Logger } from './utils/logger.js'
 
 interface GracefulShutdown {
   server: Server

@@ -1,7 +1,7 @@
 import http from 'http'
 import type { AddressInfo } from 'net'
 import type { Express } from 'express'
-import type { Logger } from './utils/logger'
+import type { Logger } from './utils/logger.js'
 
 interface CreateServer {
   app: Express

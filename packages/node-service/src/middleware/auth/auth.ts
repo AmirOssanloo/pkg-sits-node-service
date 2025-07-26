@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { path } from 'ramda'
 import config from '@sits/configuration'
-import type { EnrichedRequest } from '../../typings/request'
-import isSecurePath from './isSecurePath'
+import type { EnrichedRequest } from '../../typings/request.js'
+import isSecurePath from './isSecurePath.js'
 
 const authMiddleware = () => async (req: Request, res: Response, next: NextFunction) => {
   if (!isSecurePath(req)) {

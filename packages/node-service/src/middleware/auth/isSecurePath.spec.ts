@@ -1,5 +1,5 @@
-import { EnrichedRequest } from '../../typings/request'
-import isSecurePath from './isSecurePath'
+import { EnrichedRequest } from '../../typings/request.js'
+import isSecurePath from './isSecurePath.js'
 
 // Mock the config module
 jest.mock('../../config', () => ({

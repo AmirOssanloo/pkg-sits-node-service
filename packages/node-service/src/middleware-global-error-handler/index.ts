@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express'
-import { BasicError } from '@sits/errors'
-import { EnrichedRequest } from '../typings/request'
+import { BasicError } from '../errors/BasicError.js'
+import { EnrichedRequest } from '../typings/request.js'
 
 const errorHandlerMiddleware = (
   error: Error,

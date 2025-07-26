@@ -1,9 +1,9 @@
 import type { Express } from 'express'
 import config from '@sits/configuration'
-import createGracefulShutdown from './createGracefulShutdown'
-import createServer from './createServer'
-import type { ReleaseResources } from './types'
-import type { Logger } from './utils/logger'
+import createGracefulShutdown from './createGracefulShutdown.js'
+import createServer from './createServer.js'
+import type { ReleaseResources } from './types.js'
+import type { Logger } from './utils/logger.js'
 
 const errorTypes = ['unhandledRejection', 'uncaughtExeption']
 const signalTraps = ['exit', 'SIGTERM', 'SIGINT', 'SIGUSR2']

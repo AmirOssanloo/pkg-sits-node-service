@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import { pathOr } from 'ramda'
 import { v4 as uuidv4 } from 'uuid'
-import { EnrichedRequest } from '../typings/request'
+import { EnrichedRequest } from '../typings/request.js'
 
 export const CORRELATION_ID = 'correlation_id'
 

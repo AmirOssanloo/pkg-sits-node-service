@@ -2,12 +2,12 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import type { Express } from 'express'
 import helmet from 'helmet'
-import { authMiddleware } from './middleware/auth'
-import contextMiddleware from './middleware/context'
-import correlationIdMiddleware from './middleware/correlationId'
-import corsMiddleware from './middleware/cors'
-import loggerMiddleware from './middleware/logger'
-import type { Logger } from './utils/logger'
+import { authMiddleware } from './middleware/auth/index.js'
+import contextMiddleware from './middleware/context.js'
+import correlationIdMiddleware from './middleware/correlationId.js'
+import corsMiddleware from './middleware/cors.js'
+import loggerMiddleware from './middleware/logger.js'
+import type { Logger } from './utils/logger.js'
 
 interface ServiceOptions {
   logger?: Logger

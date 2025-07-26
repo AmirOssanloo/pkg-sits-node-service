@@ -1,6 +1,6 @@
 import { Response } from 'express'
-import { EnrichedRequest } from '../typings/request'
-import correlationIdMiddleware, { CORRELATION_ID } from './correlationId'
+import { EnrichedRequest } from '../typings/request.js'
+import correlationIdMiddleware, { CORRELATION_ID } from './correlationId.js'
 
 describe('correlationIdMiddleware', () => {
   describe('request does not have a correlation id', () => {

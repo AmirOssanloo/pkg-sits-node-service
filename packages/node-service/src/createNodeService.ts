@@ -1,10 +1,10 @@
 import express from 'express'
 import type { Express } from 'express'
-import bootApp from './bootApp'
-import createApp from './createApp'
-import type { ReleaseResources } from './types'
-import logger from './utils/logger'
-import type { Logger } from './utils/logger'
+import bootApp from './bootApp.js'
+import createApp from './createApp.js'
+import type { ReleaseResources } from './types.js'
+import logger from './utils/logger.js'
+import type { Logger } from './utils/logger.js'
 
 export interface ServiceListenOptions {
   releaseResources?: ReleaseResources

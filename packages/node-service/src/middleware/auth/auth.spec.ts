@@ -1,10 +1,10 @@
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { EnrichedRequest } from '../../typings/request'
-import authMiddleware from './auth'
-import isSecurePath from './isSecurePath'
+import { EnrichedRequest } from '../../typings/request.js'
+import authMiddleware from './auth.js'
+import isSecurePath from './isSecurePath.js'
 
-jest.mock('./isSecurePath')
+jest.mock('./isSecurePath.js')
 jest.mock('jsonwebtoken')
 
 const mockIsSecurePath = isSecurePath as jest.Mock

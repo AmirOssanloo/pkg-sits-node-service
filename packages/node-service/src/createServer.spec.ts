@@ -1,7 +1,7 @@
 import type { AddressInfo } from 'net'
 import Fastify from 'fastify'
 import fetch from 'node-fetch'
-import createServer from './createServer'
+import createServer from './createServer.js'
 
 describe('createServer', () => {
   const status = 200

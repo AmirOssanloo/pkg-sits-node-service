@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express'
 import { type Schema, ValidationError as JoiValidationError } from 'joi'
-import { ValidationError } from '@sits/errors'
-import { EnrichedRequest } from '../typings/request'
+import { ValidationError } from '../errors/ValidationError.js'
+import { EnrichedRequest } from '../typings/request.js'
 
 interface ValidationSchema {
   body?: Schema

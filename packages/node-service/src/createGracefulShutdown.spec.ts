@@ -1,7 +1,7 @@
 import http from 'http'
 import Fastify, { FastifyInstance } from 'fastify'
-import createGracefulShutdownHandler from './createGracefulShutdown'
-import type { GracefulShutdownHandler } from './createGracefulShutdown'
+import createGracefulShutdownHandler from './createGracefulShutdown.js'
+import type { GracefulShutdownHandler } from './createGracefulShutdown.js'
 
 const PORT = 6000
 const STATUS = 200
