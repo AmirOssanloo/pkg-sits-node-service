@@ -31,7 +31,14 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
       cors({
         origin: config.service.middleware?.cors?.origin ?? true,
         credentials: config.service.middleware?.cors?.credentials ?? true,
-        methods: config.service.middleware?.cors?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        methods: config.service.middleware?.cors?.methods ?? [
+          'GET',
+          'POST',
+          'PUT',
+          'DELETE',
+          'PATCH',
+          'OPTIONS',
+        ],
         allowedHeaders: config.service.middleware?.cors?.allowedHeaders,
         exposedHeaders: config.service.middleware?.cors?.exposedHeaders,
         maxAge: config.service.middleware?.cors?.maxAge,
@@ -63,9 +70,11 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
     app.use(
       helmet({
         contentSecurityPolicy: config.service.middleware?.helmet?.contentSecurityPolicy ?? false,
-        crossOriginEmbedderPolicy: config.service.middleware?.helmet?.crossOriginEmbedderPolicy ?? true,
+        crossOriginEmbedderPolicy:
+          config.service.middleware?.helmet?.crossOriginEmbedderPolicy ?? true,
         crossOriginOpenerPolicy: config.service.middleware?.helmet?.crossOriginOpenerPolicy ?? true,
-        crossOriginResourcePolicy: config.service.middleware?.helmet?.crossOriginResourcePolicy ?? true,
+        crossOriginResourcePolicy:
+          config.service.middleware?.helmet?.crossOriginResourcePolicy ?? true,
         dnsPrefetchControl: config.service.middleware?.helmet?.dnsPrefetchControl ?? true,
         frameguard: config.service.middleware?.helmet?.frameguard ?? true,
         hidePoweredBy: config.service.middleware?.helmet?.hidePoweredBy ?? true,
@@ -73,7 +82,8 @@ const createApp = (app: Express, _options: ServiceOptions): Express => {
         ieNoOpen: config.service.middleware?.helmet?.ieNoOpen ?? true,
         noSniff: config.service.middleware?.helmet?.noSniff ?? true,
         originAgentCluster: config.service.middleware?.helmet?.originAgentCluster ?? true,
-        permittedCrossDomainPolicies: config.service.middleware?.helmet?.permittedCrossDomainPolicies ?? false,
+        permittedCrossDomainPolicies:
+          config.service.middleware?.helmet?.permittedCrossDomainPolicies ?? false,
         referrerPolicy: config.service.middleware?.helmet?.referrerPolicy ?? true,
         xssFilter: config.service.middleware?.helmet?.xssFilter ?? true,
       } as any)

@@ -7,34 +7,6 @@ import type { Logger } from '../utils/logger.js'
  * Core service types
  */
 
-// Service configuration options
-export interface ServiceSetupOptions {
-  name: string
-  version: string
-  environment?: string
-  logLevel?: 'debug' | 'info' | 'warn' | 'error'
-  trustProxy?: boolean
-  corsOptions?: CorsOptions
-  helmetOptions?: any
-  authOptions?: AuthOptions
-}
-
-// Service listen options
-export interface ServiceListenOptions {
-  port: number
-  host?: string
-  backlog?: number
-}
-
-// Service instance
-export interface NodeServiceInstance {
-  app: Express
-  server: Server
-  config: ServiceSetupOptions
-  listen: (options: ServiceListenOptions) => Promise<Server>
-  shutdown: () => Promise<void>
-}
-
 /**
  * Middleware types
  */

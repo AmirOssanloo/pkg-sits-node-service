@@ -5,9 +5,6 @@ import logger from '../utils/logger.js'
 import createApp from './app.js'
 import bootApp from './boot.js'
 
-// Re-export from types for backward compatibility
-export type { ServiceListenOptions, ServiceSetupOptions } from '../types/index.js'
-
 // Internal types
 interface InternalServiceListenOptions {
   releaseResources?: ReleaseResources
