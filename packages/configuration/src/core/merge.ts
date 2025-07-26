@@ -9,12 +9,12 @@ import { getDefaultConfig } from './defaults.js'
  */
 export function mergeWithDefaults(userConfig: UserConfig): Config {
   const defaults = getDefaultConfig()
-  
+
   // Override the default name if provided
   if (userConfig.name) {
     defaults.name = userConfig.name
   }
-  
+
   // Deep merge the configurations, with user config taking precedence
   return mergeDeepRight(defaults, userConfig) as Config
 }

@@ -15,11 +15,11 @@ export interface ValidationIssue {
 export class ConfigValidationError extends Error {
   public readonly zodError: ZodError
   public readonly issues: ValidationIssue[]
-  
+
   constructor(zodError: ZodError) {
     const issues = formatZodIssues(zodError)
     const message = formatValidationMessage(issues)
-    
+
     super(message)
     this.name = 'ConfigValidationError'
     this.zodError = zodError
@@ -31,10 +31,10 @@ export class ConfigValidationError extends Error {
  * Formats Zod issues into a more readable format
  */
 function formatZodIssues(error: ZodError): ValidationIssue[] {
-  return error.issues.map(issue => ({
+  return error.issues.map((issue) => ({
     path: issue.path.join('.') || 'root',
     message: issue.message,
-    code: issue.code
+    code: issue.code,
   }))
 }
 
@@ -43,9 +43,7 @@ function formatZodIssues(error: ZodError): ValidationIssue[] {
  */
 function formatValidationMessage(issues: ValidationIssue[]): string {
   const header = 'Configuration validation failed:'
-  const issueLines = issues.map(issue => 
-    `  - ${issue.path}: ${issue.message}`
-  )
-  
+  const issueLines = issues.map((issue) => `  - ${issue.path}: ${issue.message}`)
+
   return [header, ...issueLines].join('\n')
 }

@@ -1,12 +1,11 @@
+import { ConfigValidationError } from './errors.js'
 import {
   validateConfig,
   validateConfigAsync,
   safeValidateConfig,
   isValidConfig,
-  extractConfigPath
+  extractConfigPath,
 } from './validator.js'
-import { ConfigValidationError } from './errors.js'
-import { getDefaultConfig } from '../core/defaults.js'
 
 describe('Validation Utilities', () => {
   const validConfig = {
@@ -23,10 +22,10 @@ describe('Validation Utilities', () => {
         responseHeaders: null,
         supportsCredentials: null,
         maxAge: null,
-        endPreflightRequests: null
+        endPreflightRequests: null,
       },
-      https: { enabled: false, options: {} }
-    }
+      https: { enabled: false, options: {} },
+    },
   }
 
   describe('validateConfig', () => {
@@ -39,9 +38,9 @@ describe('Validation Utilities', () => {
       const configWithCustom = {
         ...validConfig,
         customProp: 'value',
-        resources: { db: { host: 'localhost' } }
+        resources: { db: { host: 'localhost' } },
       }
-      
+
       const result = validateConfig(configWithCustom)
       expect(result.customProp).toBe('value')
       expect(result.resources).toEqual({ db: { host: 'localhost' } })
@@ -50,19 +49,20 @@ describe('Validation Utilities', () => {
     it('should reject custom properties in strict mode', () => {
       const configWithCustom = {
         ...validConfig,
-        customProp: 'value'
+        customProp: 'value',
       }
-      
-      expect(() => validateConfig(configWithCustom, { strict: true }))
-        .toThrow(ConfigValidationError)
+
+      expect(() => validateConfig(configWithCustom, { strict: true })).toThrow(
+        ConfigValidationError
+      )
     })
 
     it('should throw ConfigValidationError with formatted message', () => {
       const invalidConfig = {
         name: '',
-        core: { port: 'not-a-number' }
+        core: { port: 'not-a-number' },
       }
-      
+
       try {
         validateConfig(invalidConfig)
         fail('Should have thrown')
@@ -79,9 +79,9 @@ describe('Validation Utilities', () => {
     it('should validate with default values', () => {
       const minimalConfig = {
         name: 'test-service',
-        core: {}
+        core: {},
       }
-      
+
       const result = validateConfig(minimalConfig)
       expect(result.core.port).toBe(3000)
       expect(result.core.cors.enabled).toBe(false)
@@ -96,16 +96,15 @@ describe('Validation Utilities', () => {
 
     it('should reject invalid config asynchronously', async () => {
       const invalidConfig = { name: '' }
-      
-      await expect(validateConfigAsync(invalidConfig))
-        .rejects.toThrow(ConfigValidationError)
+
+      await expect(validateConfigAsync(invalidConfig)).rejects.toThrow(ConfigValidationError)
     })
   })
 
   describe('safeValidateConfig', () => {
     it('should return success result for valid config', () => {
       const result = safeValidateConfig(validConfig)
-      
+
       expect(result.success).toBe(true)
       if (result.success) {
         expect(result.data).toEqual(validConfig)
@@ -114,9 +113,9 @@ describe('Validation Utilities', () => {
 
     it('should return error result for invalid config', () => {
       const invalidConfig = { name: '', core: {} }
-      
+
       const result = safeValidateConfig(invalidConfig)
-      
+
       expect(result.success).toBe(false)
       if (!result.success) {
         expect(result.error).toBeInstanceOf(ConfigValidationError)
@@ -125,11 +124,11 @@ describe('Validation Utilities', () => {
     })
 
     it('should not throw for validation errors', () => {
-      const invalidConfig = { 
+      const invalidConfig = {
         name: 'test',
-        core: { port: 'invalid' }
+        core: { port: 'invalid' },
       }
-      
+
       expect(() => safeValidateConfig(invalidConfig)).not.toThrow()
     })
   })
@@ -149,7 +148,7 @@ describe('Validation Utilities', () => {
 
     it('should work as type guard', () => {
       const unknown: unknown = validConfig
-      
+
       if (isValidConfig(unknown)) {
         // TypeScript should recognize this as Config type
         expect(unknown.name).toBe('test-service')
@@ -167,13 +166,13 @@ describe('Validation Utilities', () => {
           port: 5432,
           credentials: {
             user: 'admin',
-            password: 'secret'
-          }
+            password: 'secret',
+          },
         },
         cache: {
-          url: 'redis://localhost:6379'
-        }
-      }
+          url: 'redis://localhost:6379',
+        },
+      },
     }
 
     it('should extract nested paths', () => {
@@ -181,8 +180,10 @@ describe('Validation Utilities', () => {
       expect(extractConfigPath<number>(config, 'core.port')).toBe(3000)
       expect(extractConfigPath<boolean>(config, 'core.cors.enabled')).toBe(false)
       expect(extractConfigPath<string>(config, 'resources.database.host')).toBe('localhost')
-      expect(extractConfigPath<object>(config, 'resources.database.credentials'))
-        .toEqual({ user: 'admin', password: 'secret' })
+      expect(extractConfigPath<object>(config, 'resources.database.credentials')).toEqual({
+        user: 'admin',
+        password: 'secret',
+      })
     })
 
     it('should return undefined for non-existent paths', () => {
@@ -206,11 +207,11 @@ describe('Validation Utilities', () => {
         core: {
           port: -1,
           cors: {
-            origins: ['not-a-url']
-          }
-        }
+            origins: ['not-a-url'],
+          },
+        },
       }
-      
+
       try {
         validateConfig(invalidConfig)
       } catch (error) {

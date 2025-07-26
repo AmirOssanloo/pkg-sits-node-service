@@ -2,8 +2,8 @@ import * as path from 'path'
 import { mergeDeepRight } from 'ramda'
 import readConfigFile from '../loaders/yaml.js'
 import type { Config, UserConfig } from '../types.js'
-import { mergeWithDefaults } from './merge.js'
 import { validateConfig as validateConfigSchema } from '../validation/validator.js'
+import { mergeWithDefaults } from './merge.js'
 
 const { NODE_ENV } = process.env
 

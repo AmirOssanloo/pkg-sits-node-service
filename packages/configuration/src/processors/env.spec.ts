@@ -1,5 +1,5 @@
-import applyEnv from './env.js'
 import { getDefaultConfig } from '../core/defaults.js'
+import applyEnv from './env.js'
 
 const CONFIG = {
   ...getDefaultConfig(),

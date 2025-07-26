@@ -48,25 +48,25 @@ export interface CloudConfig {
 export interface CorsConfig {
   /** Enable CORS support @default false */
   enabled: boolean
-  
+
   /** Allowed origins for cross-origin requests @default null */
   origins: string[] | null
-  
+
   /** Allowed HTTP methods @default null */
   methods: string[] | null
-  
+
   /** Allowed request headers @default null */
   requestHeaders: string[] | null
-  
+
   /** Exposed response headers @default null */
   responseHeaders: string[] | null
-  
+
   /** Allow credentials in CORS requests @default null */
   supportsCredentials: boolean | null
-  
+
   /** Max age for preflight cache (seconds) @default null */
   maxAge: number | null
-  
+
   /** End preflight requests with 204 status @default null */
   endPreflightRequests: boolean | null
 }
@@ -112,9 +112,11 @@ export interface Config {
 /**
  * Utility type for partial nested objects
  */
-export type DeepPartial<T> = T extends object ? {
-  [P in keyof T]?: DeepPartial<T[P]>
-} : T
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
 
 /**
  * Type for configuration overrides (all fields optional)

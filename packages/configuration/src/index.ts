@@ -1,5 +1,5 @@
-import applyEnv from './processors/env.js'
 import assembleConfig from './core/assemble.js'
+import applyEnv from './processors/env.js'
 
 const config = assembleConfig('config')
 const envConfig = applyEnv(config)
@@ -31,13 +31,10 @@ export {
   validateConfigAsync,
   safeValidateConfig,
   isValidConfig,
-  extractConfigPath
+  extractConfigPath,
 } from './validation/validator.js'
 
-export {
-  ConfigValidationError,
-  type ValidationIssue
-} from './validation/errors.js'
+export { ConfigValidationError, type ValidationIssue } from './validation/errors.js'
 
 export type { ValidationOptions } from './validation/schemas.js'
 
@@ -51,5 +48,5 @@ export {
   CorsConfigSchema,
   HttpsConfigSchema,
   StrategyDefinitionSchema,
-  StrategyPathSchema
+  StrategyPathSchema,
 } from './validation/schemas.js'

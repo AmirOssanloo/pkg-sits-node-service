@@ -14,12 +14,12 @@ const readConfigFile = (filePath: string, optional: boolean = false): UserConfig
   try {
     const fileContents = fs.readFileSync(filePath, 'utf8')
     const config = yaml.load(fileContents)
-    
+
     // Handle empty files
     if (!config || typeof config !== 'object') {
       return {} as UserConfig
     }
-    
+
     return config as UserConfig
   } catch (error) {
     throw new Error(`Failed to parse configuration file ${filePath}: ${error}`)
