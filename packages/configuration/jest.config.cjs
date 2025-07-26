@@ -5,24 +5,22 @@ module.exports = {
   extensionsToTreatAsEsm: ['.ts'],
   roots: ['<rootDir>/src'],
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
-      useESM: true,
-      tsconfig: {
-        moduleResolution: 'NodeNext',
-        module: 'NodeNext',
-        allowJs: true,
-        isolatedModules: true
-      }
-    }]
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+        tsconfig: {
+          moduleResolution: 'NodeNext',
+          module: 'NodeNext',
+          allowJs: true,
+          isolatedModules: true,
+        },
+      },
+    ],
   },
   testMatch: ['**/*.spec.ts'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/**/*.spec.ts',
-    '!src/index.ts'
-  ]
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/**/*.spec.ts', '!src/index.ts'],
 }

@@ -7,6 +7,7 @@ The `@sits/configuration` package provides a robust, type-safe configuration man
 ## Current Implementation
 
 ### Features
+
 - **YAML-based configuration** with environment-specific overrides
 - **TypeScript type definitions** for type safety
 - **Default configuration** with deep merging
@@ -15,6 +16,7 @@ The `@sits/configuration` package provides a robust, type-safe configuration man
 - **Extensible design** allowing custom properties
 
 ### Package Structure
+
 ```
 packages/configuration/
 ├── src/
@@ -35,17 +37,17 @@ The configuration uses a `core` namespace for framework settings and allows cust
 
 ```typescript
 interface Config {
-  name: string              // Service name (required)
-  core: CoreConfig          // Framework configuration
-  [key: string]: any        // Custom properties
+  name: string // Service name (required)
+  core: CoreConfig // Framework configuration
+  [key: string]: any // Custom properties
 }
 
 interface CoreConfig {
-  auth: AuthConfig | null   // Authentication settings
-  cloud: CloudConfig        // Cloud deployment info
-  port: number              // Server port (default: 3000)
-  cors: CorsConfig          // CORS settings
-  https: HttpsConfig        // HTTPS configuration
+  auth: AuthConfig | null // Authentication settings
+  cloud: CloudConfig // Cloud deployment info
+  port: number // Server port (default: 3000)
+  cors: CorsConfig // CORS settings
+  https: HttpsConfig // HTTPS configuration
 }
 ```
 
@@ -65,7 +67,7 @@ config/
 import config from '@sits/configuration'
 
 // Access core configuration
-console.log(config.core.port)        // 3000
+console.log(config.core.port) // 3000
 console.log(config.core.cors.enabled) // false
 
 // Access custom properties
@@ -87,6 +89,7 @@ These are applied to `process.env` and removed from the config object in product
 ## Configuration Merging
 
 The system merges configurations in this order:
+
 1. **Default configuration** (from `defaults.ts`)
 2. **Base configuration** (`config/index.yaml`)
 3. **Environment-specific** (`config/node.{NODE_ENV}.yaml`)
@@ -116,6 +119,7 @@ interface MyConfig extends Config {
 The configuration package now includes comprehensive schema validation using Zod:
 
 ### Features
+
 - **Runtime validation** - Configurations are validated when loaded
 - **Clear error messages** - Detailed paths and descriptions for validation failures
 - **Type inference** - Schemas provide TypeScript types automatically
@@ -145,7 +149,7 @@ if (result.success) {
 
 // Extend schemas for custom validation
 const MyConfigSchema = ConfigSchema.extend({
-  myCustomField: z.string().min(1)
+  myCustomField: z.string().min(1),
 })
 ```
 
@@ -161,6 +165,7 @@ Configuration validation failed:
 ## Upcoming Features
 
 ### Future Enhancements
+
 - Hot reloading for development
 - Remote configuration sources
 - Encrypted value support
@@ -193,6 +198,7 @@ If migrating from the old embedded configuration:
 ## Testing
 
 The package includes comprehensive tests for:
+
 - Configuration file reading
 - Environment merging
 - Default value application

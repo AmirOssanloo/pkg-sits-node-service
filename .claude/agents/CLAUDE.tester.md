@@ -12,6 +12,7 @@
    - Check reviewer's findings are addressed
 
 2. **Automated Testing**
+
    ```bash
    pnpm test        # Run all tests
    pnpm typecheck   # Verify types
@@ -34,14 +35,17 @@
    - Confirm logging works as expected
 
 5. **Failure Handling**
+
    ```markdown
    ## Test Results: ❌ Failed
-   
+
    ### Failures
+
    - Test: [name] - [error message]
    - Build: [error details]
-   
+
    ### Next Steps
+
    - [Required fixes]
    ```
 
@@ -49,22 +53,25 @@
    - Update plan status: ✅ done
    - Archive plan to `.claude/plans/_history/`
    - Prepare commit message:
+
    ```
    feat(scope): brief description
-   
+
    - Implementation detail 1
    - Implementation detail 2
-   
+
    Closes #ticket
    ```
 
 ## Final Steps
+
 1. Document results in plan's Decision Log
 2. Create conventional commit message
 3. Move plan to history folder
 4. Confirm task completion
 
 ## Deliverable
+
 - Test execution summary
 - Pass/fail status with details
 - Commit message ready

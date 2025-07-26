@@ -5,6 +5,7 @@ Quick checks for agents to ensure proper workflow compliance.
 ## Planner Validation
 
 Before requesting approval:
+
 ```bash
 # Check plan file exists
 ls .claude/plans/PLAN_*.md
@@ -16,6 +17,7 @@ grep "Status: ⏸️ awaiting approval" .claude/plans/PLAN_*.md
 ## Programmer Validation
 
 Before starting implementation:
+
 ```bash
 # Check for approved status
 grep "Status: 🛠 implementing" .claude/plans/PLAN_*.md
@@ -27,6 +29,7 @@ grep "Approved By:" .claude/plans/PLAN_*.md
 ## Reviewer Validation
 
 During review:
+
 ```bash
 # Run quality checks
 pnpm lint
@@ -40,6 +43,7 @@ grep -r "console.log" apps/ packages/ --include="*.ts" --include="*.tsx"
 ## Tester Validation
 
 Final checks:
+
 ```bash
 # Full validation suite
 pnpm test && pnpm lint && pnpm typecheck && pnpm build
@@ -51,6 +55,7 @@ grep -c "\[x\]" .claude/plans/PLAN_*.md
 ## Status Transitions
 
 Valid status flow:
+
 1. 🟡 planning (Planner creates)
 2. ⏸️ awaiting approval (Planner requests)
 3. 🛠 implementing (User approves)

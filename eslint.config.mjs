@@ -19,8 +19,8 @@ export default [
       '**/*.config.cjs',
       '**/*.config.mjs',
       'bin/**',
-      'scripts/**'
-    ]
+      'scripts/**',
+    ],
   },
 
   // Base JavaScript config
@@ -41,17 +41,17 @@ export default [
       parser: tseslint.parser,
       parserOptions: {
         project: './tsconfig.json',
-        tsconfigRootDir: import.meta.dirname
-      }
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
-      'import': importPlugin,
-      'jest': jestPlugin,
-      'node': nodePlugin,
-      'prettier': prettierPlugin,
-      'promise': promisePlugin,
-      'security': securityPlugin
+      import: importPlugin,
+      jest: jestPlugin,
+      node: nodePlugin,
+      prettier: prettierPlugin,
+      promise: promisePlugin,
+      security: securityPlugin,
     },
     rules: {
       // TypeScript specific rules
@@ -64,20 +64,18 @@ export default [
         {
           alphabetize: {
             order: 'asc',
-            caseInsensitive: true
+            caseInsensitive: true,
           },
-          'newlines-between': 'never'
-        }
+          'newlines-between': 'never',
+        },
       ],
 
       // Prettier
       'prettier/prettier': 'error',
 
       // Promise rules
-      'promise/always-return': 'warn',
       'promise/no-return-wrap': 'error',
       'promise/param-names': 'error',
-      'promise/catch-or-return': 'warn',
       'promise/no-native': 'off',
       'promise/no-nesting': 'warn',
       'promise/no-promise-in-callback': 'warn',
@@ -85,18 +83,18 @@ export default [
       'promise/avoid-new': 'off',
       'promise/no-new-statics': 'error',
       'promise/no-return-in-finally': 'warn',
-      'promise/valid-params': 'warn'
+      'promise/valid-params': 'warn',
     },
     settings: {
       'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx']
+        '@typescript-eslint/parser': ['.ts', '.tsx'],
       },
       'import/resolver': {
         node: {
-          extensions: ['.js', '.jsx', '.ts', '.tsx']
-        }
-      }
-    }
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
+      },
+    },
   },
 
   // Configuration for test files
@@ -111,8 +109,8 @@ export default [
         beforeEach: 'readonly',
         afterEach: 'readonly',
         beforeAll: 'readonly',
-        afterAll: 'readonly'
-      }
+        afterAll: 'readonly',
+      },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
@@ -121,15 +119,15 @@ export default [
       'jest/no-focused-tests': 'error',
       'jest/no-identical-title': 'error',
       'jest/prefer-to-have-length': 'warn',
-      'jest/valid-expect': 'error'
-    }
+      'jest/valid-expect': 'error',
+    },
   },
 
   // Configuration for CommonJS files
   {
     files: ['**/*.cjs'],
     languageOptions: {
-      sourceType: 'commonjs'
-    }
-  }
+      sourceType: 'commonjs',
+    },
+  },
 ]

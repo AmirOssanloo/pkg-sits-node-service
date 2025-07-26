@@ -23,16 +23,16 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 
 ## Key Commands
 
-| Command          | Purpose                                      |
-| ---------------- | -------------------------------------------- |
-| `pnpm install`   | Install dependencies                         |
-| `pnpm test`      | Run all tests                                |
-| `pnpm lint`      | Run ESLint                                   |
-| `pnpm type:check`| Run TypeScript type checking                 |
-| `pnpm dev`       | Start development server with nodemon        |
-| `pnpm build`     | Build for production                         |
-| `pnpm build:clean`| Remove build artifacts                      |
-| `pnpm create:token`| Generate JWT authentication token          |
+| Command             | Purpose                               |
+| ------------------- | ------------------------------------- |
+| `pnpm install`      | Install dependencies                  |
+| `pnpm test`         | Run all tests                         |
+| `pnpm lint`         | Run ESLint                            |
+| `pnpm type:check`   | Run TypeScript type checking          |
+| `pnpm dev`          | Start development server with nodemon |
+| `pnpm build`        | Build for production                  |
+| `pnpm build:clean`  | Remove build artifacts                |
+| `pnpm create:token` | Generate JWT authentication token     |
 
 **Package Manager**: Always use `pnpm` (never npm or yarn)
 
@@ -81,6 +81,7 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 ## Claude Configuration
 
 For detailed guidelines and agent behavior, see:
+
 - `.claude/CLAUDE.md` - Architecture & detailed rules
 - `.claude/docs/node-service.md` - Node service framework documentation
 - `.claude/docs/configuration.md` - Configuration package documentation
@@ -111,6 +112,7 @@ For detailed guidelines and agent behavior, see:
 ## AI Assistant Configuration
 
 Detailed guidelines for different aspects are in:
+
 - `.claude/CLAUDE.md` - Global rules & architecture
 - `.claude/docs/node-service.md` - Node service framework architecture
 - `.claude/docs/configuration.md` - Configuration package details
@@ -124,6 +126,7 @@ Detailed guidelines for different aspects are in:
 ## Self-Updating Documentation
 
 When making changes that affect:
+
 - **Library API** → Update `.claude/docs/node-service.md` and README.md
 - **Package structure** → Update relevant `.claude/docs/*.md`
 - **Commands** → Update the commands table in this file

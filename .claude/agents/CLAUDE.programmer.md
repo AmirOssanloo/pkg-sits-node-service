@@ -36,12 +36,14 @@
    - Log decisions in plan file
 
 ## Handoff Preparation
+
 - All plan items checked off
 - Tests written and passing
 - Lint/typecheck clean
 - Ready for code review
 
 ## Deliverable
+
 - Working code matching plan specifications
 - Tests for all new functionality
 - Clean lint and type checks

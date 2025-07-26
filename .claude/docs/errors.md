@@ -7,6 +7,7 @@ The `errors` package (planned) will provide a standardized error handling system
 ## Current Implementation
 
 Error handling currently exists in:
+
 - `packages/node-service/errors/index.ts` - Basic error definitions
 - `packages/node-service/middleware-global-error-handler/` - Express error middleware
 
@@ -20,7 +21,7 @@ export class AppError extends Error {
   public readonly statusCode: number
   public readonly isOperational: boolean
   public readonly context?: Record<string, any>
-  
+
   constructor(message: string, statusCode: number, isOperational = true) {
     super(message)
     this.statusCode = statusCode
@@ -74,12 +75,14 @@ export class InternalError extends AppError {
 ### 1. Operational vs Programming Errors
 
 **Operational Errors** (Expected):
+
 - Invalid user input
 - Failed API calls
 - Database connection issues
 - File not found
 
 **Programming Errors** (Bugs):
+
 - Type errors
 - Reference errors
 - Logic errors
@@ -93,7 +96,7 @@ Errors should carry context for debugging:
 throw new ValidationError('Invalid email format', {
   field: 'email',
   value: userInput.email,
-  expected: 'valid email address'
+  expected: 'valid email address',
 })
 ```
 
@@ -122,17 +125,13 @@ Consistent error response format:
 ### Global Error Handler
 
 ```typescript
-export function errorHandler(
-  error: Error,
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
+export function errorHandler(error: Error, request: FastifyRequest, reply: FastifyReply) {
   // Log error
   logger.error('Request failed', {
     error,
     url: request.url,
     method: request.method,
-    correlationId: request.id
+    correlationId: request.id,
   })
 
   // Handle known errors
@@ -144,8 +143,8 @@ export function errorHandler(
         statusCode: error.statusCode,
         context: error.context,
         timestamp: new Date().toISOString(),
-        correlationId: request.id
-      }
+        correlationId: request.id,
+      },
     })
   }
 
@@ -158,8 +157,8 @@ export function errorHandler(
       statusCode: 500,
       timestamp: new Date().toISOString(),
       correlationId: request.id,
-      ...(isProd ? {} : { stack: error.stack })
-    }
+      ...(isProd ? {} : { stack: error.stack }),
+    },
   })
 }
 ```
@@ -167,16 +166,19 @@ export function errorHandler(
 ## Error Recovery Strategies
 
 ### 1. Graceful Degradation
+
 - Fallback to cached data
 - Return partial results
 - Use default values
 
 ### 2. Circuit Breaker Pattern
+
 - Prevent cascading failures
 - Auto-recovery after timeout
 - Health check integration
 
 ### 3. Retry Logic
+
 - Exponential backoff
 - Maximum retry limits
 - Idempotency checks
@@ -184,12 +186,14 @@ export function errorHandler(
 ## Monitoring & Alerting
 
 ### Error Tracking
+
 - Structured logging
 - Error rate metrics
 - Performance impact
 - User impact assessment
 
 ### Integration Points
+
 - Sentry/Rollbar integration
 - CloudWatch/Datadog metrics
 - Slack/PagerDuty alerts
@@ -198,6 +202,7 @@ export function errorHandler(
 ## Testing Error Scenarios
 
 ### Unit Tests
+
 ```typescript
 describe('ValidationError', () => {
   it('should have correct status code', () => {
@@ -209,6 +214,7 @@ describe('ValidationError', () => {
 ```
 
 ### Integration Tests
+
 - Test error middleware
 - Verify error responses
 - Check logging output

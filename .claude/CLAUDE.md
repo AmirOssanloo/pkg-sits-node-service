@@ -5,24 +5,24 @@
 
 ## Documentation Structure
 
-| Document | Purpose |
-| -------- | ------- |
-| `/CLAUDE.md` | Quick reference & overview |
-| `/.claude/CLAUDE.md` | This file - detailed rules |
-| `/.claude/agents/AGENT_BASE.md` | Common agent guidelines |
-| `/.claude/agents/AGENT_WORKFLOW.md` | Validation checks |
-| `/.claude/plans/TEMPLATE.md` | Plan template |
-| `/.claude/docs/node-service.md` | Node service framework documentation |
-| `/.claude/docs/configuration.md` | Configuration package documentation |
-| `/.claude/docs/errors.md` | Error handling documentation |
-| Agent files (`*.planner.md`, etc.) | Role-specific behavior |
+| Document                            | Purpose                              |
+| ----------------------------------- | ------------------------------------ |
+| `/CLAUDE.md`                        | Quick reference & overview           |
+| `/.claude/CLAUDE.md`                | This file - detailed rules           |
+| `/.claude/agents/AGENT_BASE.md`     | Common agent guidelines              |
+| `/.claude/agents/AGENT_WORKFLOW.md` | Validation checks                    |
+| `/.claude/plans/TEMPLATE.md`        | Plan template                        |
+| `/.claude/docs/node-service.md`     | Node service framework documentation |
+| `/.claude/docs/configuration.md`    | Configuration package documentation  |
+| `/.claude/docs/errors.md`           | Error handling documentation         |
+| Agent files (`*.planner.md`, etc.)  | Role-specific behavior               |
 
 ## Global Coding Rules
 
 1. **TypeScript only** – strict mode; avoid `any`.
 2. **ES modules** everywhere (`import/export`).
 3. Follow lint + Prettier. No stray `console.log`.
-4. Respect three-layer architecture: `core → plugins → adapters`. 
+4. Respect three-layer architecture: `core → plugins → adapters`.
 5. **Tests are mandatory** for every feature or bug-fix.
 6. **Security:** validate all inputs; never hard-code secrets.
 7. **Performance:** avoid N+1 queries, unnecessary re-renders, CPU-heavy loops.
@@ -118,12 +118,12 @@ Each feature/bug-fix gets exactly **one** plan file, created by the Planner.
 
 ### Agent responsibilities
 
-| Role            | Action on this file                                                                                                                                           |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Role            | Action on this file                                                                                                                                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Planner**     | Create file; fill **Goals** & **Checklist**.<br>Set **Status:** 🟡 _planning_ → ⏸️ _awaiting approval_.<br>Get user approval before setting 🛠 _implementing_. |
 | **Implementer** | Verify status is 🛠 _implementing_ (not ⏸️ _awaiting approval_).<br>Tick boxes as tasks complete.<br>Append brief notes if deviating.                          |
-| **Reviewer**    | Verify all boxes are ticked; add comments under **Decisions / Notes**.<br>Set **Status:** 🔍 _reviewing_.                                                     |
-| **Tester**      | After tests pass, change **Status** to ✅ _done_ and add a final confirmation note.                                                                           |
+| **Reviewer**    | Verify all boxes are ticked; add comments under **Decisions / Notes**.<br>Set **Status:** 🔍 _reviewing_.                                                      |
+| **Tester**      | After tests pass, change **Status** to ✅ _done_ and add a final confirmation note.                                                                            |
 
 ---
 

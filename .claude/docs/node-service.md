@@ -9,14 +9,18 @@ The `node-service` package is a lightweight Node.js framework for building HTTP 
 The framework follows a three-layer architecture:
 
 ### 1. Core Layer
+
 Essential functionality that every service needs:
+
 - `createNodeService`: Main factory function for creating services
 - `createApp`: Sets up the Express application with middleware
 - `bootApp`: Handles server startup and graceful shutdown
 - `createServer`: HTTP server creation and management
 
 ### 2. Plugins Layer
+
 Optional middleware and features:
+
 - **Authentication**: JWT-based auth middleware with secure/public path routing
 - **Correlation ID**: Request tracking across services
 - **Context**: Request context propagation
@@ -25,7 +29,9 @@ Optional middleware and features:
 - **Error Handling**: Global error handler middleware
 
 ### 3. Adapters Layer
+
 Framework integrations:
+
 - Express 5 as the primary web server
 - Native Express middleware support
 - Cookie parser, helmet for security
@@ -73,7 +79,11 @@ app.get('/hello', (req, res) => {
 
 // 3. Setup and run
 const { run } = await setup()
-run({ releaseResources: async () => { /* cleanup */ } })
+run({
+  releaseResources: async () => {
+    /* cleanup */
+  },
+})
 ```
 
 ## Configuration
@@ -96,6 +106,7 @@ sns:
 ## Middleware Chain
 
 The middleware chain in `createApp.ts` includes:
+
 1. CORS (cross-origin requests)
 2. Helmet (security headers)
 3. Cookie Parser

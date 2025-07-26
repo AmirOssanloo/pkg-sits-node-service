@@ -31,7 +31,7 @@ async function startServer() {
   app.get('/hello', (req, res) => {
     res.json({ message: 'Hello World' })
   })
-  
+
   app.get('/secure/data', (req, res) => {
     // This route requires authentication
     res.json({ data: 'Secret information' })
@@ -39,13 +39,13 @@ async function startServer() {
 
   // Setup and run the service
   const { run } = await setup()
-  
+
   // Start with optional cleanup function
   run({
     releaseResources: async () => {
       // Close database connections, etc.
       logger.info('Cleaning up resources')
-    }
+    },
   })
 }
 

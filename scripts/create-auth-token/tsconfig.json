@@ -6,8 +6,5 @@
   },
   "include": ["./**/*.ts"],
   "exclude": ["dist", "node_modules"],
-  "references": [
-    { "path": "../../packages/configuration" },
-    { "path": "../../fixtures" }
-  ]
+  "references": [{ "path": "../../packages/configuration" }, { "path": "../../fixtures" }]
 }

@@ -44,20 +44,25 @@
 
    ```markdown
    ## Review Summary
+
    [Brief overall assessment]
 
    ## Findings
 
    ### 🔴 Critical (must fix)
+
    - [Issue and location]
 
    ### 🟡 Minor (should fix)
+
    - [Issue and location]
 
    ### 🟢 Suggestions (optional)
+
    - [Enhancement ideas]
 
    ## Decision
+
    - [ ] Approved
    - [ ] Changes requested
    ```
@@ -68,6 +73,7 @@
    - Update plan status based on outcome
 
 ## Deliverable
+
 - Comprehensive review findings
 - Fixed trivial issues
 - Clear approval/rejection status

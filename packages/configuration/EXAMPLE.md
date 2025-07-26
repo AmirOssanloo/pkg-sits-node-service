@@ -8,17 +8,17 @@ The configuration system uses a base configuration file (`config/index.yaml`) th
 name: my-service
 core:
   # Authentication configuration
-  auth: null  # Set to null to disable authentication
-  
+  auth: null # Set to null to disable authentication
+
   # Cloud deployment information
   cloud:
     cluster: ''
     environment: ''
     region: ''
-  
+
   # Server port
   port: 3000
-  
+
   # CORS configuration
   cors:
     enabled: false
@@ -29,7 +29,7 @@ core:
     supportsCredentials: null
     maxAge: null
     endPreflightRequests: null
-  
+
   # HTTPS configuration
   https:
     enabled: false
@@ -85,7 +85,7 @@ You can add any custom properties outside the `core` namespace:
 name: my-service
 core:
   # ... core configuration
-  
+
 # Custom properties
 resources:
   database:
@@ -94,11 +94,11 @@ resources:
     name: myapp
     user: ${DB_USER}
     password: ${DB_PASSWORD}
-  
+
   redis:
     host: localhost
     port: 6379
-    
+
   s3:
     bucket: my-app-uploads
     region: us-east-1
@@ -106,9 +106,9 @@ resources:
 features:
   emailNotifications: true
   analytics: false
-  
+
 limits:
-  maxUploadSize: 10485760  # 10MB
+  maxUploadSize: 10485760 # 10MB
   requestsPerMinute: 100
 ```
 
@@ -160,13 +160,15 @@ const typedConfig = config as MyConfig
 
 // Validate custom configuration
 const MyConfigSchema = ConfigSchema.extend({
-  resources: z.object({
-    database: z.object({
-      host: z.string(),
-      port: z.number(),
-      name: z.string()
+  resources: z
+    .object({
+      database: z.object({
+        host: z.string(),
+        port: z.number(),
+        name: z.string(),
+      }),
     })
-  }).optional()
+    .optional(),
 })
 
 // Runtime validation
@@ -197,7 +199,7 @@ import { z } from 'zod'
 
 // Extend core config
 const MyCustomCoreSchema = CoreConfigSchema.extend({
-  customSetting: z.string().default('default-value')
+  customSetting: z.string().default('default-value'),
 })
 
 // Create fully custom config schema
@@ -207,9 +209,9 @@ const MyServiceConfigSchema = ConfigSchema.extend({
     rateLimit: z.object({
       enabled: z.boolean(),
       maxRequests: z.number().int().positive(),
-      windowMs: z.number().int().positive()
-    })
-  })
+      windowMs: z.number().int().positive(),
+    }),
+  }),
 })
 
 // Use for validation

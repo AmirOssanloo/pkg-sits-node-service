@@ -34,6 +34,7 @@
    - Only set 🛠 implementing after explicit approval
 
 ## Deliverable
+
 - Complete plan file in `.claude/plans/`
 - No code implementation
 - Clear approval request
