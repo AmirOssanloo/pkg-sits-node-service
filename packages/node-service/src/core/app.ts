@@ -1,3 +1,4 @@
+import config from '@sits/configuration'
 import cookieParser from 'cookie-parser'
 import type { Express, Router } from 'express'
 import authMiddleware from '../middleware/auth/index.js'
@@ -16,37 +17,46 @@ interface AppOptions {
   logger?: Logger
 }
 
+// TODO: We need to remove console.logs and figure out a better way to get observability into the application.
+
 /**
  * Creates and configures the Express application with all middleware
  */
 const createApp = (app: Express, { handlers }: AppOptions): Express => {
-  const config = getServiceConfig()
+  const serviceConfig = getServiceConfig()
+
+  console.log('ServiceConfig', serviceConfig)
+  console.log('CoreConfig', config.core)
 
   // Middleware before handlers
   app.use(contextMiddleware() as any)
   app.use(correlationIdMiddleware() as any)
   app.use(loggerMiddleware() as any)
 
-  if (config.service.middleware?.cors?.enabled) {
-    app.use(corsMiddleware(config) as any)
+  if (serviceConfig.service.middleware?.cors?.enabled) {
+    app.use(corsMiddleware(serviceConfig) as any)
   }
 
-  if (config.service.middleware?.helmet?.enabled) {
-    app.use(helmetMiddleware(config) as any)
+  if (serviceConfig.service.middleware?.helmet?.enabled) {
+    app.use(helmetMiddleware(serviceConfig) as any)
   }
 
-  app.use(bodyParserMiddleware(app, config) as any)
+  app.use(bodyParserMiddleware(app, serviceConfig) as any)
   app.use(cookieParser() as any)
 
-  if (config.service.middleware?.auth?.enabled) {
+  // Check if authentication is configured in core.auth
+  if (config.core?.auth && Object.keys(config.core.auth.strategies || {}).length > 0) {
+    console.log('Auth middleware enabled - strategies configured in core.auth')
     app.use(authMiddleware() as any)
   }
 
   // Health check endpoints
-  createHealthEndpoints(app, config)
+  createHealthEndpoints(app, serviceConfig)
 
   // User-provided handlers
   app.use(async (req, res, next) => {
+    console.log('User-provided handlers')
+
     try {
       await handlers(req, res, next)
     } catch (error) {

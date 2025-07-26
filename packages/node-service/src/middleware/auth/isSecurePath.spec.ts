@@ -4,14 +4,21 @@ import { EnrichedRequest } from '../../types/express.js'
 // Mock the config module before importing
 jest.unstable_mockModule('@sits/configuration', () => ({
   default: {
-    sns: {
+    core: {
       auth: {
-        jwt: {
-          securePaths: ['/api/v1'],
-          excludedPaths: ['/api/v1/auth/login'],
+        strategies: {
+          jwt: {
+            provider: 'jwt',
+            config: {
+              secret: 'test-secret'
+            }
+          }
         },
-      },
-    },
+        paths: [
+          { path: '/api/v1', strategy: 'jwt' }
+        ]
+      }
+    }
   },
 }))
 
@@ -25,8 +32,8 @@ describe('isSecurePath', () => {
     expect(result).toBe(true)
   })
 
-  it('should return false if the path is excluded', () => {
-    const req = { originalUrl: '/api/v1/auth/login' } as unknown as EnrichedRequest
+  it('should return false if the path is in ignore list', () => {
+    const req = { originalUrl: '/health' } as unknown as EnrichedRequest
     const result = isSecurePath(req)
     expect(result).toBe(false)
   })

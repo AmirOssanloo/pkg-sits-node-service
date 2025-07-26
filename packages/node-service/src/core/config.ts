@@ -73,17 +73,6 @@ export const nodeServiceConfigSchema = z.object({
         xssFilter: z.boolean().default(true),
       }),
 
-      // Authentication configuration
-      auth: z.object({
-        enabled: z.boolean().default(false),
-        secret: z.string().min(32).optional(),
-        algorithms: z.array(z.string()).default(['HS256']),
-        credentialsRequired: z.boolean().default(true),
-        requestProperty: z.string().default('user'),
-        securePaths: z.array(z.string()).default([]),
-        ignorePaths: z.array(z.string()).default(['/health', '/ping', '/metrics']),
-      }),
-
       // Rate limiting configuration
       rateLimit: z.object({
         enabled: z.boolean().default(false),
