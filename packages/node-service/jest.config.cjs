@@ -25,9 +25,8 @@ module.exports = {
     '!src/**/*.spec.ts',
     '!src/index.ts',
   ],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
+  injectGlobals: true,
+  moduleFileExtensions: ['js', 'ts', 'json'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 }

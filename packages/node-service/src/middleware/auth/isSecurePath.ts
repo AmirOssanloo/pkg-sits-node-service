@@ -1,6 +1,6 @@
+import config from '@sits/configuration'
 import { Request } from 'express'
 import { path, pathOr } from 'ramda'
-import config from '@sits/configuration'
 
 const isSecurePath = (req: Request) => {
   const originalUrl = path(['originalUrl'], req)

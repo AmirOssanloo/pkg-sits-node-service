@@ -1,8 +1,8 @@
+import config from '@sits/configuration'
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { path } from 'ramda'
-import config from '@sits/configuration'
-import type { EnrichedRequest } from '../../typings/request.js'
+import type { EnrichedRequest } from '../../types/express.js'
 import isSecurePath from './isSecurePath.js'
 
 const authMiddleware = () => async (req: Request, res: Response, next: NextFunction) => {

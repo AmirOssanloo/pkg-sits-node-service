@@ -1,17 +1,22 @@
-import { EnrichedRequest } from '../../typings/request.js'
-import isSecurePath from './isSecurePath.js'
+import { jest } from '@jest/globals'
+import { EnrichedRequest } from '../../types/express.js'
 
-// Mock the config module
-jest.mock('../../config', () => ({
-  sns: {
-    auth: {
-      jwt: {
-        securePaths: ['/api/v1'],
-        excludedPaths: ['/api/v1/auth/login'],
+// Mock the config module before importing
+jest.unstable_mockModule('@sits/configuration', () => ({
+  default: {
+    sns: {
+      auth: {
+        jwt: {
+          securePaths: ['/api/v1'],
+          excludedPaths: ['/api/v1/auth/login'],
+        },
       },
     },
   },
 }))
+
+// Import after mocking
+const isSecurePath = (await import('./isSecurePath.js')).default
 
 describe('isSecurePath', () => {
   it('should return true if the path is secure', () => {

@@ -1,14 +1,36 @@
+import { jest } from '@jest/globals'
 import { Response } from 'express'
-import jwt from 'jsonwebtoken'
-import { EnrichedRequest } from '../../typings/request.js'
-import authMiddleware from './auth.js'
-import isSecurePath from './isSecurePath.js'
+import { EnrichedRequest } from '../../types/express.js'
 
-jest.mock('./isSecurePath.js')
-jest.mock('jsonwebtoken')
+// Mock modules before importing
+const mockIsSecurePath = jest.fn()
+const mockJwtVerify = jest.fn()
 
-const mockIsSecurePath = isSecurePath as jest.Mock
-const mockJwtVerify = jwt.verify as jest.Mock
+jest.unstable_mockModule('./isSecurePath.js', () => ({
+  default: mockIsSecurePath,
+}))
+
+jest.unstable_mockModule('jsonwebtoken', () => ({
+  default: {
+    verify: mockJwtVerify,
+    sign: jest.fn(),
+    decode: jest.fn(),
+  },
+  verify: mockJwtVerify,
+  sign: jest.fn(),
+  decode: jest.fn(),
+}))
+
+jest.unstable_mockModule('@sits/configuration', () => ({
+  default: {
+    env: {
+      JWT_SECRET: 'test-secret',
+    },
+  },
+}))
+
+// Import after mocking
+const authMiddleware = (await import('./auth.js')).default
 
 describe('authMiddleware', () => {
   let req: EnrichedRequest
@@ -27,8 +49,7 @@ describe('authMiddleware', () => {
     } as unknown as Response
 
     next = jest.fn()
-    mockIsSecurePath.mockReset()
-    mockJwtVerify.mockReset()
+    jest.clearAllMocks()
   })
 
   describe('non-secure path', () => {

@@ -1,8 +1,27 @@
-export type { EnrichedRequest } from './typings/request.js'
-export type { Logger } from './utils/logger.js'
-export type { ServiceListenOptions, ServiceSetupOptions } from './createNodeService.js'
+// Type exports
+export * from './types/index.js'
+export type { EnrichedRequest, RequestContext } from './types/express.js'
+
+// Core exports
+export { default as NodeService } from './core/service.js'
+export { default as createApp } from './core/app.js'
+export { default as bootApp } from './core/boot.js'
+
+// Middleware exports
+export { default as validateRequestSchemaMiddleware } from './middleware/validation/validate-request-joi.js' // Deprecated - use validateRequestMiddleware
+export { default as validateRequestMiddleware } from './middleware/validation/validate-request.js'
+export { default as errorHandlerMiddleware } from './middleware/error-handler/index.js'
+export * from './middleware/validation/schemas.js'
+
+// Error exports (excluding HttpError which is already exported from types)
+export {
+  BasicError,
+  ValidationError,
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  ConflictError,
+} from './errors/index.js'
+
+// Re-export configuration
 export { default as config } from '@sits/configuration'
-export { default as NodeService } from './createNodeService.js'
-export { default as validateRequestSchemaMiddleware } from './middleware-validate-request-schema/index.js'
-export { default as errorHandlerMiddleware } from './middleware-global-error-handler/index.js'
-export * from './errors/index.js'

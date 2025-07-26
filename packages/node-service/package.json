@@ -28,14 +28,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && pnpm build:post",
-    "build:post": "cp -R src/typings dist/esm/typings && cp src/types.d.ts dist/esm/types.d.ts && cp -R src/typings dist/cjs/typings && cp src/types.d.ts dist/cjs/types.d.ts && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build": "rimraf dist && pnpm build:esm && pnpm build:cjs && pnpm build:post",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
+    "build:post": "cp -R src/types dist/esm/types && cp -R src/types dist/cjs/types && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "build:clean": "rimraf dist",
-    "build:watch": "pnpm build -- -w",
+    "build:watch": "concurrently \"pnpm build:esm --watch\" \"pnpm build:cjs --watch\"",
     "dev": "tsc --watch",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts",
+    "lint": "eslint .",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
-    "type:check": "tsc --noEmit"
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "type:check": "tsc --noEmit",
+    "prepack": "pnpm build"
   },
   "peerDependencies": {
     "express": "^4.17.1 || ^5.0.0",
@@ -50,14 +55,19 @@
     "helmet": "^8.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^4.0.10"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node-fetch": "^2.6.12",
     "@types/uuid": "^10.0.0",
+    "concurrently": "^9.2.0",
+    "fastify": "^5.4.0",
+    "node-fetch": "2.6.7",
     "rimraf": "^6.0.1"
   }
 }
