@@ -5,7 +5,7 @@ import type { NodeServiceConfig } from '../../core/config.js'
 /**
  * Creates and configures CORS middleware
  */
-export default function createCorsMiddleware(config: NodeServiceConfig): RequestHandler | null {
+const createCorsMiddleware = (config: NodeServiceConfig): RequestHandler | null => {
   const corsConfig = config.core?.cors
 
   // If CORS is disabled, return null
@@ -51,3 +51,5 @@ export default function createCorsMiddleware(config: NodeServiceConfig): Request
 
   return cors(corsOptions)
 }
+
+export default createCorsMiddleware

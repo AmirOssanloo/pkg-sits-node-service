@@ -9,6 +9,7 @@ import helmetMiddleware from '../middleware/helmet/index.js'
 import loggerMiddleware from '../middleware/logging/logger.js'
 import contextMiddleware from '../middleware/request/context.js'
 import correlationIdMiddleware from '../middleware/request/correlation-id.js'
+import globalErrorHandlerMiddleware from '../middleware/global-error-handler/index.js'
 import type { Logger } from '../utils/logger.js'
 import { getServiceConfig } from './config.js'
 
@@ -68,18 +69,7 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
   })
 
   // Global error handler
-  app.use((error: any, req: any, res: any) => {
-    const status = error.status || error.statusCode || 500
-    const message = error.message || 'Internal Server Error'
-
-    req.logger?.error('Request error', { error: error.message, stack: error.stack })
-
-    res.status(status).json({
-      error: status >= 500 ? 'Internal Server Error' : message,
-      timestamp: new Date().toISOString(),
-      ...(process.env.NODE_ENV === 'development' && { stack: error.stack }),
-    })
-  })
+  app.use(globalErrorHandlerMiddleware as any)
 
   return app
 }

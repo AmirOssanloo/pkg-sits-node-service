@@ -36,9 +36,8 @@ interface Options {
  * router.post('/users', validateRequestMiddleware(schema), handler)
  * ```
  */
-const validateRequestMiddleware =
-  (schemas: ValidationSchema, options?: Options) =>
-  (req: EnrichedRequest, res: Response, next: NextFunction) => {
+const validateRequestMiddleware = (schemas: ValidationSchema, options?: Options) => {
+  return (req: EnrichedRequest, res: Response, next: NextFunction) => {
     req.validated = {}
 
     try {
@@ -89,6 +88,7 @@ const validateRequestMiddleware =
       next(error)
     }
   }
+}
 
 /**
  * Format Zod error into a human-readable message
