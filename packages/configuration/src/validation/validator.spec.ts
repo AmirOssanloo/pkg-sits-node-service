@@ -24,8 +24,12 @@ describe('validateConfig', () => {
 
   it('should throw error with formatted message', () => {
     const invalidConfig = {
-      name: 'incorrect-name',
-      core: { port: 'invalid-value' },
+      name: '', // Empty string - will fail min(1) validation
+      core: {
+        server: {
+          port: 'invalid-value', // String instead of number
+        },
+      },
     }
 
     try {

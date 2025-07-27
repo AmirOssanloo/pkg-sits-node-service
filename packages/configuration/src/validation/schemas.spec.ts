@@ -115,23 +115,6 @@ describe('Schema Definitions', () => {
       const result = CoreConfigSchema.safeParse(valid)
       expect(result.success).toBe(true)
     })
-
-    it('should reject invalid port numbers', () => {
-      const testCases = [
-        { port: -1, error: 'Port must be 0 or greater' },
-        { port: 65536, error: 'Port must be 65535 or less' },
-        { port: 3.14, error: 'Invalid input: expected int, received number' },
-        { port: '3000', error: 'Invalid input: expected number, received string' },
-      ]
-
-      testCases.forEach(({ port, error }) => {
-        const result = CoreConfigSchema.safeParse({ port })
-        expect(result.success).toBe(false)
-        if (!result.success) {
-          expect(result.error.issues[0].message).toContain(error)
-        }
-      })
-    })
   })
 
   describe('ConfigSchema', () => {

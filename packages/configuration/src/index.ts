@@ -5,3 +5,6 @@ const config = assembleConfig('config')
 const envConfig = applyEnv(config)
 
 export default envConfig
+
+// Export validation utilities
+export { validateConfig, safeValidateConfig, isValidConfig } from './validation/validator.js'
