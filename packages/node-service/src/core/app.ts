@@ -28,11 +28,11 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
   app.use(correlationIdMiddleware() as any)
   app.use(loggerMiddleware() as any)
 
-  if (serviceConfig.service.middleware?.cors?.enabled) {
+  if (serviceConfig.core?.cors?.enabled) {
     app.use(corsMiddleware(serviceConfig) as any)
   }
 
-  if (serviceConfig.service.middleware?.helmet?.enabled) {
+  if (serviceConfig.nodeService?.middleware?.helmet?.enabled) {
     app.use(helmetMiddleware(serviceConfig) as any)
   }
 

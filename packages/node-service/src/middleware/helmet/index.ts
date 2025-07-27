@@ -6,7 +6,7 @@ import type { NodeServiceConfig } from '../../core/config.js'
  * Creates and configures Helmet security middleware
  */
 export default function createHelmetMiddleware(config: NodeServiceConfig): RequestHandler | null {
-  const helmetConfig = config.service.middleware?.helmet
+  const helmetConfig = config.nodeService?.middleware?.helmet
 
   // If Helmet is disabled, return null
   if (helmetConfig?.enabled === false) {

@@ -25,13 +25,20 @@ describe('Node Service Integration Tests', () => {
       const { default: createNodeService } = await import('../service.js')
       const service = createNodeService()
 
-      // Add a simple route
-      service.app.get('/test', (req, res) => {
+      // Create a router
+      const router = express.Router()
+      router.get('/test', (req, res) => {
         res.json({ status: 'ok' })
       })
 
+      // Setup the service
+      const { app, run } = await service.setup({
+        handlers: router,
+      })
+
       // This is a simplified test
-      expect(service.app).toBeDefined()
+      expect(app).toBeDefined()
+      expect(run).toBeDefined()
       expect(service.setup).toBeDefined()
       expect(service.logger).toBeDefined()
     })

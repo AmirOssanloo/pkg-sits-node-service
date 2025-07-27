@@ -7,7 +7,7 @@ import type { NodeServiceConfig } from '../../core/config.js'
  */
 const bodyParserMiddleware = (app: Express, config: NodeServiceConfig) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const bodyParserConfig = config.service.middleware?.bodyParser
+    const bodyParserConfig = config.nodeService?.middleware?.bodyParser
 
     // JSON body parser
     app.use(

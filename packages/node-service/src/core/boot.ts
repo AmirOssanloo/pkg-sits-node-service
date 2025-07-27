@@ -15,7 +15,7 @@ interface BootApp {
 
 const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
   const config = getServiceConfig()
-  const { server } = await createServer({ app, port: config.service?.port ?? 3000, logger })
+  const { server } = await createServer({ app, port: config.core?.port ?? 3000, logger })
 
   const gracefulShutdown = createGracefulShutdown({
     server,
@@ -43,9 +43,9 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
   })
 
   // Use signals from configuration
-  const signalTraps = config.service?.shutdown?.signals ?? ['SIGTERM', 'SIGINT']
+  const signalTraps = config.nodeService?.shutdown?.signals ?? ['SIGTERM', 'SIGINT']
 
-  signalTraps.forEach((eventType) => {
+  signalTraps.forEach((eventType: string) => {
     const shutdown = gracefulShutdown(eventType)
 
     const handler = async (error: Error) => {
@@ -54,11 +54,11 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
         process.exit(0)
       } catch (error) {
         logger.error('Killing process', { error })
-        process.kill(process.pid, eventType)
+        process.kill(process.pid, eventType as NodeJS.Signals)
       }
     }
 
-    process.once(eventType, handler)
+    process.once(eventType as NodeJS.Signals, handler as any)
     processHandlers.push({ eventType, handler })
   })
 }

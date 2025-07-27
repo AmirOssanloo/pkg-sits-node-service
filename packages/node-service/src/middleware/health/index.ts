@@ -5,7 +5,7 @@ import type { NodeServiceConfig } from '../../core/config.js'
  * Creates and configures health check endpoints
  */
 export default function createHealthEndpoints(app: Express, config: NodeServiceConfig): void {
-  const healthConfig = config.service?.health
+  const healthConfig = config.nodeService?.health
 
   // If health checks are disabled, return early
   if (!healthConfig?.enabled) {
@@ -34,8 +34,8 @@ export default function createHealthEndpoints(app: Express, config: NodeServiceC
       status: allHealthy ? 'ok' : 'error',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      service: config.service?.name ?? 'node-service',
-      version: config.service?.version ?? '1.0.0',
+      service: config.name ?? 'node-service',
+      version: config.nodeService?.version ?? '1.0.0',
       responseTime: Date.now() - startTime,
       checks,
     }

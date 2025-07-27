@@ -1,16 +1,27 @@
-import express from 'express'
-import type { Express, Router } from 'express'
+import express, { Router } from 'express'
+import type { Application } from 'express'
 import type { ReleaseResources, Logger } from '../types/index.js'
 import logger from '../utils/logger.js'
 import createApp from './app.js'
 import bootApp from './boot.js'
 
-interface ServiceListenOptions {
-  releaseResources?: ReleaseResources
+interface CreateNodeServiceReturn {
+  setup: (opts?: ServiceSetupOptions) => Promise<SetupNodeServiceReturn>
+  logger: Logger
+}
+
+interface SetupNodeServiceReturn {
+  run: (opts?: ServiceListenOptions) => void
+  app: Application
 }
 
 interface ServiceSetupOptions {
   handlers?: Router
+  releaseResources?: ReleaseResources
+}
+
+interface ServiceListenOptions {
+  releaseResources?: ReleaseResources
 }
 
 const state = {
@@ -18,15 +29,7 @@ const state = {
   isRunning: false,
 }
 
-interface CreateNodeService {
-  app: Express
-  setup: (opts?: ServiceSetupOptions) => Promise<{
-    run: (opts?: ServiceListenOptions) => void
-  }>
-  logger: Logger
-}
-
-const createNodeService = (): CreateNodeService => {
+const createNodeService = (): CreateNodeServiceReturn => {
   const expressApp = express()
 
   const setup = async (opts: ServiceSetupOptions = {}) => {
@@ -34,11 +37,10 @@ const createNodeService = (): CreateNodeService => {
       throw new Error('The app has already been bootstrapped')
     }
 
-    const { handlers = express.Router() } = opts
     state.hasBootstrapped = true
 
     const app = createApp(expressApp, {
-      handlers,
+      handlers: opts.handlers || Router(),
       logger,
     })
 
@@ -71,11 +73,11 @@ const createNodeService = (): CreateNodeService => {
 
     return {
       run,
+      app,
     }
   }
 
   return {
-    app: expressApp,
     setup,
     logger,
   }
