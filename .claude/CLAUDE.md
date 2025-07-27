@@ -5,6 +5,8 @@
 
 ## Documentation Structure
 
+// TODO: Please update this, we have moved the errors (standard error classes).
+
 | Document                            | Purpose                              |
 | ----------------------------------- | ------------------------------------ |
 | `/CLAUDE.md`                        | Quick reference & overview           |
@@ -30,6 +32,7 @@
 9. New deps require justification & must be added via `pnpm`.
 10. Commit flow: **Plan → Approve → Implement → Review → Test → Commit**.
 
+// TODO: Please update this, we have moved the errors (standard error classes), update docs.
 See the domain docs (`node-service.md`, `configuration.md`, `errors.md`) and agent docs in `.claude/agents/` for details.
 
 ---
@@ -58,8 +61,7 @@ See the domain docs (`node-service.md`, `configuration.md`, `errors.md`) and age
    – Keep token footprint low—brevity matters for future context windows.
 
 3. **Log the change**  
-   – Append a one-line entry to `CHANGELOG.md` if user-visible.  
-   – Optionally add a 1-2 sentence note under today’s date in `JOURNAL.md`.
+   – Append a one-line entry to `CHANGELOG.md` if user-visible.
 
 4. **Commit etiquette**  
    – Prefer same-PR commits for tightly-coupled code + doc changes; separate PRs if docs are substantial.  

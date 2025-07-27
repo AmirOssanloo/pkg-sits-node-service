@@ -48,6 +48,7 @@ core:
     origins:
       - http://localhost:3000
       - http://localhost:5173
+    // TODO: Please define GET, POST, PUT, DELETE, PATCH, OPTIONS as default value for methods (unless there is a hard recommendation against it)
     methods:
       - GET
       - POST

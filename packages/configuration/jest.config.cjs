@@ -22,5 +22,5 @@ module.exports = {
     ],
   },
   testMatch: ['**/*.spec.ts'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/**/*.spec.ts', '!src/index.ts'],
+  collectCoverage: false,
 }

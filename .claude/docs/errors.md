@@ -1,3 +1,5 @@
+// TODO: PLEASE REMOVE THIS (OR MOVE TO node-service since this package was moved into node-service)
+
 # Errors Package Documentation
 
 ## Overview

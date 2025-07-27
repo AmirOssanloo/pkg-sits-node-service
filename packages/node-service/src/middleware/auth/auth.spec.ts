@@ -29,12 +29,12 @@ jest.unstable_mockModule('@sits/configuration', () => ({
           jwt: {
             provider: 'jwt',
             config: {
-              secret: 'test-secret'
-            }
-          }
+              secret: 'test-secret',
+            },
+          },
         },
-        paths: []
-      }
+        paths: [],
+      },
     },
     env: {
       JWT_SECRET: 'test-secret',

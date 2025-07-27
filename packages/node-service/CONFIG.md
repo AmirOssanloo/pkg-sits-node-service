@@ -9,23 +9,22 @@ Create a `config/default.yaml` file in your project root:
 ```yaml
 service:
   name: my-service
-  version: 1.0.0
   environment: development
   port: 3000
   host: 0.0.0.0
-  
+
   logging:
     level: info
     format: json
     silent: false
-    
+
   server:
     trustProxy: false
     timeout: 60000
     keepAliveTimeout: 65000
     headersTimeout: 66000
     maxHeaderSize: 16384
-    
+
   middleware:
     cors:
       enabled: true
@@ -38,28 +37,32 @@ service:
         - DELETE
         - PATCH
         - OPTIONS
-        
+
     helmet:
       enabled: true
       contentSecurityPolicy: false
-      
-    auth:
-      enabled: false
-      secret: your-secret-key-min-32-chars
-      algorithms:
-        - HS256
-      credentialsRequired: true
-      securePaths: []
-      ignorePaths:
-        - /health
-        - /ping
-        - /metrics
-        
+
+core:
+  auth:
+    strategies:
+      jwt:
+        config:
+          secret: your-secret-key-min-32-chars
+          algorithms:
+            - HS256
+    paths:
+      - /api/*
+      - /admin/*
+    ignorePaths:
+      - /health
+      - /ping
+      - /metrics
+
     rateLimit:
       enabled: false
       windowMs: 900000 # 15 minutes
       max: 100
-      
+
     bodyParser:
       json:
         limit: 10mb
@@ -68,17 +71,17 @@ service:
         extended: true
         limit: 10mb
         parameterLimit: 1000
-        
+
   health:
     enabled: true
     path: /health
     timeout: 5000
-    
+
   metrics:
     enabled: false
     path: /metrics
     includeDefaults: true
-    
+
   shutdown:
     enabled: true
     timeout: 30000
@@ -197,11 +200,21 @@ service:
       origin: https://myapp.com
     helmet:
       enabled: true
-    auth:
-      enabled: true
     rateLimit:
       enabled: true
       max: 100
+
+core:
+  auth:
+    strategies:
+      jwt:
+        config:
+          secret: ${JWT_SECRET}
+    paths:
+      - /api/*
+    ignorePaths:
+      - /health
+      - /metrics
 ```
 
 ### Testing Configuration
@@ -213,8 +226,6 @@ service:
   logging:
     silent: true
   middleware:
-    auth:
-      enabled: false
     rateLimit:
       enabled: false
 ```

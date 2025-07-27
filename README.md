@@ -5,7 +5,7 @@ A lightweight Node.js framework for building HTTP services with minimal boilerpl
 ## Features
 
 - 🚀 **Express 5** - Battle-tested web framework
-- 🔧 **Zero Config** - Sensible defaults with YAML configuration support
+- 🔧 **Clean Configuration** - YAML-based configuration with sensible structure
 - ✅ **Schema Validation** - Runtime configuration validation with Zod and clear error messages
 - 🔐 **JWT Authentication** - Built-in auth middleware with secure path routing
 - 📝 **Structured Logging** - Request tracking with correlation IDs
@@ -36,7 +36,7 @@ async function startServer() {
 
   // Setup and run the service
   const { run } = await service.setup()
-  
+
   run({
     releaseResources: async () => {
       // Close database connections, etc.
@@ -57,13 +57,13 @@ import { createNodeService } from '@amirossanloo/node-service'
 const service = createNodeService()
 
 // Create a router with your routes
-const apiRouter = express.Router()
-apiRouter.get('/users', (req, res) => res.json({ users: [] }))
-apiRouter.post('/users', (req, res) => res.status(201).json({ user: req.body }))
+const router = express.Router()
+router.get('/users', (req, res) => res.json({ users: [] }))
+router.post('/users', (req, res) => res.status(201).json({ user: req.body }))
 
 // Setup with the router
 const { run } = await service.setup({
-  handlers: apiRouter
+  handlers: router,
 })
 
 // You can also add routes directly to the app
@@ -79,16 +79,24 @@ run()
 Create a `config` directory with YAML files for different environments:
 
 ```yaml
-# config/node.development.yaml
-sns:
+# config/default.yaml
+service:
   name: my-service
   port: 3000
+  environment: development
+
+core:
   auth:
-    jwt:
-      secret: ${JWT_SECRET}
-    securePaths:
-      - /secure
-      - /api/admin
+    strategies:
+      jwt:
+        config:
+          secret: ${JWT_SECRET}
+    paths:
+      - /api/*
+      - /admin/*
+    ignorePaths:
+      - /health
+      - /metrics
 ```
 
 Environment variables can be interpolated using `${VAR_NAME}` syntax.
@@ -99,9 +107,8 @@ This is a monorepo with the following structure:
 
 ```
 ├── packages/
-│   ├── node-service/    # Main framework package
-│   ├── configuration/   # Config management (planned)
-│   └── errors/          # Error handling (planned)
+│   ├── node-service/    # Main framework package (includes error classes)
+│   └── configuration/   # Config management package
 ├── examples/            # Usage examples
 ├── config/              # Sample configurations
 └── scripts/             # Utility scripts

@@ -1,5 +1,17 @@
 import { Request } from 'express'
+import { JwtPayload } from 'jsonwebtoken'
 import { Logger } from '../utils/logger.js'
+
+/**
+ * User information extracted from JWT token
+ */
+export interface AuthenticatedUser extends JwtPayload {
+  id?: string | number
+  email?: string
+  username?: string
+  roles?: string[]
+  permissions?: string[]
+}
 
 /**
  * Module augmentation for Express Request
@@ -14,7 +26,7 @@ declare module 'express' {
       query?: any
       params?: any
     }
-    user?: any // Added by auth middleware
+    user?: AuthenticatedUser
   }
 }
 
@@ -39,5 +51,5 @@ export interface EnrichedRequest<T = any> extends Request {
         query?: any
         params?: any
       }
-  user?: any
+  user?: AuthenticatedUser
 }

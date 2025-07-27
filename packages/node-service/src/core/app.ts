@@ -17,16 +17,11 @@ interface AppOptions {
   logger?: Logger
 }
 
-// TODO: We need to remove console.logs and figure out a better way to get observability into the application.
-
 /**
  * Creates and configures the Express application with all middleware
  */
 const createApp = (app: Express, { handlers }: AppOptions): Express => {
   const serviceConfig = getServiceConfig()
-
-  console.log('ServiceConfig', serviceConfig)
-  console.log('CoreConfig', config.core)
 
   // Middleware before handlers
   app.use(contextMiddleware() as any)
@@ -46,7 +41,6 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
 
   // Check if authentication is configured in core.auth
   if (config.core?.auth && Object.keys(config.core.auth.strategies || {}).length > 0) {
-    console.log('Auth middleware enabled - strategies configured in core.auth')
     app.use(authMiddleware() as any)
   }
 
@@ -55,8 +49,6 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
 
   // User-provided handlers
   app.use(async (req, res, next) => {
-    console.log('User-provided handlers')
-
     try {
       await handlers(req, res, next)
     } catch (error) {
@@ -65,8 +57,29 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
   })
 
   // Middleware after handlers
-  // We should add a middleware that will handle missing routes (missingRouteMiddleware)
-  // We should add a middleware that will be used to handle errors (errorHandlerMiddleware)
+
+  // 404 handler for unmatched routes
+  app.use((req, res) => {
+    res.status(404).json({
+      error: 'Not Found',
+      message: `Route ${req.method} ${req.originalUrl} not found`,
+      timestamp: new Date().toISOString(),
+    })
+  })
+
+  // Global error handler
+  app.use((error: any, req: any, res: any) => {
+    const status = error.status || error.statusCode || 500
+    const message = error.message || 'Internal Server Error'
+
+    req.logger?.error('Request error', { error: error.message, stack: error.stack })
+
+    res.status(status).json({
+      error: status >= 500 ? 'Internal Server Error' : message,
+      timestamp: new Date().toISOString(),
+      ...(process.env.NODE_ENV === 'development' && { stack: error.stack }),
+    })
+  })
 
   return app
 }

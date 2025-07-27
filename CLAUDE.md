@@ -12,7 +12,7 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 | Package manager | pnpm |
 | Runtime environment | Node.js 22.16.0+ |
 | Module system | ESM (ECMAScript modules) |
-| TypeScript config | @tsconfig/node22 (uses `moduleResolution: node16`) |
+| TypeScript config | @tsconfig/node22 |
 | Web server | Express 5 |
 | Middleware | Express-compatible (cookie-parser, cors, helmet) |
 | Authentication | JWT (jsonwebtoken) |
@@ -23,16 +23,16 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 
 ## Key Commands
 
-| Command              | Purpose                               |
-| -------------------- | ------------------------------------- |
-| `pnpm install`       | Install dependencies                  |
-| `pnpm test`          | Run all tests                         |
-| `pnpm lint`          | Run ESLint                            |
-| `pnpm type:check`    | Run TypeScript type checking          |
-| `pnpm dev`           | Start development server with nodemon |
-| `pnpm build`         | Build for production                  |
-| `pnpm build:clean`   | Remove build artifacts                |
-| `pnpm create:token`  | Generate JWT authentication token     |
+| Command             | Purpose                               |
+| ------------------- | ------------------------------------- |
+| `pnpm install`      | Install dependencies                  |
+| `pnpm test`         | Run all tests                         |
+| `pnpm lint`         | Run ESLint                            |
+| `pnpm type:check`   | Run TypeScript type checking          |
+| `pnpm dev`          | Start development server with nodemon |
+| `pnpm build`        | Build for production                  |
+| `pnpm build:clean`  | Remove build artifacts                |
+| `pnpm create:token` | Generate JWT authentication token     |
 
 ## Claude Commands
 
@@ -49,11 +49,11 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 ## Library Architecture
 
 - **Core**: Essential service functionality (createNodeService, createApp, bootApp)
-- **Plugins**: Optional middleware (auth, cors, logging, error handling)
-- **Adapters**: Framework integrations (Fastify plugins, Express middleware compatibility)
-- **Configuration**: YAML-based config with environment variable support
+- **Middleware**: Built-in middleware (auth, cors, logging, error handling)
+- **Configuration**: YAML-based config with environment variable support and Zod validation
+- **Types & Errors**: TypeScript definitions and standard error classes
 - **Testing**: Jest with TypeScript support
-- **Architecture**: Three-layer design (core → plugins → adapters)
+- **Architecture**: Clean, modular design with Express 5 foundation
 
 ## Development Workflow
 
@@ -70,9 +70,8 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 ```
 /
 ├── packages/         # Library packages
-│   ├── node-service/ # Main service framework
-│   ├── configuration/# Config management (planned)
-│   └── errors/       # Error handling (planned)
+│   ├── node-service/ # Main service framework (includes standard error classes)
+│   └── configuration/# Config management package
 ├── examples/         # Usage examples
 │   ├── app.ts        # Example service setup
 │   └── handlers/     # Example route handlers
@@ -95,9 +94,8 @@ This is a **Node Service** framework, a Node.js library for creating services wi
 For detailed guidelines and agent behavior, see:
 
 - `.claude/CLAUDE.md` - Architecture & detailed rules
-- `.claude/docs/node-service.md` - Node service framework documentation
+- `.claude/docs/node-service.md` - Node service framework documentation (includes error handling)
 - `.claude/docs/configuration.md` - Configuration package documentation
-- `.claude/docs/errors.md` - Error handling documentation
 - `.claude/plans/TEMPLATE.md` - Plan template
 - Agent-specific configs in `.claude/agents/`
 
@@ -119,6 +117,7 @@ For detailed guidelines and agent behavior, see:
 - **Performance:** Optimize middleware chains, avoid blocking operations
 - **Documentation:** Keep docs updated when making changes
 - **Dependencies:** New dependencies require justification
+- **Migration Phase:** This package is in pre-release migration phase. Do NOT maintain backward compatibility - implement clean solutions without legacy support layers.
 - **ESM Modules:** This project uses ESM (ECMAScript modules). All relative imports in TypeScript files MUST include the `.js` extension (e.g., `import foo from './foo.js'`). This is required by Node.js ESM resolution and TypeScript's `node16`/`nodenext` module resolution strategy.
 - **Dual Package Build:** Packages are built to support both ESM and CommonJS consumers. The build process creates both `dist/esm/` and `dist/cjs/` outputs, allowing the packages to be used in any Node.js environment.
 
@@ -127,9 +126,8 @@ For detailed guidelines and agent behavior, see:
 Detailed guidelines for different aspects are in:
 
 - `.claude/CLAUDE.md` - Global rules & architecture
-- `.claude/docs/node-service.md` - Node service framework architecture
+- `.claude/docs/node-service.md` - Node service framework architecture (includes error handling)
 - `.claude/docs/configuration.md` - Configuration package details
-- `.claude/docs/errors.md` - Error handling patterns
 - `.claude/agents/CLAUDE.analyser.md` - Analysing agent
 - `.claude/agents/CLAUDE.planner.md` - Planning agent
 - `.claude/agents/CLAUDE.programmer.md` - Implementation agent
