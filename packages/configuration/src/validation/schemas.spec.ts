@@ -4,7 +4,6 @@ import {
   CoreConfigSchema,
   AuthConfigSchema,
   CloudConfigSchema,
-  CorsConfigSchema,
   StrategyDefinitionSchema,
 } from './schemas.js'
 
@@ -72,7 +71,7 @@ describe('Schema Definitions', () => {
 
       expect(result).toEqual({
         cluster: '',
-        environment: '',
+        stage: '',
         region: '',
       })
     })
@@ -80,7 +79,7 @@ describe('Schema Definitions', () => {
     it('should validate cloud config with values', () => {
       const valid = {
         cluster: 'eu-west-1',
-        environment: 'production',
+        stage: 'production',
         region: 'eu',
       }
 
@@ -89,51 +88,13 @@ describe('Schema Definitions', () => {
     })
   })
 
-  describe('CorsConfigSchema', () => {
-    it('should validate CORS config with defaults', () => {
-      const result = CorsConfigSchema.parse({})
-
-      expect(result).toEqual({
-        enabled: false,
-        origins: null,
-        methods: null,
-        requestHeaders: null,
-        responseHeaders: null,
-        supportsCredentials: null,
-        maxAge: null,
-        endPreflightRequests: null,
-      })
-    })
-
-    it('should validate enabled CORS with origins', () => {
-      const valid = {
-        enabled: true,
-        origins: ['https://example.com', 'https://app.example.com'],
-      }
-
-      const result = CorsConfigSchema.safeParse(valid)
-      expect(result.success).toBe(true)
-    })
-
-    it('should reject invalid URLs in origins', () => {
-      const invalid = {
-        enabled: true,
-        origins: ['not-a-url', 'https://valid.com'],
-      }
-
-      const result = CorsConfigSchema.safeParse(invalid)
-      expect(result.success).toBe(false)
-    })
-  })
-
   describe('CoreConfigSchema', () => {
     it('should validate minimal core config', () => {
       const result = CoreConfigSchema.parse({})
 
       expect(result.auth).toBeNull()
-      expect(result.port).toBe(3000)
       expect(result.cloud.cluster).toBe('')
-      expect(result.cors.enabled).toBe(false)
+      expect(result.server.port).toBe(3000)
       expect(result.https.enabled).toBe(false)
     })
 
@@ -144,8 +105,10 @@ describe('Schema Definitions', () => {
           paths: [{ path: '/secure', strategy: 'jwt' }],
         },
         cloud: { cluster: 'prod', environment: 'production', region: 'us-east-1' },
-        port: 8080,
-        cors: { enabled: true, origins: ['https://example.com'] },
+        server: {
+          port: 8080,
+          https: { enabled: true, options: { cert: 'cert', key: 'key' } },
+        },
         https: { enabled: true, options: { cert: 'cert', key: 'key' } },
       }
 
@@ -180,7 +143,7 @@ describe('Schema Definitions', () => {
 
       const result = ConfigSchema.parse(valid)
       expect(result.name).toBe('test-service')
-      expect(result.core.port).toBe(3000)
+      expect(result.core.server.port).toBe(3000)
     })
 
     it('should allow custom properties with passthrough', () => {
@@ -245,19 +208,13 @@ describe('Schema Definitions', () => {
       // This test verifies TypeScript type inference works correctly
       const config: z.infer<typeof ConfigSchema> = {
         name: 'test',
+        environment: 'test',
         core: {
           auth: null,
-          cloud: { cluster: '', environment: '', region: '' },
-          port: 3000,
-          cors: {
-            enabled: false,
-            origins: null,
-            methods: null,
-            requestHeaders: null,
-            responseHeaders: null,
-            supportsCredentials: null,
-            maxAge: null,
-            endPreflightRequests: null,
+          cloud: { cluster: '', stage: '', region: '' },
+          server: {
+            port: 3000,
+            host: 'localhost',
           },
           https: { enabled: false, options: {} },
         },
@@ -265,7 +222,7 @@ describe('Schema Definitions', () => {
 
       // TypeScript will fail to compile if types don't match
       expect(config.name).toBe('test')
-      expect(config.core.port).toBe(3000)
+      expect(config.core.server.port).toBe(3000)
     })
   })
 })

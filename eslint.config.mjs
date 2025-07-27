@@ -9,41 +9,10 @@ import promisePlugin from 'eslint-plugin-promise'
 import securityPlugin from 'eslint-plugin-security'
 
 export default [
-  // Ignore patterns
-  {
-    ignores: [
-      '**/dist/**',
-      '**/node_modules/**',
-      '**/coverage/**',
-      '**/*.config.js',
-      '**/*.config.cjs',
-      '**/*.config.mjs',
-      'bin/**',
-      'scripts/**',
-    ],
-  },
-
-  // Base JavaScript config
-  js.configs.recommended,
-
-  // TypeScript configs
+  ...js.configs.recommended,
   ...tseslint.configs.recommended,
-
-  // Prettier config (disables conflicting rules)
-  prettierConfig,
-
-  // Global configuration for all files
+  ...prettierConfig,
   {
-    files: ['**/*.{js,mjs,cjs,ts}'],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      parser: tseslint.parser,
-      parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
       import: importPlugin,
@@ -53,6 +22,21 @@ export default [
       promise: promisePlugin,
       security: securityPlugin,
     },
+  },
+  {
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '**/generated/**',
+      '**/*.config.js',
+      '**/*.config.cjs',
+      '**/*.config.mjs',
+      'bin/**',
+      'scripts/**',
+    ],
+  },
+  {
     rules: {
       // TypeScript specific rules
       '@typescript-eslint/no-empty-function': 'off',
@@ -96,38 +80,59 @@ export default [
       },
     },
   },
-
-  // Configuration for test files
-  {
-    files: ['**/*.spec.{js,ts}', '**/*.test.{js,ts}'],
-    languageOptions: {
-      globals: {
-        jest: 'readonly',
-        describe: 'readonly',
-        it: 'readonly',
-        expect: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
-        beforeAll: 'readonly',
-        afterAll: 'readonly',
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      'jest/expect-expect': 'warn',
-      'jest/no-disabled-tests': 'warn',
-      'jest/no-focused-tests': 'error',
-      'jest/no-identical-title': 'error',
-      'jest/prefer-to-have-length': 'warn',
-      'jest/valid-expect': 'error',
-    },
-  },
-
-  // Configuration for CommonJS files
-  {
-    files: ['**/*.cjs'],
-    languageOptions: {
-      sourceType: 'commonjs',
-    },
-  },
 ]
+
+// // Global configuration for all files
+// {
+//   files: ['**/*.{js,mjs,cjs,ts}'],
+//   languageOptions: {
+//     ecmaVersion: 2022,
+//     sourceType: 'module',
+//     parser: tseslint.parser,
+//     parserOptions: {
+//       project: './tsconfig.json',
+//       tsconfigRootDir: import.meta.dirname,
+//     },
+//   },
+//   plugins: {
+//     '@typescript-eslint': tseslint.plugin,
+//     import: importPlugin,
+//     jest: jestPlugin,
+//     node: nodePlugin,
+//     prettier: prettierPlugin,
+//     promise: promisePlugin,
+//     security: securityPlugin,
+//   },
+// // Configuration for test files
+// {
+//   files: ['**/*.spec.{js,ts}', '**/*.test.{js,ts}'],
+//   languageOptions: {
+//     globals: {
+//       jest: 'readonly',
+//       describe: 'readonly',
+//       it: 'readonly',
+//       expect: 'readonly',
+//       beforeEach: 'readonly',
+//       afterEach: 'readonly',
+//       beforeAll: 'readonly',
+//       afterAll: 'readonly',
+//     },
+//   },
+//   rules: {
+//     '@typescript-eslint/no-explicit-any': 'off',
+//     'jest/expect-expect': 'warn',
+//     'jest/no-disabled-tests': 'warn',
+//     'jest/no-focused-tests': 'error',
+//     'jest/no-identical-title': 'error',
+//     'jest/prefer-to-have-length': 'warn',
+//     'jest/valid-expect': 'error',
+//   },
+// },
+
+// // Configuration for CommonJS files
+// {
+//   files: ['**/*.cjs'],
+//   languageOptions: {
+//     sourceType: 'commonjs',
+//   },
+// },

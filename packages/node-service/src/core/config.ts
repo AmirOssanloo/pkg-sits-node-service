@@ -1,17 +1,36 @@
 import config, { ConfigSchema, extractConfigPath } from '@sits/configuration'
 import { z } from 'zod'
 
+// CORS configuration
+// export const CorsConfigSchema = z.object({
+//   enabled: z.boolean().default(false),
+//   origins: z.array(z.string().url()).nullable().default(null),
+//   methods: z.array(z.string()).nullable().default(null),
+//   requestHeaders: z.array(z.string()).nullable().default(null),
+//   responseHeaders: z.array(z.string()).nullable().default(null),
+//   supportsCredentials: z.boolean().nullable().default(null),
+//   maxAge: z.number().int().positive().nullable().default(null),
+//   endPreflightRequests: z.boolean().nullable().default(null),
+// })
+
+// cors: CorsConfigSchema.default({
+//   enabled: false,
+//   origins: null,
+//   methods: null,
+//   requestHeaders: null,
+//   responseHeaders: null,
+//   supportsCredentials: null,
+//   maxAge: null,
+//   endPreflightRequests: null,
+// }),
+
 /**
  * Node Service specific configuration extensions
  * These are fields that extend the base configuration from @sits/configuration
  */
 export const nodeServiceExtensionsSchema = z.object({
-  nodeService: z.object({
-      version: z.string().default('1.0.0'),
-      environment: z.enum(['development', 'test', 'staging', 'production']).default('development'),
-      host: z.string().default('0.0.0.0'),
-      baseUrl: z.string().url().optional(),
-
+  nodeService: z
+    .object({
       // Logging configuration
       logging: z.object({
         level: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
@@ -57,9 +76,7 @@ export const nodeServiceExtensionsSchema = z.object({
             .positive()
             .default(15 * 60 * 1000), // 15 minutes
           max: z.number().positive().default(100),
-          message: z
-            .string()
-            .default('Too many requests from this IP, please try again later.'),
+          message: z.string().default('Too many requests from this IP, please try again later.'),
           standardHeaders: z.boolean().default(true),
           legacyHeaders: z.boolean().default(false),
         }),
@@ -79,9 +96,7 @@ export const nodeServiceExtensionsSchema = z.object({
           raw: z.object({
             enabled: z.boolean().default(false),
             limit: z.string().default('10mb'),
-            type: z
-              .union([z.string(), z.array(z.string())])
-              .default('application/octet-stream'),
+            type: z.union([z.string(), z.array(z.string())]).default('application/octet-stream'),
           }),
           text: z.object({
             enabled: z.boolean().default(false),
@@ -120,7 +135,8 @@ export const nodeServiceExtensionsSchema = z.object({
         signals: z.array(z.string()).default(['SIGTERM', 'SIGINT']),
         forceExitAfter: z.number().positive().optional(),
       }),
-    }).optional(),
+    })
+    .optional(),
 })
 
 /**

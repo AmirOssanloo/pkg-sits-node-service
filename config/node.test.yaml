@@ -1,2 +1,5 @@
-env:
-  JWT_SECRET: test
+environment: 'test'
+core:
+  server:
+    port: 3022
+  auth: null

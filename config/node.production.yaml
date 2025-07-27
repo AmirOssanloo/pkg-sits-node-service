@@ -1,2 +1,4 @@
-env:
-  JWT_SECRET: production
+environment: 'production'
+core:
+  server:
+    port: 3021

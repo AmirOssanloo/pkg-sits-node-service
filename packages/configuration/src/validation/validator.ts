@@ -1,57 +1,26 @@
 import { ZodError } from 'zod'
 import { ConfigValidationError } from './errors.js'
-import type { Config, ValidationOptions } from './schemas.js'
-import { ConfigSchema, BaseConfigSchema, defaultValidationOptions } from './schemas.js'
+import type { UserConfig } from '../types.js'
+import { ConfigSchema } from './schemas.js'
 
 /**
- * Validates a configuration object against the schema
- * @param config The configuration to validate
- * @param options Validation options
- * @returns The validated configuration
- * @throws {ZodError} If validation fails
+ * Validate a configuration object
  */
-export function validateConfig(config: unknown, options: ValidationOptions = {}): Config {
-  const opts = { ...defaultValidationOptions, ...options }
-
+export function validateConfig(config: unknown): UserConfig {
   try {
-    // Create schema based on options
-    // In strict mode, use BaseConfigSchema with .strict() to disallow unknown properties
-    // Default mode uses ConfigSchema which allows additional properties
-    const schema = opts.strict ? BaseConfigSchema.strict() : ConfigSchema
+    const result = ConfigSchema.parse(config) as UserConfig
 
-    // Validate with options
-    const result = schema.parse(config)
+    console.log(result)
 
-    return result as Config
+    return result as UserConfig
   } catch (error) {
+    console.log(error)
+
     if (error instanceof ZodError) {
-      // Enhance error message for better debugging
+      console.log('ZodError')
       throw new ConfigValidationError(error)
     }
-    throw error
-  }
-}
 
-/**
- * Validates a configuration object asynchronously
- * Useful for async transformations or refinements
- */
-export async function validateConfigAsync(
-  config: unknown,
-  options: ValidationOptions = {}
-): Promise<Config> {
-  const opts = { ...defaultValidationOptions, ...options }
-
-  try {
-    const schema = opts.strict ? BaseConfigSchema : ConfigSchema
-
-    const result = await schema.parseAsync(config)
-
-    return result as Config
-  } catch (error) {
-    if (error instanceof ZodError) {
-      throw new ConfigValidationError(error)
-    }
     throw error
   }
 }
@@ -60,11 +29,10 @@ export async function validateConfigAsync(
  * Safe validation that returns a result object instead of throwing
  */
 export function safeValidateConfig(
-  config: unknown,
-  options: ValidationOptions = {}
-): { success: true; data: Config } | { success: false; error: ConfigValidationError } {
+  config: unknown
+): { success: true; data: UserConfig } | { success: false; error: ConfigValidationError } {
   try {
-    const data = validateConfig(config, options)
+    const data = validateConfig(config)
     return { success: true, data }
   } catch (error) {
     if (error instanceof ConfigValidationError) {
@@ -77,29 +45,7 @@ export function safeValidateConfig(
 /**
  * Type guard to check if a value is a valid configuration
  */
-export function isValidConfig(value: unknown): value is Config {
+export function isValidConfig(value: unknown): value is UserConfig {
   const result = safeValidateConfig(value)
   return result.success
-}
-
-/**
- * Extracts partial configuration for specific paths
- */
-export function extractConfigPath<T>(config: Config, path: string): T | undefined {
-  if (!path) {
-    return config as unknown as T
-  }
-
-  const parts = path.split('.')
-  let current: any = config
-
-  for (const part of parts) {
-    if (current && typeof current === 'object' && part in current) {
-      current = current[part]
-    } else {
-      return undefined
-    }
-  }
-
-  return current as T
 }

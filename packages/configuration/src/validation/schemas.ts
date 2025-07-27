@@ -18,21 +18,15 @@ export const AuthConfigSchema = z.object({
 
 // Cloud configuration
 export const CloudConfigSchema = z.object({
-  cluster: z.string().default(''),
-  environment: z.string().default(''),
-  region: z.string().default(''),
+  stage: z.string().default(''), // staging, production, etc.
+  region: z.string().default(''), // eu-west-1, us-east-1, etc.
+  cluster: z.string().default(''), // eu-staging, eu-production, etc.
 })
 
-// CORS configuration
-export const CorsConfigSchema = z.object({
-  enabled: z.boolean().default(false),
-  origins: z.array(z.string().url()).nullable().default(null),
-  methods: z.array(z.string()).nullable().default(null),
-  requestHeaders: z.array(z.string()).nullable().default(null),
-  responseHeaders: z.array(z.string()).nullable().default(null),
-  supportsCredentials: z.boolean().nullable().default(null),
-  maxAge: z.number().int().positive().nullable().default(null),
-  endPreflightRequests: z.boolean().nullable().default(null),
+// Server configuration
+export const ServerConfigSchema = z.object({
+  host: z.string().default('0.0.0.0'),
+  port: z.number().int().default(3000),
 })
 
 // HTTPS configuration
@@ -44,67 +38,18 @@ export const HttpsConfigSchema = z.object({
 // Core configuration (framework settings)
 export const CoreConfigSchema = z.object({
   auth: AuthConfigSchema.nullable().default(null),
-  cloud: CloudConfigSchema.default({ cluster: '', environment: '', region: '' }),
-  port: z
-    .number()
-    .int()
-    .min(0, { message: 'Port must be 0 or greater' })
-    .max(65535, { message: 'Port must be 65535 or less' })
-    .default(3000),
-  cors: CorsConfigSchema.default({
-    enabled: false,
-    origins: null,
-    methods: null,
-    requestHeaders: null,
-    responseHeaders: null,
-    supportsCredentials: null,
-    maxAge: null,
-    endPreflightRequests: null,
-  }),
+  cloud: CloudConfigSchema.default({ cluster: '', stage: '', region: '' }),
+  server: ServerConfigSchema.default({ host: '0.0.0.0', port: 3000 }),
   https: HttpsConfigSchema.default({ enabled: false, options: {} }),
 })
 
 // Base configuration schema (strict)
 export const BaseConfigSchema = z.object({
   name: z.string().min(1, { message: 'Service name is required' }),
+  environment: z.string().nullable().default(null),
   core: CoreConfigSchema,
-  env: z.record(z.string(), z.string()).optional(),
 })
 
 // Main configuration schema with additional properties
 // Uses intersection to allow both defined properties and additional ones
 export const ConfigSchema = BaseConfigSchema.and(z.record(z.string(), z.unknown()))
-
-// Type exports from schemas
-export type StrategyDefinition = z.infer<typeof StrategyDefinitionSchema>
-export type StrategyPath = z.infer<typeof StrategyPathSchema>
-export type AuthConfig = z.infer<typeof AuthConfigSchema>
-export type CloudConfig = z.infer<typeof CloudConfigSchema>
-export type CorsConfig = z.infer<typeof CorsConfigSchema>
-export type HttpsConfig = z.infer<typeof HttpsConfigSchema>
-export type CoreConfig = z.infer<typeof CoreConfigSchema>
-export type Config = z.infer<typeof ConfigSchema>
-
-// User config type (all optional except name)
-export type UserConfig = z.input<typeof ConfigSchema>
-
-// Validation options
-export interface ValidationOptions {
-  /**
-   * If true, unknown properties will cause validation to fail
-   * @default false
-   */
-  strict?: boolean
-
-  /**
-   * If true, all validation errors will be collected before throwing
-   * @default true
-   */
-  abortEarly?: boolean
-}
-
-// Default validation options
-export const defaultValidationOptions: ValidationOptions = {
-  strict: false,
-  abortEarly: false,
-}

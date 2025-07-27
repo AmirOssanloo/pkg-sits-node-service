@@ -1,15 +1,15 @@
 import { hasIn } from 'ramda'
-import type { Config } from '../types.js'
+import type { UserConfig } from '../types.js'
 
 const CONFIG_ENV_KEY = 'env'
 
-const applyEnv = (config: Config): Config => {
+const applyEnv = (config: UserConfig): UserConfig => {
   if (hasIn(CONFIG_ENV_KEY, config)) {
-    const env = config[CONFIG_ENV_KEY]
+    const env = config[CONFIG_ENV_KEY] as Record<string, unknown>
 
     if (env) {
       Object.keys(env).forEach((key) => {
-        process.env[key] = env[key]
+        process.env[key] = env[key] as string
       })
     }
 

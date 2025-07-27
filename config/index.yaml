@@ -1,4 +1,4 @@
-name: service
+name: 'node-service'
 core:
   auth:
     strategies:
@@ -9,22 +9,3 @@ core:
     paths:
       - path: /secure
         strategy: jwt
-  cloud:
-    cluster: ''
-    environment: ''
-    region: ''
-  port: 3000
-  cors:
-    enabled: false
-    origins: null
-    methods: null
-    requestHeaders: null
-    responseHeaders: null
-    supportsCredentials: null
-    maxAge: null
-    endPreflightRequests: null
-  https:
-    enabled: false
-    options: {}
-env:
-  JWT_SECRET: index

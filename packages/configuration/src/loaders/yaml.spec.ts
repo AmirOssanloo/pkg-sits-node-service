@@ -1,4 +1,5 @@
 import * as path from 'path'
+import type { UserConfig } from '../types.js'
 import readConfigFile from './yaml.js'
 
 const configDir = '../../config'
@@ -7,17 +8,17 @@ describe('readConfigFile', () => {
   describe('should read correct file', () => {
     it('should read index file', () => {
       const filePath = path.join(configDir, 'index.yaml')
-      const config = readConfigFile(filePath)
+      const config = readConfigFile(filePath) as UserConfig
 
-      expect(config.env?.JWT_SECRET).toBe('index')
+      expect(config.name).toBe('node-service')
     })
 
     it('should read environment file', () => {
       const ENV = 'development'
       const filePath = path.join(configDir, `node.${ENV}.yaml`)
-      const config = readConfigFile(filePath)
+      const config = readConfigFile(filePath) as UserConfig
 
-      expect(config.env?.JWT_SECRET).toBe(ENV)
+      expect(config.environment).toBe(ENV)
     })
   })
 

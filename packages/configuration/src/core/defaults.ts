@@ -1,33 +1,26 @@
-import type { Config } from '../types.js'
+import type { BaseConfig } from '../types.js'
 
-export const defaultConfig: Config = {
-  name: 'service',
+export const defaultConfig: BaseConfig = {
+  name: 'new-service',
+  environment: null,
   core: {
-    auth: null, // No authentication by default
+    auth: null,
     cloud: {
-      cluster: '', // Empty by default
-      environment: '', // Empty by default
-      region: '', // Empty by default
+      cluster: '',
+      stage: '',
+      region: '',
     },
-    port: 3000, // Default port
-    cors: {
-      enabled: false, // CORS disabled by default
-      origins: null,
-      methods: null,
-      requestHeaders: null,
-      responseHeaders: null,
-      supportsCredentials: null,
-      maxAge: null,
-      endPreflightRequests: null,
+    server: {
+      host: '0.0.0.0',
+      port: 3000,
     },
     https: {
-      enabled: false, // HTTPS disabled by default
-      options: {}, // Empty options
+      enabled: false,
+      options: {},
     },
   },
 }
 
-export function getDefaultConfig(): Config {
-  // Return a deep copy to prevent mutation of defaults
-  return JSON.parse(JSON.stringify(defaultConfig))
+export function getDefaultConfig(): BaseConfig {
+  return { ...defaultConfig }
 }
