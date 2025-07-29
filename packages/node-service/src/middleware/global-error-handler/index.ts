@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express'
 import { BasicError } from '../../errors/BasicError.js'
-import { EnrichedRequest } from '../../types/express.js'
+import type { EnrichedRequest } from '../../types/express.js'
 
 /**
  * Creates and configures the global error handler middleware

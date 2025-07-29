@@ -19,6 +19,32 @@ export const defaultConfig: BaseConfig = {
       options: {},
     },
   },
+  middleware: {
+    cors: {
+      enabled: false,
+    },
+    helmet: {
+      enabled: false,
+    },
+    bodyParser: {
+      enabled: false,
+    },
+    cookieParser: {
+      enabled: false,
+    },
+    logger: {
+      enabled: false,
+    },
+    correlationId: {
+      enabled: false,
+    },
+    context: {
+      enabled: false,
+    },
+    health: {
+      enabled: false,
+    },
+  },
 }
 
 export function getDefaultConfig(): BaseConfig {

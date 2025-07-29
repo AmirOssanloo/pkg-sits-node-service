@@ -1,16 +1,16 @@
 import cors from 'cors'
 import type { RequestHandler } from 'express'
-import type { NodeServiceConfig } from '../../core/config.js'
+import type { UserConfig } from '@sits/configuration'
 
 /**
  * Creates and configures CORS middleware
  */
-const createCorsMiddleware = (config: NodeServiceConfig): RequestHandler | null => {
-  const corsConfig = config.core?.cors
+const createCorsMiddleware = (config: UserConfig): RequestHandler => {
+  const corsConfig = config.middleware?.cors
 
   // If CORS is disabled, return null
   if (!corsConfig?.enabled) {
-    return null
+    return (_, __, next) => next()
   }
 
   // Map from @sits/configuration format to cors middleware format

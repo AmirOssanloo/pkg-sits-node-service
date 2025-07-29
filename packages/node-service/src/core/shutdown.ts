@@ -17,8 +17,8 @@ const createGracefulShutdownHandler = ({ server, releaseResources, logger }: Gra
         case 'unhandledRejection':
           logger.error('Caught unhandled promise rejections', { error })
           break
-        case 'unhandledExeption':
-          logger.error('Caught unhandled exeption', { error })
+        case 'uncaughtException':
+          logger.error('Uncaught exeption handled', { error })
           break
         case 'exit':
           logger.info('Exit was called', { meta: { error } })

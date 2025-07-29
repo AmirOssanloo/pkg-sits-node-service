@@ -1,16 +1,16 @@
 import type { RequestHandler } from 'express'
 import helmet from 'helmet'
-import type { NodeServiceConfig } from '../../core/config.js'
+import type { UserConfig } from '@sits/configuration'
 
 /**
  * Creates and configures Helmet security middleware
  */
-const createHelmetMiddleware = (config: NodeServiceConfig): RequestHandler | null => {
-  const helmetConfig = config.nodeService?.middleware?.helmet
+const createHelmetMiddleware = (config: UserConfig): RequestHandler => {
+  const helmetConfig = config.middleware?.helmet
 
   // If Helmet is disabled, return null
   if (helmetConfig?.enabled === false) {
-    return null
+    return (_, __, next) => next()
   }
 
   // Create Helmet middleware with configuration

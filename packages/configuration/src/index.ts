@@ -8,3 +8,5 @@ export default envConfig
 
 // Export validation utilities
 export { validateConfig, safeValidateConfig, isValidConfig } from './validation/validator.js'
+
+export type { BaseConfig, UserConfig } from './types.js'

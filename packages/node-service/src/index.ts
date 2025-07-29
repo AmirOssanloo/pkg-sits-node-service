@@ -1,6 +1,12 @@
 // Type exports
 export * from './types/index.js'
-export type { EnrichedRequest, RequestContext } from './types/express.js'
+export type {
+  EnrichedRequest,
+  RequestContext,
+  ValidationSchema,
+  InferValidatedRequest,
+  InferZodSchema,
+} from './types/request.js'
 
 // Core exports
 export { default as createNodeService } from './core/service.js'

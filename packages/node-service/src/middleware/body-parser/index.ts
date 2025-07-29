@@ -1,13 +1,13 @@
 import express from 'express'
-import type { Express, NextFunction } from 'express'
-import type { NodeServiceConfig } from '../../core/config.js'
+import type { Express, NextFunction, Request, Response } from 'express'
+import type { UserConfig } from '@sits/configuration'
 
 /**
  * Creates and configures body parser middleware
  */
-const bodyParserMiddleware = (app: Express, config: NodeServiceConfig) => {
+const bodyParserMiddleware = (app: Express, config: UserConfig) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const bodyParserConfig = config.nodeService?.middleware?.bodyParser
+    const bodyParserConfig = config.middleware?.bodyParser
 
     // JSON body parser
     app.use(

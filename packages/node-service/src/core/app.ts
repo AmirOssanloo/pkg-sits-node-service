@@ -1,52 +1,41 @@
 import config from '@sits/configuration'
 import cookieParser from 'cookie-parser'
-import type { Express, Router } from 'express'
+import type { Express, RequestHandler } from 'express'
 import authMiddleware from '../middleware/auth/index.js'
 import bodyParserMiddleware from '../middleware/body-parser/index.js'
 import corsMiddleware from '../middleware/cors/index.js'
-import createHealthEndpoints from '../middleware/health/index.js'
 import helmetMiddleware from '../middleware/helmet/index.js'
 import loggerMiddleware from '../middleware/logging/logger.js'
 import contextMiddleware from '../middleware/request/context.js'
 import correlationIdMiddleware from '../middleware/request/correlation-id.js'
 import globalErrorHandlerMiddleware from '../middleware/global-error-handler/index.js'
 import type { Logger } from '../utils/logger.js'
-import { getServiceConfig } from './config.js'
 
 interface AppOptions {
-  handlers: Router
+  handlers?: RequestHandler
   logger?: Logger
 }
 
 /**
  * Creates and configures the Express application with all middleware
  */
-const createApp = (app: Express, { handlers }: AppOptions): Express => {
-  const serviceConfig = getServiceConfig()
-
+const createApp = (app: Express, { handlers = () => {} }: AppOptions): Express => {
   // Middleware before handlers
-  app.use(contextMiddleware() as any)
-  app.use(correlationIdMiddleware() as any)
-  app.use(loggerMiddleware() as any)
+  app.use(contextMiddleware())
+  app.use(correlationIdMiddleware())
+  app.use(loggerMiddleware())
 
-  if (serviceConfig.core?.cors?.enabled) {
-    app.use(corsMiddleware(serviceConfig) as any)
+  if (config.middleware.cors.enabled) {
+    app.use(corsMiddleware(config))
   }
 
-  if (serviceConfig.nodeService?.middleware?.helmet?.enabled) {
-    app.use(helmetMiddleware(serviceConfig) as any)
+  if (config.middleware.helmet.enabled) {
+    app.use(helmetMiddleware(config))
   }
 
-  app.use(bodyParserMiddleware(app, serviceConfig) as any)
-  app.use(cookieParser() as any)
-
-  // Check if authentication is configured in core.auth
-  if (config.core?.auth && Object.keys(config.core.auth.strategies || {}).length > 0) {
-    app.use(authMiddleware() as any)
-  }
-
-  // Health check endpoints
-  createHealthEndpoints(app, serviceConfig)
+  app.use(bodyParserMiddleware(app, config))
+  app.use(cookieParser())
+  app.use(authMiddleware())
 
   // User-provided handlers
   app.use(async (req, res, next) => {
@@ -57,7 +46,10 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
     }
   })
 
-  // Middleware after handlers
+  // Simple ping endpoint (always available)
+  app.get('/ping', (req, res) => {
+    res.json({ timestamp: new Date().toISOString() })
+  })
 
   // 404 handler for unmatched routes
   app.use((req, res) => {
@@ -69,7 +61,7 @@ const createApp = (app: Express, { handlers }: AppOptions): Express => {
   })
 
   // Global error handler
-  app.use(globalErrorHandlerMiddleware as any)
+  app.use(globalErrorHandlerMiddleware())
 
   return app
 }

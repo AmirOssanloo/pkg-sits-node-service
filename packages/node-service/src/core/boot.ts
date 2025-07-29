@@ -1,11 +1,18 @@
 import type { Express } from 'express'
 import type { ReleaseResources } from '../types/index.js'
 import type { Logger } from '../utils/logger.js'
-import { getServiceConfig } from './config.js'
+import config from '@sits/configuration'
 import createServer from './server.js'
 import createGracefulShutdown from './shutdown.js'
 
-const errorTypes = ['unhandledRejection', 'uncaughtExeption']
+interface ProcessHandler {
+  eventType: string
+  handler: (error: Error) => Promise<void>
+}
+
+// TODO: These should be constants in constants.ts
+const errorTypes = ['unhandledRejection', 'uncaughtException']
+const signalTraps = ['exit', 'SIGINT', 'SIGTERM', 'SIGUSR2']
 
 interface BootApp {
   app: Express
@@ -14,8 +21,8 @@ interface BootApp {
 }
 
 const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
-  const config = getServiceConfig()
-  const { server } = await createServer({ app, port: config.core?.port ?? 3000, logger })
+  const { port } = config.core.server
+  const { server } = await createServer({ app, port, logger })
 
   const gracefulShutdown = createGracefulShutdown({
     server,
@@ -23,7 +30,7 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
     logger,
   })
 
-  const processHandlers = []
+  const processHandlers: ProcessHandler[] = []
 
   errorTypes.forEach((eventType) => {
     const shutdown = gracefulShutdown(eventType)
@@ -42,9 +49,6 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
     processHandlers.push({ eventType, handler })
   })
 
-  // Use signals from configuration
-  const signalTraps = config.nodeService?.shutdown?.signals ?? ['SIGTERM', 'SIGINT']
-
   signalTraps.forEach((eventType: string) => {
     const shutdown = gracefulShutdown(eventType)
 
@@ -54,11 +58,11 @@ const bootApp = async ({ app, releaseResources, logger }: BootApp) => {
         process.exit(0)
       } catch (error) {
         logger.error('Killing process', { error })
-        process.kill(process.pid, eventType as NodeJS.Signals)
+        process.kill(process.pid, eventType)
       }
     }
 
-    process.once(eventType as NodeJS.Signals, handler as any)
+    process.once(eventType, handler)
     processHandlers.push({ eventType, handler })
   })
 }

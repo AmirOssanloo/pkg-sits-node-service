@@ -1,12 +1,12 @@
 import { Response, NextFunction } from 'express'
-import { ZodError, ZodSchema } from 'zod'
+import { ZodError, ZodType } from 'zod'
 import { ValidationError } from '../../errors/ValidationError.js'
 import { EnrichedRequest } from '../../types/express.js'
 
 interface ValidationSchema {
-  body?: ZodSchema
-  query?: ZodSchema
-  params?: ZodSchema
+  body?: ZodType<any, any, any>
+  query?: ZodType<any, any, any>
+  params?: ZodType<any, any, any>
 }
 
 interface Options {

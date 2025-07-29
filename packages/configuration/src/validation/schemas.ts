@@ -43,11 +43,41 @@ export const CoreConfigSchema = z.object({
   https: HttpsConfigSchema.default({ enabled: false, options: {} }),
 })
 
+// Middleware configuration
+
+export const MiddlewareConfigSchema = z.object({
+  cors: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  helmet: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  bodyParser: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  cookieParser: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  logger: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  correlationId: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  context: z.object({
+    enabled: z.boolean().default(true),
+  }),
+  health: z.object({
+    enabled: z.boolean().default(true),
+  }),
+})
+
 // Base configuration schema (strict)
 export const BaseConfigSchema = z.object({
   name: z.string().min(1, { message: 'Service name is required' }),
   environment: z.string().nullable().default(null),
   core: CoreConfigSchema,
+  middleware: MiddlewareConfigSchema,
 })
 
 // Main configuration schema with additional properties

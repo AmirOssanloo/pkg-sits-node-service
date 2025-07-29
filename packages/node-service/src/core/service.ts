@@ -1,26 +1,27 @@
-import express, { Router } from 'express'
+import express, { RequestHandler } from 'express'
 import type { Application } from 'express'
-import type { ReleaseResources, Logger } from '../types/index.js'
+import type { ReleaseResources } from '../types/index.js'
+import type { Logger } from '../utils/logger.js'
 import logger from '../utils/logger.js'
 import createApp from './app.js'
 import bootApp from './boot.js'
 
 interface CreateNodeServiceReturn {
-  setup: (opts?: ServiceSetupOptions) => Promise<SetupNodeServiceReturn>
+  setup: (options?: ServiceSetupOptions) => Promise<SetupNodeServiceReturn>
   logger: Logger
 }
 
 interface SetupNodeServiceReturn {
-  run: (opts?: ServiceListenOptions) => void
+  run: (options?: ServiceRunOptions) => void
   app: Application
 }
 
 interface ServiceSetupOptions {
-  handlers?: Router
+  handlers?: RequestHandler
   releaseResources?: ReleaseResources
 }
 
-interface ServiceListenOptions {
+interface ServiceRunOptions {
   releaseResources?: ReleaseResources
 }
 
@@ -32,21 +33,22 @@ const state = {
 const createNodeService = (): CreateNodeServiceReturn => {
   const expressApp = express()
 
-  const setup = async (opts: ServiceSetupOptions = {}) => {
+  const setup = async (options: ServiceSetupOptions = {}) => {
     if (state.hasBootstrapped) {
       throw new Error('The app has already been bootstrapped')
     }
 
     state.hasBootstrapped = true
+    const { handlers } = options
 
     const app = createApp(expressApp, {
-      handlers: opts.handlers || Router(),
+      handlers,
       logger,
     })
 
-    const listen = async ({
-      releaseResources: releaseResourcesByRun,
-    }: ServiceListenOptions = {}) => {
+    const run = async (options: ServiceRunOptions = {}) => {
+      const { releaseResources: releaseResourcesByRun } = options
+
       if (state.isRunning) {
         throw new Error('The app has already been started')
       }
@@ -57,18 +59,16 @@ const createNodeService = (): CreateNodeServiceReturn => {
         await Promise.all([releaseResourcesByRun ? releaseResourcesByRun() : null])
       }
 
-      await bootApp({
-        app,
-        releaseResources,
-        logger,
-      })
-    }
-
-    const run = (opts = {}) => {
-      listen(opts).catch((error) => {
-        logger.error('The app crashed', error)
+      try {
+        await bootApp({
+          app,
+          releaseResources,
+          logger,
+        })
+      } catch (error) {
+        logger.error('The app crashed', { error })
         throw error
-      })
+      }
     }
 
     return {
