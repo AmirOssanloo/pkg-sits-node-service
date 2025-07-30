@@ -1,6 +1,7 @@
 import type { Request } from 'express'
 import type { ZodType } from 'zod'
 import type { Logger } from '../utils/logger.js'
+import { AuthIdentity } from './auth.js'
 
 export interface ValidationSchema {
   body?: ZodType<any, any, any>
@@ -16,12 +17,13 @@ type InferBody<T> = T extends { body: ZodType<infer U, any, any> } ? { body: U }
 type InferQuery<T> = T extends { query: ZodType<infer U, any, any> } ? { query: U } : {}
 type InferParams<T> = T extends { params: ZodType<infer U, any, any> } ? { params: U } : {}
 
+// Ensure that the express.d.ts file is updated to include new properties when updating this interface
 export interface EnrichedRequest<Schema extends ValidationSchema = {}> extends Request {
   correlation_id: string
   context: RequestContext
   logger: Logger
   validated: InferBody<Schema> & InferQuery<Schema> & InferParams<Schema>
-  user?: any
+  auth?: AuthIdentity
 }
 
 // Type helper to extract the inferred type from a Zod schema

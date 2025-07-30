@@ -36,7 +36,7 @@ const authMiddleware = () => async (req: Request, res: Response, next: NextFunct
     }
 
     // Store the user information from the token
-    enrichedRequest.user = tokenPayload as AuthenticatedUser
+    enrichedRequest.user = tokenPayload
 
     return next()
   } catch {

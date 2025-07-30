@@ -2,6 +2,8 @@ import type { RequestHandler } from 'express'
 import helmet from 'helmet'
 import type { UserConfig } from '@sits/configuration'
 
+// TODO: Check and clean up this file
+
 /**
  * Creates and configures Helmet security middleware
  */

@@ -21,13 +21,13 @@ interface AppOptions {
  */
 const createApp = (app: Express, { handlers = () => {} }: AppOptions): Express => {
   // Middleware before handlers
-  app.use(contextMiddleware())
-  app.use(correlationIdMiddleware())
-  app.use(loggerMiddleware())
-
   if (config.middleware.cors.enabled) {
     app.use(corsMiddleware(config))
   }
+
+  app.use(contextMiddleware())
+  app.use(correlationIdMiddleware())
+  app.use(loggerMiddleware())
 
   if (config.middleware.helmet.enabled) {
     app.use(helmetMiddleware(config))

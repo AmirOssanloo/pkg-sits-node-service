@@ -7,6 +7,7 @@ export type {
   InferValidatedRequest,
   InferZodSchema,
 } from './types/request.js'
+export type { AuthIdentity } from './types/auth.js'
 
 // Core exports
 export { default as createNodeService } from './core/service.js'
@@ -15,10 +16,8 @@ export { default as bootApp } from './core/boot.js'
 
 // Middleware exports
 export { default as validateRequestMiddleware } from './middleware/validation/validate-request.js'
-export { default as errorHandlerMiddleware } from './middleware/error-handler/index.js'
-export * from './middleware/validation/schemas.js'
 
-// Error exports (excluding HttpError which is already exported from types)
+// Error exports
 export {
   BasicError,
   ValidationError,

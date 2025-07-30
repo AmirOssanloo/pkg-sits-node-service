@@ -1,7 +1,8 @@
-import { Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ZodError, ZodType } from 'zod'
 import { ValidationError } from '../../errors/ValidationError.js'
-import { EnrichedRequest } from '../../types/express.js'
+
+// TODO: Check and clean up this file
 
 interface ValidationSchema {
   body?: ZodType<any, any, any>
@@ -37,7 +38,7 @@ interface Options {
  * ```
  */
 const validateRequestMiddleware = (schemas: ValidationSchema, options?: Options) => {
-  return (req: EnrichedRequest, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     req.validated = {}
 
     try {

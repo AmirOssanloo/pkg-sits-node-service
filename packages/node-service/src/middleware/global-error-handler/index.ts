@@ -1,12 +1,11 @@
-import { Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { BasicError } from '../../errors/BasicError.js'
-import type { EnrichedRequest } from '../../types/express.js'
 
 /**
  * Creates and configures the global error handler middleware
  */
 const errorHandlerMiddleware = () => {
-  return (error: Error, req: EnrichedRequest, res: Response, next: NextFunction) => {
+  return (error: Error, req: Request, res: Response, next: NextFunction) => {
     const isDevelopment = process.env.NODE_ENV === 'development'
 
     // If headers have already been sent, delegate to Express's default error handler

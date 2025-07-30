@@ -2,6 +2,8 @@ import cors from 'cors'
 import type { RequestHandler } from 'express'
 import type { UserConfig } from '@sits/configuration'
 
+// TODO: Check and clean up this file
+
 /**
  * Creates and configures CORS middleware
  */
