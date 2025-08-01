@@ -1,16 +1,17 @@
 import config from '@sits/configuration'
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import type { EnrichedRequest, AuthenticatedUser } from '../../types/express.js'
 import isSecurePath from './isSecurePath.js'
+import type { JwtAuthIdentity } from '../../types/auth.js'
 
 const authMiddleware = () => async (req: Request, res: Response, next: NextFunction) => {
+  // TODO: Add support for multiple auth strategies
+  // TODO: Ensure that the path is matching the strategy path
   if (!isSecurePath(req)) {
     return next()
   }
 
-  const enrichedRequest = req as EnrichedRequest
-  const authToken = enrichedRequest.headers.authorization
+  const authToken = req.headers.authorization
 
   try {
     if (!authToken || !authToken.startsWith('Bearer ')) {
@@ -19,6 +20,8 @@ const authMiddleware = () => async (req: Request, res: Response, next: NextFunct
 
     // Get JWT configuration from core.auth
     const authConfig = config.core?.auth
+
+    // TODO: Add support for multiple auth strategies
     const jwtStrategy = authConfig?.strategies?.jwt
     const secret = jwtStrategy?.config?.secret as string
 
@@ -36,7 +39,7 @@ const authMiddleware = () => async (req: Request, res: Response, next: NextFunct
     }
 
     // Store the user information from the token
-    enrichedRequest.user = tokenPayload
+    req.auth = tokenPayload as JwtAuthIdentity
 
     return next()
   } catch {

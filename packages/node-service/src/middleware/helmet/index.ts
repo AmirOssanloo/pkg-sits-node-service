@@ -3,6 +3,7 @@ import helmet from 'helmet'
 import type { UserConfig } from '@sits/configuration'
 
 // TODO: Check and clean up this file
+// TODO: Ensure middleware config is strongly typed, middleware is currently "any"
 
 /**
  * Creates and configures Helmet security middleware

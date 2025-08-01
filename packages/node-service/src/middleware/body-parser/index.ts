@@ -7,7 +7,7 @@ import type { UserConfig } from '@sits/configuration'
  */
 const bodyParserMiddleware = (app: Express, config: UserConfig) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const bodyParserConfig = config.middleware?.bodyParser
+    const bodyParserConfig = config.middleware.bodyParser
 
     // JSON body parser
     app.use(

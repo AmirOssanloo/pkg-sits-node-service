@@ -1,5 +1,6 @@
 import config from '@sits/configuration'
 import { Request } from 'express'
+import type { StrategyPath } from '@sits/configuration'
 
 const isSecurePath = (req: Request) => {
   const originalUrl = req.originalUrl || req.path
@@ -16,8 +17,9 @@ const isSecurePath = (req: Request) => {
     return false
   }
 
+  // TODO: Ensure that the path is matching the strategy path
   // Check if any auth path matches the current URL (using wildcard matching)
-  const isSecure = authPaths.some((strategyPath) => {
+  const isSecure = authPaths.some((strategyPath: StrategyPath) => {
     const pattern = strategyPath.path.replace(/\*/g, '.*')
     return new RegExp(`^${pattern}`).test(originalUrl)
   })

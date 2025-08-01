@@ -46,7 +46,7 @@ const createApp = (app: Express, { handlers = () => {} }: AppOptions): Express =
     }
   })
 
-  // Simple ping endpoint (always available)
+  // Ping endpoint
   app.get('/ping', (req, res) => {
     res.json({ timestamp: new Date().toISOString() })
   })
